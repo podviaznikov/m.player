@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player</title>
+    <link href="css/ui-lightness/jquery-ui-1.8.11.custom.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="js/lib/head.min.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/jquery-ui-1.8.11.custom.min.js"></script>
+    <script src="js/lib/underscore-min.js"></script>
+    <script src="js/lib/backbone-min.js"></script>
+    <script src="js/lib/uuid.js"></script>
+    <script src="js/lib/id3v2.js" ></script>
+    <script src="js/lib/id3.js" ></script>
+    <script src="js/api/lastfm.js"></script>
+    <script src="js/fs/fs.ext.js"></script>
+    <script src="js/fs/fs.core.js"></script>
+    <script src="js/fs/fs.util.js"></script>
+    <script src="js/fs/fs.reader.js"></script>
+    <script src="js/fs/fs.writer.js"></script>
+    <script src="js/app/models.js"></script>
+    <script src="js/app/ui.app.js"></script>
+    <script src="js/app/ui.songslist.js"></script>
+    <script src="js/app/ui.playlist.js"></script>
+    <script src="js/app/ui.player.js"></script>
+    <script src="js/app/ui.library.js"></script>
+    <script src="js/app/ui.album.js"></script>
+    <script src="js/app/ui.visualization.js"></script>
+    <script src="js/app/settings.js"></script>
+    <script src="js/app/store.js"></script>
+    <script src="js/app/controller.js"></script>
+    <script>
+    $(function()
+    {
+        AppController.init();
+    });
+    </script>
+</head>
+<body>
+<section id="playing_visualization" class="info_panel"></section>
+<section id="library_menu" class="info_panel scrollable_content">
+    <header><h1>Artists</h1></header>
+    <section id="library_content"></section>
+</section>
+<section id="filtered_lib" class="info_panel scrollable_content">
+    <header><h1>Albums</h1></header>
+    <section id="filtered_lib_content"></section>
+</section>
+<section id="playing_list" class="info_panel scrollable_content">
+    <header class="box"><h1>Now playing</h1></header>
+    <section id="song_info_view"></section>
+    <section id="playing_songs">
+        <label>Drop files here</label>
+    </section>
+    <footer></footer>
+</section>
+<footer id="player">
+     <span id="shuffle_toggle" class="control on" title="Turn shuffle off">
+         <img src="css/icons/shuffle.png" class="main_icon_mode">
+         <img src="css/icons/shuffle_hover.png" class="hover_icon_mode">
+    </span>
+
+    <span id="repeat_toggle" class="control on" title="Turn repeat off">
+        <img src="css/icons/repeat.png" class="main_icon_mode">
+        <img src="css/icons/repeat_hover.png" class="hover_icon_mode">
+    </span>
+
+    <span id="stop_song" class="control" title="Stop">
+        <img src="css/icons/stop.png" class="main_icon_mode">
+        <img src="css/icons/stop_hover.png" class="hover_icon_mode">
+    </span>
+
+    <span id="previous_song" class="control" title="Previous">
+        <img src="css/icons/previous.png" class="main_icon_mode">
+        <img src="css/icons/previous_hover.png" class="hover_icon_mode">
+    </span>
+
+    <span id="play_toggle" class="control playing" title="Pause">
+        <img src="css/icons/play.png" class="main_icon_mode playing">
+        <img src="css/icons/play_hover.png" id="play_hover" class="hover_icon_mode">
+        <img src="css/icons/pause.png" class="main_icon_mode paused">
+        <img src="css/icons/pause_hover.png" id="pause_hover" class="hover_icon_mode">
+    </span>
+    <span id="next_song" class="control" title="Next">
+        <img src="css/icons/next.png" class="main_icon_mode">
+        <img src="css/icons/next_hover.png" class="hover_icon_mode">
+    </span>
+
+    <span id="sound_toggle" class="control on" title="mute">
+        <img src="css/icons/sound.png" class="main_icon_mode on">
+        <img src="css/icons/sound_hover.png" id="sound_on_hover" class="hover_icon_mode">
+        <img src="css/icons/no_sound.png" class="main_icon_mode off">
+        <img src="css/icons/no_sound_hover.png" id="no_sound_hover" class="hover_icon_mode">
+    </span>
+
+    <span id="volume_gutter" title="Volume">
+        <span id="volume_handle" class="control ui-slider-handle"></span>
+    </span>
+
+
+    <span id="music_gutter" title="Seek">
+        <span id="music_handle" class="control ui-slider-handle"></span>
+    </span>
+    <label id="time_counter">0:00</label>
+    <audio id="player_ctrl"></audio>
+</footer>
+<article id="album_info_view" class="box"></article>
+<script type="html/template" id="song_tpl">
+    <div class="song cell track_number"><%= track %></div>
+    <div class="song cell"><%= title %></div>
+</script>
+<script type="html/template" id="song_mini_tpl">
+    <div class="song cell"><%= title %></div>
+    <div class="delete_song cell" title="Remove song"><span class="control ui-icon ui-icon-close"></span></div>
+</script>
+<script type="html/template" id="playlist_stat_tpl">
+    <label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span>
+</script>
+
+<script type="html/template" id="artist_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="artist_info">
+        <h1><%= name %></h1>
+        <div class="artist_albums"><% _.each(albums, function(album) { %> <a class="album_link" data-album="<%= album %>"><%= album %></a> <% }); %></div>
+        <div class="artist_genres"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
+        <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+    </section>
+</script>
+<script type="html/template" id="visualization_tpl">
+    <span class="main_album_image"><img src="<%= image %>"></span>
+</script>
+<script type="html/template" id="detailed_album_info_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="detailed_album_info">
+        <h1><%= name %></h1>
+        <label for="release_date">Release date</label><span class="release_date"><%= releaseDate %></span>
+    </section>
+</script>
+<script type="html/template" id="song_info_tpl">
+    <span id="song_image" class="info_image"><img src="<%= image %>"></span>
+    <section id="song_info">
+        <h1><%= name %></h1>
+        <span class="data_info_row"><%= album %></span>
+        <span class="data_info_row"><%= artist %></span>
+        <span class="data_info_row"><%= year %></span>
+    </section>
+</script>
+</body>
+</html>
