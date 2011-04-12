@@ -18,7 +18,9 @@ var AppController=
 		this.visualizationView = new ui.VisualizationView;
 		musicDao.open(this.onDBLoad);
 	},
-
+    /**
+     * Load UI components that are depended on connection to the storage(indexDB).
+     */
 	onDBLoad:function()
 	{
         this.libraryMenu = new ui.LibraryMenu;
