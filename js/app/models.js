@@ -18,27 +18,22 @@ var Song = Backbone.Model.extend(
 var SongsList = Backbone.Collection.extend({
 
     model: Song,
-
+    initialize:function()
+    {
+        _.bindAll(this,'handleSongLoad');
+    },
     comparator: function(song)
     {
         return song.get('track');
     },
 
-    fetch: function(method,allLoaded)
+    handleSongLoad:function(model)
     {
-        var collection = this;
-        var handleSongLoad = function(model)
-        {
-            collection._add(model);//todo anton question regarding internal and public method. look one more time
-        };
-        if(method)
-        {
-            method(handleSongLoad,allLoaded);
-        }
-        else
-        {
-            musicDao.getAllSongs(handleSongLoad,allLoaded);
-        }
+        this.add(model);
+    },
+    fetch: function(name,allLoaded)
+    {
+        musicDao.getAllArtistSongs(name,this.handleSongLoad,allLoaded);
         return this;
     }
 });
@@ -46,24 +41,22 @@ var Artist = Backbone.Model.extend(
 {
     initialize:function()
     {
+        _.bindAll(this,'setParameterFromSongs');
         if(!this.get('id'))
         {
             this.id=UUID.generate();
             this.set({id:this.id});
         }
         this.songs = new SongsList;
-        var self = this;
-        this.songs.fetch(function(handleArtistLoad,allLoaded)
-        {
-            musicDao.getAllArtistSongs(self.get('name'),handleArtistLoad,allLoaded);
-        },
-        function()
-        {
-            var albums = _.uniq(self.songs.pluck('album'));
-            var genres = _.uniq(self.songs.pluck('genre'));
-            var songsCount = self.songs.length;
-            self.set({albums:albums,genres:genres,songsCount:songsCount});
-        });
+        this.songs.fetch(this.get('name'),this.setParameterFromSongs);
+    },
+
+    setParameterFromSongs:function()
+    {
+        var albums = _.uniq(this.songs.pluck('album'));
+        var genres = _.uniq(this.songs.pluck('genre'));
+        var songsCount = this.songs.length;
+        this.set({albums:albums,genres:genres,songsCount:songsCount});
     }
 });
 
@@ -76,7 +69,7 @@ var ArtistsList = Backbone.Collection.extend({
         var collection = this;
         var handleArtistLoad = function(model)
         {
-            collection._add(model);
+            collection.add(model);
         };
         musicDao.getAllArtists(handleArtistLoad,allLoaded);
         return this;

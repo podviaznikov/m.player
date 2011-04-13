@@ -57,6 +57,7 @@ $(function()
         {
             _.bindAll(this, 'addOne', 'addAll', 'render');
             this.model.songs.bind('all',this.render);
+            this.model.bind('change',this.render);
             this.model.view=this;
         },
         render: function()
