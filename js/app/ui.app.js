@@ -36,6 +36,10 @@ $(function()
                 AppController.playlistView.destroyFileURL();
                 AppController.playlistView.currentSong().view.playSong();
             }
+            else if(keyCode==32)//space
+            {
+                AppController.playerCtrl.togglePause();
+            }
         }
 
     });

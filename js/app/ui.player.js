@@ -83,6 +83,7 @@ $(function()
         initialize:function()
         {
             this.bind('audio:update',this.updateAudioProgress);
+            _.bindAll(this,'togglePause');
             this.audioEL = new ui.AudioElement({player:this});
             var self = this;
             $('#volume_gutter').slider(
@@ -168,6 +169,18 @@ $(function()
             this.$(this.playToggle).addClass('paused');
             this.$(this.playToggle).removeClass('playing');
             this.audioEL.pause();
+        },
+        togglePause:function()
+        {
+            var isPaused = this.$(this.playToggle).hasClass('paused');
+            if(isPaused)
+            {
+                this.play();
+            }
+            else
+            {
+                this.pause();
+            }
         },
         stop:function()
         {

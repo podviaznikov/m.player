@@ -28,7 +28,6 @@ $(function()
                     var lastPlayedArtist = self.artists.findByName(lastArtist);
                     lastPlayedArtist.view.selectArtist();
                 }
-
             });
         },
 

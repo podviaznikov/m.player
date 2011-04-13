@@ -261,6 +261,10 @@ article.artist-data label:after
     margin-bottom:15px;
     font-weight:bold;
 }
+.detailed_album_info label:after
+{
+    content:': ';
+}
 #album_info
 {
     -webkit-box-flex: 2;

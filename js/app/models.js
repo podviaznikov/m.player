@@ -53,9 +53,9 @@ var Artist = Backbone.Model.extend(
         }
         this.songs = new SongsList;
         var self = this;
-        this.songs.fetch(function(handleSongLoad,allLoaded)
+        this.songs.fetch(function(handleArtistLoad,allLoaded)
         {
-            musicDao.getAllArtistSongs(self.get('name'),handleSongLoad,allLoaded);
+            musicDao.getAllArtistSongs(self.get('name'),handleArtistLoad,allLoaded);
         },
         function()
         {
