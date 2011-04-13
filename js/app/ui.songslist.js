@@ -14,13 +14,8 @@ $(function()
 
         initialize: function()
         {
-            _.bindAll(this, 'showAlbums', 'render');
+            _.bindAll(this, 'showAlbums');
             this.mapping={};
-        },
-
-        render: function()
-        {
-           return this;
         },
 
         showAlbums: function(albums,artist,songs)

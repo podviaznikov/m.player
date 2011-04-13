@@ -83,7 +83,7 @@ $(function()
         initialize:function()
         {
             this.bind('audio:update',this.updateAudioProgress);
-            _.bindAll(this,'togglePause');
+            _.bindAll(this,'togglePause','changedVolume');
             this.audioEL = new ui.AudioElement({player:this});
             var self = this;
             $('#volume_gutter').slider(
@@ -93,13 +93,13 @@ $(function()
                 range: 'min',
                 max: 1,
                 animate: true,
-                stop:function(e,ui)
-                {
-                    self.audioEL.setVolume(ui.value);
-                    settings.saveVolume(ui.value);
-                }
+                stop:this.changedVolume
             });
-
+        },
+        changedVolume:function(e,ui)
+        {
+            this.audioEL.setVolume(ui.value);
+            settings.saveVolume(ui.value);
         },
         soundOn:function()
         {

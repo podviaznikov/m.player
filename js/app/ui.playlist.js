@@ -7,7 +7,8 @@
 var global = window;
 $(function()
 {
-    ui.PlayListView = Backbone.View.extend({
+    ui.PlayListView = Backbone.View.extend(
+    {
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),
         songsEl:$('#playing_list #playing_songs'),
@@ -41,7 +42,6 @@ $(function()
                 }
             }
         },
-
         render: function()
         {
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
@@ -230,6 +230,10 @@ $(function()
             'dblclick .song':'playSong',
             'click .delete_song': 'deleteSong'
         },
+        initialize:function()
+        {
+            _.bindAll(this,'render','selectSong','playSong','deleteSong','songFileLoaded');
+        },
 
         render: function()
         {
@@ -239,12 +243,12 @@ $(function()
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
             var html = _.template(this.tpl,
-                {
-                    track:this.model.get('track'),
-                    title:this.model.get('title'),
-                    album:this.model.get('album'),
-                    year:this.model.get('year')
-                });
+            {
+                track:this.model.get('track'),
+                title:this.model.get('title'),
+                album:this.model.get('album'),
+                year:this.model.get('year')
+            });
             $(this.el).html(html);
             return this;
         },
@@ -257,17 +261,17 @@ $(function()
         },
         playSong:function()
         {
-            var self=this;
             settings.saveLastSong(this.model.toJSON());
             this.selectSong();
             var songFileName=this.el.dataset.filename;
-            var songName=this.el.dataset.songname;
-            fs.util.createFileURL(songFileName,function(url)
-            {
-                self.options.playlist.trigger('url:create',url);
-                AppController.playerCtrl.play(url);
-            });
+            fs.util.createFileURL(songFileName,this.songFileLoaded);
         },
+        songFileLoaded:function(url)
+        {
+            this.options.playlist.trigger('url:create',url);
+            AppController.playerCtrl.play(url);
+        },
+
         deleteSong: function()
         {
             var id=this.el.dataset.id;

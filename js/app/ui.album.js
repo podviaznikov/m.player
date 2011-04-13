@@ -60,7 +60,6 @@ $(function()
             lastFM.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
             return this;
         }
-
     });
 
 
@@ -72,6 +71,10 @@ $(function()
             'click .song':'selectSong',
             'dblclick .song':'selectForPlaying',
             'click .delete_song': 'deleteSong'
+        },
+        initialize:function()
+        {
+            _.bindAll(this,'selectSong','selectForPlaying','render');
         },
 
         render: function()

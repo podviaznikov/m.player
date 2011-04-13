@@ -41,7 +41,6 @@ $(function()
                 AppController.playerCtrl.togglePause();
             }
         }
-
     });
 
 });
