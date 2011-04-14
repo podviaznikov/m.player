@@ -129,8 +129,8 @@ footer#player
 #time_counter
 {
     color: white;
-    float: right;
-    margin-right: 40px;
+    margin-left: 5px;
+    margin-right: 10px;
     margin-top: 8px;
 }
 
@@ -403,7 +403,7 @@ span.info_image img
 #stop_song
 {
     background-image:url(icons/stop.png);
-    width:11px;
+    width:10px;
     height:10px;
 }
 #stop_song:hover
@@ -471,4 +471,17 @@ span.info_image img
 #sound_toggle.off:hover
 {
     background-image:url(icons/no_sound_hover.png);
+}
+#expand
+{
+    width:18px;
+    height:18px;
+}
+#expand.on
+{
+    background-image:url(icons/expand.png);
+}
+#expand.on:hover
+{
+    background-image:url(icons/expand_hover.png);
 }

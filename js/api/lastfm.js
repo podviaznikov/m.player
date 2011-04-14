@@ -12,7 +12,8 @@ var lastFM=
     getArtistImage:function(artist,callback)
     {
         var reqUrl=apiUrl+'method=artist.getInfo&artist='+artist+'&format=json&api_key='+apiKey;
-        $.ajax({
+        $.ajax(
+        {
             url: reqUrl,
             context: document.body,
             crossDomain:true,
@@ -31,7 +32,8 @@ var lastFM=
     getAlbumImage:function(artist,album,callback)
     {
         var reqUrl=apiUrl+'method=album.getInfo&artist='+artist+'&album='+album+'&format=json&api_key='+apiKey;
-        $.ajax({
+        $.ajax(
+        {
             url: reqUrl,
             context: document.body,
             crossDomain:true,
@@ -47,10 +49,31 @@ var lastFM=
         });
     },
 
+    getAlbumPoster:function(artist,album,callback)
+    {
+        var reqUrl=apiUrl+'method=album.getInfo&artist='+artist+'&album='+album+'&format=json&api_key='+apiKey;
+        $.ajax(
+        {
+            url: reqUrl,
+            context: document.body,
+            crossDomain:true,
+            dataType:'jsonp',
+            success: function(data)
+            {
+                callback(data.album.image[4]['#text']||'css/images/no_picture.png');
+            },
+            error: function()
+            {
+                callback('css/images/no_picture.png');
+            }
+        });
+    },
+
     getAlbumInfo:function(artist,album,callback)
     {
         var reqUrl=apiUrl+'method=album.getInfo&artist='+artist+'&album='+album+'&format=json&api_key='+apiKey;
-        $.ajax({
+        $.ajax(
+        {
             url: reqUrl,
             context: document.body,
             crossDomain:true,

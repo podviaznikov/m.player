@@ -20,6 +20,15 @@ $(function()
         {
             return this;
         },
+        enterNowPlayingMode:function()
+        {
+          $('section.info_panel').hide();
+        },
+
+        enterRegularPlayerMode:function()
+        {
+          $('section.info_panel').css('display','inline-block');
+        },
         keyPressed:function(event)
         {
             var keyCode = event.keyCode;

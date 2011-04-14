@@ -10,12 +10,11 @@ $(function()
     ui.VisualizationView = Backbone.View.extend(
     {
         el: $('#playing_visualization'),
-        tpl:$('#visualization_tpl').html(),
+        tpl: $('#visualization_tpl').html(),
 
         initialize: function()
         {
-            var self=this;
-            this.bind('song:select',this.selectSong);
+            _.bindAll(this,'selectSong','render');
         },
         selectSong:function(song)
         {

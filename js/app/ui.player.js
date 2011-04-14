@@ -78,12 +78,14 @@ $(function()
             'click #shuffle_toggle.on':'shuffleOff',
             'click #shuffle_toggle.off':'shuffleOn',
             'click #repeat_toggle.on':'repeatOff',
-            'click #repeat_toggle.off':'repeatOn'
+            'click #repeat_toggle.off':'repeatOn',
+            'click #expand.on':'nowPlayingMode',
+            'click #expand.off':'regularPlayerMode'
         },
         initialize:function()
         {
             this.bind('audio:update',this.updateAudioProgress);
-            _.bindAll(this,'togglePause','changedVolume');
+            _.bindAll(this,'togglePause','changedVolume','nowPlayingMode','regularPlayerMode');
             this.audioEL = new ui.AudioElement({player:this});
             var self = this;
             $('#volume_gutter').slider(
@@ -95,6 +97,18 @@ $(function()
                 animate: true,
                 stop:this.changedVolume
             });
+        },
+        nowPlayingMode:function()
+        {
+            $('#expand').removeClass('on');
+            $('#expand').addClass('off');
+            AppController.appView.enterNowPlayingMode();
+        },
+        regularPlayerMode:function()
+        {
+            $('#expand').removeClass('off');
+            $('#expand').addClass('on');
+            AppController.appView.enterRegularPlayerMode();
         },
         changedVolume:function(e,ui)
         {

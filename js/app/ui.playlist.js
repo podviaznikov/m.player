@@ -257,7 +257,7 @@ $(function()
             $('.song-data').removeClass('selected_song');
             $(this.el).addClass('selected_song');
             this.options.playlist.trigger('song:select',this.model);
-            AppController.visualizationView.trigger('song:select',this.model);
+            AppController.visualizationView.selectSong(this.model);
         },
         playSong:function()
         {

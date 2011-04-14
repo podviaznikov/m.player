@@ -32,7 +32,7 @@
     <script>$(function(){AppController.init();});</script>
 </head>
 <body>
-<section id="playing_visualization" class="info_panel"></section>
+<section id="playing_visualization"></section>
 <section id="library_menu" class="info_panel scrollable_content">
     <header><h1>Artists</h1></header>
     <section id="library_content"></section>
@@ -60,6 +60,7 @@
     <span id="volume_gutter" title="Volume"><span id="volume_handle" class="control ui-slider-handle"></span></span>
     <span id="music_gutter" title="Seek"><span id="music_handle" class="control ui-slider-handle"></span></span>
     <label id="time_counter">0:00</label>
+    <span id="expand" class="control on"></span>
     <audio id="player_ctrl"></audio>
 </footer>
 <article id="album_info_view" class="box"></article>
