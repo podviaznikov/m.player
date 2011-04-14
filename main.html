@@ -29,12 +29,7 @@
     <script src="js/app/settings.js"></script>
     <script src="js/app/store.js"></script>
     <script src="js/app/controller.js"></script>
-    <script>
-    $(function()
-    {
-        AppController.init();
-    });
-    </script>
+    <script>$(function(){AppController.init();});</script>
 </head>
 <body>
 <section id="playing_visualization" class="info_panel"></section>
@@ -55,52 +50,15 @@
     <footer></footer>
 </section>
 <footer id="player">
-     <span id="shuffle_toggle" class="control on" title="Turn shuffle off">
-         <img src="css/icons/shuffle.png" class="main_icon_mode">
-         <img src="css/icons/shuffle_hover.png" class="hover_icon_mode">
-    </span>
-
-    <span id="repeat_toggle" class="control on" title="Turn repeat off">
-        <img src="css/icons/repeat.png" class="main_icon_mode">
-        <img src="css/icons/repeat_hover.png" class="hover_icon_mode">
-    </span>
-
-    <span id="stop_song" class="control" title="Stop">
-        <img src="css/icons/stop.png" class="main_icon_mode">
-        <img src="css/icons/stop_hover.png" class="hover_icon_mode">
-    </span>
-
-    <span id="previous_song" class="control" title="Previous">
-        <img src="css/icons/previous.png" class="main_icon_mode">
-        <img src="css/icons/previous_hover.png" class="hover_icon_mode">
-    </span>
-
-    <span id="play_toggle" class="control playing" title="Pause">
-        <img src="css/icons/play.png" class="main_icon_mode playing">
-        <img src="css/icons/play_hover.png" id="play_hover" class="hover_icon_mode">
-        <img src="css/icons/pause.png" class="main_icon_mode paused">
-        <img src="css/icons/pause_hover.png" id="pause_hover" class="hover_icon_mode">
-    </span>
-    <span id="next_song" class="control" title="Next">
-        <img src="css/icons/next.png" class="main_icon_mode">
-        <img src="css/icons/next_hover.png" class="hover_icon_mode">
-    </span>
-
-    <span id="sound_toggle" class="control on" title="mute">
-        <img src="css/icons/sound.png" class="main_icon_mode on">
-        <img src="css/icons/sound_hover.png" id="sound_on_hover" class="hover_icon_mode">
-        <img src="css/icons/no_sound.png" class="main_icon_mode off">
-        <img src="css/icons/no_sound_hover.png" id="no_sound_hover" class="hover_icon_mode">
-    </span>
-
-    <span id="volume_gutter" title="Volume">
-        <span id="volume_handle" class="control ui-slider-handle"></span>
-    </span>
-
-
-    <span id="music_gutter" title="Seek">
-        <span id="music_handle" class="control ui-slider-handle"></span>
-    </span>
+    <span id="shuffle_toggle" class="control on" title="Turn shuffle off"></span>
+    <span id="repeat_toggle" class="control on" title="Turn repeat off"></span>
+    <span id="stop_song" class="control" title="Stop"></span>
+    <span id="previous_song" class="control" title="Previous"></span>
+    <span id="play_toggle" class="control paused" title="Play"></span>
+    <span id="next_song" class="control" title="Next"></span>
+    <span id="sound_toggle" class="control on" title="mute"></span>
+    <span id="volume_gutter" title="Volume"><span id="volume_handle" class="control ui-slider-handle"></span></span>
+    <span id="music_gutter" title="Seek"><span id="music_handle" class="control ui-slider-handle"></span></span>
     <label id="time_counter">0:00</label>
     <audio id="player_ctrl"></audio>
 </footer>
@@ -133,7 +91,7 @@
     <span class="info_image"><img src="<%= image %>"></span>
     <section class="detailed_album_info">
         <h1><%= name %></h1>
-        <label for="release_date">Release date</label><span class="release_date"><%= releaseDate %></span>
+        <span class="release_date"><%= releaseDate %></span>
     </section>
 </script>
 <script type="html/template" id="song_info_tpl">

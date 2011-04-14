@@ -45,6 +45,10 @@ section.info_panel header
     padding-left:10px;
     padding-right:20px;
 }
+div.artist_albums
+{
+    margin-bottom:5px;
+}
 #songs
 {
     display:table;
@@ -261,10 +265,6 @@ article.artist-data label:after
     margin-bottom:15px;
     font-weight:bold;
 }
-.detailed_album_info label:after
-{
-    content:': ';
-}
 #album_info
 {
     -webkit-box-flex: 2;
@@ -474,10 +474,7 @@ span.control:hover .hover_icon_mode
     color: black!important;
 }
 
-#sound_toggle,#stop_song
-{
-    margin-top:-1px;
-}
+
 #sound_toggle
 {
     margin-left:20px;
@@ -490,4 +487,97 @@ span.control:hover .hover_icon_mode
 .lt-1024 #music_gutter,.lt-1280 #music_gutter
 {
     width:50%;
+}
+
+#next_song
+{
+    background-image:url(icons/next.png);
+    width:23px;
+    height:14px;
+}
+#next_song:hover
+{
+    background-image:url(icons/next_hover.png);
+}
+#previous_song
+{
+    background-image:url(icons/previous.png);
+    width:23px;
+    height:14px;
+}
+#previous_song:hover
+{
+    background-image:url(icons/previous_hover.png);
+}
+#stop_song
+{
+    background-image:url(icons/stop.png);
+    width:11px;
+    height:10px;
+}
+#stop_song:hover
+{
+    background-image:url(icons/stop_hover.png);
+}
+#shuffle_toggle
+{
+    background-image:url(icons/shuffle.png);
+    width:20px;
+    height:14px;
+}
+#shuffle_toggle:hover
+{
+    background-image:url(icons/shuffle_hover.png);
+}
+#repeat_toggle
+{
+    background-image:url(icons/repeat.png);
+    width:19px;
+    height:14px;
+}
+#repeat_toggle:hover
+{
+    background-image:url(icons/repeat_hover.png);
+}
+#play_toggle
+{
+    width:35px;
+    height:35px;
+}
+#play_toggle.playing
+{
+    background-image:url(icons/pause.png);
+}
+#play_toggle.playing:hover
+{
+    background-image:url(icons/pause_hover.png);
+}
+#play_toggle.paused
+{
+    background-image:url(icons/play.png);
+}
+#play_toggle.paused:hover
+{
+    background-image:url(icons/play_hover.png);
+}
+#sound_toggle
+{
+    width:22px;
+    height:21px;
+}
+#sound_toggle.on
+{
+    background-image:url(icons/sound.png);
+}
+#sound_toggle.on:hover
+{
+    background-image:url(icons/sound_hover.png);
+}
+#sound_toggle.off
+{
+    background-image:url(icons/no_sound.png);
+}
+#sound_toggle.off:hover
+{
+    background-image:url(icons/no_sound_hover.png);
 }

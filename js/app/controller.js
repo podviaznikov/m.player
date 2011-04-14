@@ -17,6 +17,10 @@ var AppController=
 		this.albumInfoView = new ui.AlbumInfoView;
 		this.visualizationView = new ui.VisualizationView;
 		musicDao.open(this.onDBLoad);
+        //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
+        //$(document.body).bind("online", this.checkNetworkStatus);
+        //$(document.body).bind("offline", this.checkNetworkStatus);
+        //this.checkNetworkStatus();
 	},
     /**
      * Load UI components that are depended on connection to the storage(indexDB).
@@ -27,4 +31,13 @@ var AppController=
         this.songsView = new ui.SongsView;
         this.playlistView = new ui.PlayListView;
 	}
+//    checkNetworkStatus:function()
+//    {
+//        if (navigator.onLine) {
+//            alert('Online');
+//        }
+//        else {
+//            alert('Offline');
+//        }
+//    }
 };
