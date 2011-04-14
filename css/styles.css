@@ -146,26 +146,6 @@ footer#player
 {
     display:inline-block;
 }
-#playtoggle
-{
-    position: absolute;
-    top: 9px;
-    left: 10px;
-    width: 30px;
-    height: 30px;
-    background: url(images/player.png) no-repeat -30px 0;
-    cursor: pointer;
-}
-
-#playtoggle.playing
-{
-    background-position: 0 0;
-}
-
-#playtoggle:active
-{
-    top: 10px;
-}
 
 #volume_gutter
 {
@@ -305,7 +285,6 @@ article.artist-data label:after
 {
     max-width:575px;
     max-height:575px;
-    -webkit-box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(0, 0, 0, 0.35);
     background-color: rgba(0, 0, 0, 0.35);
     margin:10px;
@@ -381,99 +360,11 @@ span.info_image img
     padding: 0px 0px 15px 0px;
 }
 
-#sound_off_icon
-{
-    display:none;
-}
-.hover_icon_mode
-{
-    display:none;
-}
-#play_toggle.playing .playing
-{
-    display:block;
-}
-#play_toggle.playing .paused
-{
-    display:none;
-}
-#play_toggle.paused .paused
-{
-    display:block;
-}
-#play_toggle.paused .playing
-{
-    display:none;
-}
-
-#sound_toggle.on .on
-{
-    display:block;
-}
-#sound_toggle.on .off
-{
-    display:none;
-}
-#sound_toggle.off .off
-{
-    display:block;
-}
-#sound_toggle.off .on
-{
-    display:none;
-}
-
-
-
-
-span.control:hover .main_icon_mode
-{
-    display:none!important;
-}
-span.control:hover .hover_icon_mode
-{
-    display:block;
-}
-#play_toggle.playing:hover #play_hover
-{
-    display:block;
-}
-#play_toggle.playing:hover #pause_hover
-{
-    display:none;
-}
-#play_toggle.paused:hover #play_hover
-{
-    display:none;
-}
-#play_toggle.paused:hover #pause_hover
-{
-    display:block;
-}
-
-#sound_toggle.on:hover #sound_on_hover
-{
-    display:block;
-}
-#sound_toggle.on:hover #no_sound_hover
-{
-    display:none;
-}
-#sound_toggle.off:hover #sound_on_hover
-{
-    display:none;
-}
-#sound_toggle.off:hover #no_sound_hover
-{
-    display:block;
-}
-
 #playing_songs label
 {
     background-color: #FF6900!important;
     color: black!important;
 }
-
 
 #sound_toggle
 {
