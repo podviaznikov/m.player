@@ -14,39 +14,32 @@ $(function()
 
         initialize: function()
         {
-            _.bindAll(this,'selectSong','render');
+            _.bindAll(this,'selectSong','render','show','hide','renderAlbumPoster');
         },
         selectSong:function(song)
         {
             this.model = song;
+        },
+        show:function()
+        {
+            this.el.show();
             this.render();
+        },
+        hide:function()
+        {
+            this.el.hide();
+        },
+        renderAlbumPoster:function(image)
+        {
+            var html = _.template(this.tpl,
+            {
+                image:image
+            });
+            $(this.el).html(html);
         },
         render:function()
         {
-            var self = this;
-//            AppController.lastfm.album.getInfo(
-//            {
-//                artist: this.model.get('artist'),
-//                album: this.model.get('album')
-//            },
-//            {
-//                success: function(data)
-//                {
-//                    console.log(data);
-//                    var image = data.album.image[4]['#text'];
-//                    var html = _.template(self.tpl,
-//                    {
-//                        image:image
-//                    });
-//                    $(self.el).html(html);
-//
-//                },
-//                error: function(code, message)
-//                {
-//                    console.log(message);
-//                }
-//            });
-
+            lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
             return this;
         }
 

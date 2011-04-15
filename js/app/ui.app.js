@@ -22,12 +22,14 @@ $(function()
         },
         enterNowPlayingMode:function()
         {
-          $('section.info_panel').hide();
+            $('section.info_panel').hide();
+            AppController.visualizationView.show();
         },
 
         enterRegularPlayerMode:function()
         {
-          $('section.info_panel').css('display','inline-block');
+            $('section.info_panel').css('display','inline-block');
+            AppController.visualizationView.hide();
         },
         keyPressed:function(event)
         {

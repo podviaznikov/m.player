@@ -485,3 +485,11 @@ span.info_image img
 {
     background-image:url(icons/expand_hover.png);
 }
+#expand.off
+{
+    background-image:url(icons/expand.png);
+}
+#expand.off:hover
+{
+    background-image:url(icons/expand_hover.png);
+}
