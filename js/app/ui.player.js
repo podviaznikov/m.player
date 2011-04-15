@@ -63,6 +63,7 @@ $(function()
         repeatToggle:$('#repeat_toggle'),
         handleMusicProgress:$('#music_gutter #music_handle'),
         handleVolume:$('#volume_gutter #volume_handle'),
+        playerModeToggle:$('#expand'),
         loadedMusicSlider:false,
         manualSeekMusicSlider:false,
 
@@ -87,7 +88,6 @@ $(function()
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','nowPlayingMode','regularPlayerMode');
             this.audioEL = new ui.AudioElement({player:this});
-            var self = this;
             $('#volume_gutter').slider(
             {
                 value:settings.getVolume(),
@@ -100,14 +100,16 @@ $(function()
         },
         nowPlayingMode:function()
         {
-            $('#expand').removeClass('on');
-            $('#expand').addClass('off');
+            this.playerModeToggle.removeClass('on');
+            this.playerModeToggle.addClass('off');
+            this.playerModeToggle.attr('title','Library mode');
             AppController.appView.enterNowPlayingMode();
         },
         regularPlayerMode:function()
         {
-            $('#expand').removeClass('off');
-            $('#expand').addClass('on');
+            this.playerModeToggle.removeClass('off');
+            this.playerModeToggle.addClass('on');
+            this.playerModeToggle.attr('title','Full screen mode');
             AppController.appView.enterRegularPlayerMode();
         },
         changedVolume:function(e,ui)

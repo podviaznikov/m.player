@@ -26,6 +26,10 @@ body
     font-size: 11px;
     overflow: hidden;
 }
+body.fullscreen
+{
+    background-color:black;
+}
 section.info_panel
 {
     height: 100%;
@@ -95,8 +99,8 @@ footer#player
     width: 100%;
     height: 45px;
     background: black;
-    padding-left:20px;
-    padding-right:20px;
+    padding-left:10px;
+    padding-right:10px;
     padding-top: 5px;
 }
 #music_gutter
@@ -106,6 +110,7 @@ footer#player
     border-radius: 0px!important;
     background: white;
     width:65%;
+    vertical-align:middle;
 }
 #music_handle
 {
@@ -156,6 +161,7 @@ footer#player
     background: white;
     margin-left:5px;
     margin-right:60px;
+    vertical-align:middle;
 }
 #volume_handle
 {
@@ -412,9 +418,16 @@ span.info_image img
 }
 #shuffle_toggle
 {
-    background-image:url(icons/shuffle.png);
     width:20px;
     height:14px;
+}
+#shuffle_toggle.on
+{
+    background-image:url(icons/shuffle_hover.png);
+}
+#shuffle_toggle.off
+{
+    background-image:url(icons/shuffle.png);
 }
 #shuffle_toggle:hover
 {
@@ -422,9 +435,16 @@ span.info_image img
 }
 #repeat_toggle
 {
-    background-image:url(icons/repeat.png);
     width:19px;
     height:14px;
+}
+#repeat_toggle.on
+{
+    background-image:url(icons/repeat_hover.png);
+}
+#repeat_toggle.off
+{
+    background-image:url(icons/repeat.png);
 }
 #repeat_toggle:hover
 {
@@ -487,9 +507,9 @@ span.info_image img
 }
 #expand.off
 {
-    background-image:url(icons/expand.png);
+    background-image:url(icons/collapse.png);
 }
 #expand.off:hover
 {
-    background-image:url(icons/expand_hover.png);
+    background-image:url(icons/collapse_hover.png);
 }

@@ -23,11 +23,13 @@ $(function()
         enterNowPlayingMode:function()
         {
             $('section.info_panel').hide();
+            this.el.addClass('fullscreen');
             AppController.visualizationView.show();
         },
 
         enterRegularPlayerMode:function()
         {
+            this.el.removeClass('fullscreen');
             $('section.info_panel').css('display','inline-block');
             AppController.visualizationView.hide();
         },
