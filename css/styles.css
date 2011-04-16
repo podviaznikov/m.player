@@ -14,10 +14,15 @@
     display: -webkit-box;
     -webkit-box-orient:horizontal;
 }
+.hidden
+{
+    display:none;
+}
 html, body
 {
     height:100%;
     -webkit-user-select: none;
+    user-select:none;
     color:#939393;
     font-family:arial;
 }
@@ -375,15 +380,6 @@ span.info_image img
 #sound_toggle
 {
     margin-left:20px;
-}
-/*updates for small screens*/
-.lt-1024 #filtered_lib,.lt-1280 #filtered_lib
-{
-    width:30%!important;
-}
-.lt-1024 #music_gutter,.lt-1280 #music_gutter
-{
-    width:50%;
 }
 
 #next_song

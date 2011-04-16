@@ -1,0 +1,17 @@
+section.info_panel
+{
+    display:none;
+}
+#playing_list
+{
+    display:block;
+    width:100%;
+}
+#playing_list.hidden
+{
+    display:none;
+}
+#music_gutter
+{
+    width:20%;
+}

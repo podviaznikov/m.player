@@ -20,7 +20,12 @@ var lastFM=
             dataType:'jsonp',
             success: function(data)
             {
-                callback(data.artist.image[2]['#text']||'css/images/no_picture.png');
+                var image='css/images/no_picture.png';
+                if(data && data.artist && data.artist.image[2])
+                {
+                    image=data.artist.image[2]['#text']||'css/images/no_picture.png';
+                }
+                callback(image);
             },
             error: function()
             {
@@ -40,7 +45,12 @@ var lastFM=
             dataType:'jsonp',
             success: function(data)
             {
-                callback(data.album.image[2]['#text']||'css/images/no_picture.png');
+                var image='css/images/no_picture.png';
+                if(data && data.album && data.album.image[2])
+                {
+                    image=data.album.image[2]['#text']||'css/images/no_picture.png';
+                }
+                callback(image);
             },
             error: function()
             {
@@ -60,7 +70,12 @@ var lastFM=
             dataType:'jsonp',
             success: function(data)
             {
-                callback(data.album.image[4]['#text']||'css/images/no_picture.png');
+                var image='css/images/no_picture.png';
+                if(data && data.album && data.album.image[4])
+                {
+                    image=data.album.image[4]['#text']||'css/images/no_picture.png';
+                }
+                callback(image);
             },
             error: function()
             {

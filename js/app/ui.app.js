@@ -22,7 +22,7 @@ $(function()
         },
         enterNowPlayingMode:function()
         {
-            $('section.info_panel').hide();
+            $('section.info_panel').addClass('hidden');
             this.el.addClass('fullscreen');
             AppController.visualizationView.show();
         },
@@ -30,7 +30,7 @@ $(function()
         enterRegularPlayerMode:function()
         {
             this.el.removeClass('fullscreen');
-            $('section.info_panel').css('display','inline-block');
+            $('section.info_panel').removeClass('hidden');
             AppController.visualizationView.hide();
         },
         keyPressed:function(event)
