@@ -96,10 +96,14 @@ var lastFM=
             success: function(data)
             {
                 data = data.album;
-                var image = data.image[2]['#text']||'css/images/no_picture.png';//medium
+                var image = 'css/images/no_picture.png';
+                if(data && data.image[2])
+                {
+                    image=data.image[2]['#text']||'css/images/no_picture.png';//medium
+                }
                 var albumName = data.name.trim()||album;
-                var releaseDate = data.releasedate.trim().split(',')[0]||'na';//getting just date without time
-                var songsCount = data.tracks.length||'na';
+                var releaseDate = data.releasedate.trim().split(',')[0]||'';//getting just date without time
+                var songsCount = data.tracks.length||'';
 
                 callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
             },

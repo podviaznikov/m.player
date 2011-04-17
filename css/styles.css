@@ -14,10 +14,6 @@
     display: -webkit-box;
     -webkit-box-orient:horizontal;
 }
-.hidden
-{
-    display:none;
-}
 html, body
 {
     height:100%;
@@ -292,13 +288,10 @@ article.artist-data label:after
     text-align: center;
     overflow:hidden;
 }
-.lt-1440 .main_album_image img
+#playing_visualization img
 {
-    max-width:575px;
-    max-height:575px;
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    background-color: rgba(0, 0, 0, 0.35);
     margin:10px;
+    max-height: 100%;
 }
 #playing_list
 {
@@ -508,4 +501,9 @@ span.info_image img
 #expand.off:hover
 {
     background-image:url(icons/collapse_hover.png);
+}
+
+.hidden
+{
+    display:none;
 }

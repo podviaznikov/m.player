@@ -15,3 +15,12 @@ section.info_panel
 {
     width:10%;
 }
+#volume_gutter
+{
+    margin-right: 10px;
+    width:20px;
+}
+#sound_toggle
+{
+    margin-left:0px;
+}
