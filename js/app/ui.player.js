@@ -64,9 +64,13 @@ $(function()
         handleMusicProgress:$('#music_gutter #music_handle'),
         handleVolume:$('#volume_gutter #volume_handle'),
         playerModeToggle:$('#expand'),
+        helpModeToggle:$('#help'),
         loadedMusicSlider:false,
         manualSeekMusicSlider:false,
-
+        volumeGutter:$('#volume_gutter'),
+        soundOffIcon:$('#sound_off_icon'),
+        soundOnIcon:$('#sound_on_icon'),
+        timeCounter:$('#time_counter'),
         events:
         {
             'click #play_toggle.paused': 'resume',
@@ -81,22 +85,38 @@ $(function()
             'click #repeat_toggle.on':'repeatOff',
             'click #repeat_toggle.off':'repeatOn',
             'click #expand.on':'nowPlayingMode',
-            'click #expand.off':'regularPlayerMode'
+            'click #expand.off':'regularPlayerMode',
+            'click #help.on':'turnOffHelpMode',
+            'click #help.off':'turnOnHelpMode'
+
         },
         initialize:function()
         {
             this.bind('audio:update',this.updateAudioProgress);
-            _.bindAll(this,'togglePause','changedVolume','nowPlayingMode','regularPlayerMode');
+            _.bindAll(this,'togglePause','changedVolume','nowPlayingMode','regularPlayerMode',
+                    'turnOnHelpMode','turnOffHelpMode');
             this.audioEL = new ui.AudioElement({player:this});
-            $('#volume_gutter').slider(
+            this.volumeGutter.slider(
             {
                 value:settings.getVolume(),
-                step: 0.01,
-                range: 'min',
-                max: 1,
-                animate: true,
+                step:0.01,
+                range:'min',
+                max:1,
+                animate:true,
                 stop:this.changedVolume
             });
+        },
+        turnOnHelpMode:function()
+        {
+            this.helpModeToggle.removeClass('off');
+            this.helpModeToggle.addClass('on');
+            AppController.appView.showHelp();
+        },
+        turnOffHelpMode:function()
+        {
+            this.helpModeToggle.removeClass('on');
+            this.helpModeToggle.addClass('off');
+            AppController.appView.hideHelp();
         },
         nowPlayingMode:function()
         {
@@ -123,8 +143,8 @@ $(function()
 
             this.soundToggle.addClass('on');
             this.soundToggle.removeClass('off');
-            this.$('#sound_on_icon').show();
-            this.$('#sound_off_icon').hide();
+            this.soundOnIcon.show();
+            this.soundOffIcon.hide();
 
             this.audioEL.setVolume(this.volume||0.5);
         },
@@ -134,8 +154,8 @@ $(function()
 
             this.soundToggle.addClass('off');
             this.soundToggle.removeClass('on');
-            this.$('#sound_off_icon').show();
-            this.$('#sound_on_icon').hide();
+            this.soundOffIcon.show();
+            this.soundOnIcon.hide();
 
             this.volume=this.audioEL.getVolume();
             this.audioEL.setVolume(0);
@@ -225,7 +245,7 @@ $(function()
             {
                 this.next();
             }
-            this.$('#time_counter').text(timeCounter);
+            this.timeCounter.text(timeCounter);
             if (!this.manualSeekMusicSlider)
             {
                 var posPer=pos + '%';

@@ -20,6 +20,16 @@ $(function()
         {
             return this;
         },
+        showHelp:function()
+        {
+            $('section.info_panel').addClass('hidden scrollable_content');
+            $('section.help_panel').removeClass('hidden');
+        },
+        hideHelp:function()
+        {
+            $('section.info_panel').removeClass('hidden scrollable_content');
+            $('section.help_panel').addClass('hidden');
+        },
         enterNowPlayingMode:function()
         {
             $('section.info_panel').addClass('hidden');

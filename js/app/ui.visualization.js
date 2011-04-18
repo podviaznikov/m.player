@@ -39,7 +39,10 @@ $(function()
         },
         render:function()
         {
-            lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
+            if(this.model)
+            {
+                lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
+            }
             return this;
         }
 

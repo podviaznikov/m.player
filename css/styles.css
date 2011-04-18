@@ -43,12 +43,7 @@ section.info_panel header
 {
     border-bottom:1px solid #939393;
     margin-bottom:10px;
-}
-#library_menu
-{
-    width:32%;
-    padding-left:10px;
-    padding-right:20px;
+    color: #939393;
 }
 div.artist_albums
 {
@@ -293,12 +288,6 @@ article.artist-data label:after
     margin:10px;
     max-height: 100%;
 }
-#playing_list
-{
-    width:25%;
-    padding-left:20px;
-    padding-right:10px;
-}
 #playing_list footer
 {
     border-top: 1px solid #939393;
@@ -343,12 +332,7 @@ span.info_image img
     width:100px;
     height:100px;
 }
-#filtered_lib
-{
-    width:35%;
-    padding-left:20px;
-    padding-right:20px;
-}
+
 .detailed_album_info_panel
 {
     min-height:120px;
@@ -502,8 +486,65 @@ span.info_image img
 {
     background-image:url(icons/collapse_hover.png);
 }
-
+#help
+{
+    font-weight: bold;
+    color: white;
+    font-size: 24px;
+    margin-right: -2px;
+    margin-left: -8px;
+}
+.help_panel
+{
+    color:black;
+}
+#how_to_use p
+{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+#contributions section span
+{
+    display:block;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+#contributions section span a
+{
+    color:#FF6900;
+    text-decoration:underline;
+}
+.hot_key_row
+{
+    background-color: #F0F0F0;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.key_combination
+{
+    color:#FF6900;
+    margin-right:20px;
+    width:80px;
+}
 .hidden
 {
     display:none;
+}
+.left_layout_panel
+{
+    width:32%;
+    padding-left:10px;
+    padding-right:20px;
+}
+.middle_layout_panel
+{
+    width:32%;
+    padding-left:20px;
+    padding-right:20px;
+}
+.right_layout_panel
+{
+    width:28%;
+    padding-left:20px;
+    padding-right:10px;
 }
