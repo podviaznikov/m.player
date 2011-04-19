@@ -6,6 +6,15 @@
 "use strict";
 var Song = Backbone.Model.extend(
 {
+    defaults:
+    {
+        album:'no album',
+        title:'no title',
+        artist:'no artist',
+        year:'no year',
+        genre:'no genre'
+
+    },
     initialize:function()
     {
         if(!this.get('id'))

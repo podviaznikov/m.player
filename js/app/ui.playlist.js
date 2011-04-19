@@ -25,7 +25,7 @@ $(function()
         {
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL',
-             'currentSong','randomSong','renderAlbumInfo','render');
+             'currentSong','randomSong','renderAlbumInfo','render','handleFileSelect');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -175,7 +175,6 @@ $(function()
         },
         handleFileSelect:function(files)
         {
-
             for (var i = 0; i<files.length; i++)
             {
                 var file = files[i];
@@ -184,6 +183,7 @@ $(function()
                 {
                     continue;
                 }
+
                 //read data
                 fs.read.fileAsBinaryString(file, function(readError,data,initialFile)
                 {
@@ -192,29 +192,33 @@ $(function()
                         return;
                     }
                     var initialFile = initialFile;
-                    var metaData = ID3.readTagsFromData(data);
-                    var songData = metaData;
-                    var song = new Song();
-                    var artist = new Artist({name:songData.artist});
-                    var uniqueFileName=song.id+initialFile.extension();
-
-                    songData.fileName=uniqueFileName;
-                    songData.originalFileName=initialFile.name;
-                    song.set(songData);
-                    //save file
-                    fs.write.file(initialFile,function(writeError)
+                    ID3v2.parseFile(initialFile,function(tags)
                     {
-                        if(!writeError)
+                        var songData = tags;
+                        var song = new Song();
+
+                        var uniqueFileName=song.id+initialFile.extension();
+
+                        songData.fileName=uniqueFileName;
+                        songData.originalFileName=initialFile.name;
+                        song.set(songData);
+                        var artist = new Artist({name:song.get('artist')});
+                        //save file
+                        fs.write.file(initialFile,function(writeError)
                         {
-                            musicDao.addSong(song);
-                            lastFM.getArtistImage(artist.get('name'),function(image)
+                            if(!writeError)
                             {
-                                artist.set({image:image});
-                                musicDao.addArtist(artist);
-                            });
-                            AppController.playlistView.songs.add(song);
-                        }
-                    },uniqueFileName);
+                                musicDao.addSong(song);
+                                lastFM.getArtistImage(artist.get('name'),function(image)
+                                {
+                                    artist.set({image:image});
+                                    musicDao.addArtist(artist);
+                                });
+                                AppController.playlistView.songs.add(song);
+                            }
+                        },uniqueFileName);
+
+                    });
                 });
 
             }

@@ -489,10 +489,21 @@ span.info_image img
 #help
 {
     font-weight: bold;
-    color: white;
     font-size: 24px;
     margin-right: -2px;
     margin-left: -8px;
+}
+#help.off
+{
+    color: white;
+}
+#help.on
+{
+    color:#FF6900;
+}
+#help:hover
+{
+    color:#FF6900;
 }
 .help_panel
 {
@@ -509,7 +520,7 @@ span.info_image img
     margin-top:10px;
     margin-bottom:10px;
 }
-#contributions section span a
+.help_panel a
 {
     color:#FF6900;
     text-decoration:underline;

@@ -22,12 +22,13 @@ $(function()
         },
         showHelp:function()
         {
+            this.el.removeClass('fullscreen');
             $('section.info_panel').addClass('hidden scrollable_content');
             $('section.help_panel').removeClass('hidden');
         },
         hideHelp:function()
         {
-            $('section.info_panel').removeClass('hidden scrollable_content');
+            $('section.info_panel.scrollable_content').removeClass('hidden');
             $('section.help_panel').addClass('hidden');
         },
         enterNowPlayingMode:function()
@@ -40,7 +41,7 @@ $(function()
         enterRegularPlayerMode:function()
         {
             this.el.removeClass('fullscreen');
-            $('section.info_panel').removeClass('hidden');
+            $('section.info_panel.scrollable_content').removeClass('hidden');
             AppController.visualizationView.hide();
         },
         keyPressed:function(event)
