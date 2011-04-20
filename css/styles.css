@@ -537,6 +537,12 @@ span.info_image img
     margin-right:20px;
     width:80px;
 }
+#clear_playlist
+{
+    cursor:pointer;
+    font-weight:bold;
+    float:right;
+}
 .hidden
 {
     display:none;

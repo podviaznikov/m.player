@@ -19,13 +19,14 @@ $(function()
         events:
         {
             'dragover':'dragOverFiles',
-            'drop':'dropFiles'
+            'drop':'dropFiles',
+            'click #clear_playlist':'clearPlaylist'
         },
         initialize: function()
         {
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL',
-             'currentSong','randomSong','renderAlbumInfo','render','handleFileSelect');
+             'currentSong','randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -47,6 +48,13 @@ $(function()
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
             return this;
         },
+        clearPlaylist:function()
+        {
+            this.songsEl.empty();
+            this.songs.refresh([]);
+            settings.savePlayList(this.songs);
+            this.render();
+        },
         addOne: function(song)
         {
             if(song.get('fileName'))
@@ -59,7 +67,6 @@ $(function()
         },
         addAll: function()
         {
-
             if(this.songs.length!=0)
             {
                 this.songsEl.empty();
@@ -75,7 +82,18 @@ $(function()
         {
             e.stopPropagation();
             e.preventDefault();
-            this.handleFileSelect(e.originalEvent.dataTransfer.files); // handle FileList object.
+            var dataTransfer=e.originalEvent.dataTransfer;
+            var files=dataTransfer.files;
+            if(files && files.length>0)
+            {
+                this.handleFileSelect(e.originalEvent.dataTransfer.files); // handle FileList object.
+            }
+            else
+            {
+                var songJSON=JSON.parse(dataTransfer.getData('text/plain'));
+                var song = new Song(songJSON);
+                this.songs.add(song);
+            }
         },
         selectSong:function(song)
         {
@@ -225,7 +243,8 @@ $(function()
         }
     });
 
-    ui.SongMiniView = Backbone.View.extend({
+    ui.SongMiniView = Backbone.View.extend(
+    {
         className:'song-data',
         tpl:$('#song_mini_tpl').html(),
         events:

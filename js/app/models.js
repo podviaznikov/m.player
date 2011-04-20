@@ -24,8 +24,8 @@ var Song = Backbone.Model.extend(
         }
     }
 });
-var SongsList = Backbone.Collection.extend({
-
+var SongsList = Backbone.Collection.extend(
+{
     model: Song,
     initialize:function()
     {
@@ -69,8 +69,8 @@ var Artist = Backbone.Model.extend(
     }
 });
 
-var ArtistsList = Backbone.Collection.extend({
-
+var ArtistsList = Backbone.Collection.extend(
+{
     model: Artist,
 
     fetch: function(allLoaded)
@@ -90,3 +90,8 @@ var ArtistsList = Backbone.Collection.extend({
     }
 });
 
+var PlayList = Backbone.Model.extend({});
+var PlayLists = Backbone.Collection.extend(
+{
+    model: PlayList
+});

@@ -26,6 +26,7 @@
     <script src="js/app/ui.app.js"></script>
     <script src="js/app/ui.songslist.js"></script>
     <script src="js/app/ui.playlist.js"></script>
+    <script src="js/app/ui.audio.js"></script>
     <script src="js/app/ui.player.js"></script>
     <script src="js/app/ui.library.js"></script>
     <script src="js/app/ui.album.js"></script>
@@ -80,13 +81,14 @@
 <section id="playing_list" class="info_panel scrollable_content right_layout_panel">
     <header class="box"><h1>Now playing</h1></header>
     <section id="song_info_view"></section>
+    <section id="playlist_toolbar"><span contenteditable="true">Unsaved list</span><span id="clear_playlist">-</span></section>
     <section id="playing_songs">
         <label>Drop files here</label>
     </section>
     <footer></footer>
 </section>
 <footer id="player">
-    <span id="shuffle_toggle" class="control on" title="Turn shuffle off"></span>
+    <span id="shuffle_toggle" class="control off" title="Turn shuffle on"></span>
     <span id="repeat_toggle" class="control on" title="Turn repeat off"></span>
     <span id="stop_song" class="control" title="Stop"></span>
     <span id="previous_song" class="control" title="Previous"></span>
