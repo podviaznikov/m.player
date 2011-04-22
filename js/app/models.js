@@ -90,8 +90,17 @@ var ArtistsList = Backbone.Collection.extend(
     }
 });
 
-var PlayList = Backbone.Model.extend({});
+var PlayList = Backbone.Model.extend(
+{
+//    getGenres:function()
+//    {
+//        var songs=this.get('songs');
+//        var genres=_.map(songs, function(song){ return song.genre; });
+//        return _.uniq(genres);
+//    }
+});
 var PlayLists = Backbone.Collection.extend(
 {
-    model: PlayList
+    model: PlayList,
+    localStorage: new Store("saved_playlists")
 });

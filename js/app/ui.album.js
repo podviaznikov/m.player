@@ -7,7 +7,8 @@
 var global = window;
 $(function()
 {
-    ui.AlbumView = Backbone.View.extend({
+    ui.AlbumView = Backbone.View.extend(
+    {
         className: 'album_full_info_panel',
         tagName: 'article',
 
@@ -26,7 +27,6 @@ $(function()
             });
             return this;
         },
-
         addSong: function(song,key)
         {
             var view = new ui.SongView({model:song,key:key,songs:this.model.songs});
@@ -35,7 +35,40 @@ $(function()
         }
     });
 
-    ui.AlbumInfoView = Backbone.View.extend({
+    ui.PlayListFullView = Backbone.View.extend(
+    {
+        className: 'album_full_info_panel',
+        tagName: 'article',
+        tpl:$('#detailed_playlist_info_tpl').html(),
+        initialize: function()
+        {
+            _.bindAll(this, 'addSong','render');
+        },
+        render:function()
+        {
+            var self=this;
+            var html = _.template(this.tpl,
+            {
+                image:'css/images/no_picture.png',
+                name:this.model.get('name')
+            });
+            $(this.el).append(html);
+            _.each(this.model.get('songs'),function(song,key)
+            {
+                self.addSong(song,key);
+            });
+            return this;
+        },
+        addSong: function(song,key)
+        {
+            var view = new ui.SongView({model:new Song(song),key:key,songs:new SongsList(this.model.get('songs')).models});
+            song.view = view;
+            $(this.el).append(view.render().el);
+        }
+    });
+
+    ui.AlbumInfoView = Backbone.View.extend(
+    {
         className: 'detailed_album_info_panel box',
         tagName: 'section',
         tpl:$('#detailed_album_info_tpl').html(),
@@ -50,8 +83,7 @@ $(function()
             {
                 image:data.image,
                 name:data.name,
-                releaseDate:data.releaseDate,
-                songsCount:data.songsCount
+                releaseDate:data.releaseDate
             });
             $(this.el).append(html);
         },
@@ -63,7 +95,8 @@ $(function()
     });
 
 
-    ui.SongView = Backbone.View.extend({
+    ui.SongView = Backbone.View.extend(
+    {
         className:'song-data',
         tpl:$('#song_tpl').html(),
         events:

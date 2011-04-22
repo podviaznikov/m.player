@@ -17,7 +17,8 @@ var AppController=
 		this.albumInfoView = new ui.AlbumInfoView;
 		this.visualizationView = new ui.VisualizationView;
         this.visualizationView.el.height(newHeight);
-		musicDao.open(this.onDBLoad);
+        musicDao.open(this.onDBLoad);
+
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
         //$(document.body).bind("online", this.checkNetworkStatus);
         //$(document.body).bind("offline", this.checkNetworkStatus);

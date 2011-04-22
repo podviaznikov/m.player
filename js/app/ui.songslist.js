@@ -17,10 +17,9 @@ $(function()
         },
         initialize: function()
         {
-            _.bindAll(this, 'showAlbums','handleDragStart');
+            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart');
             this.mapping={};
         },
-
         showAlbums: function(albums,artist,songs)
         {
             this.filteredLibContent.empty();
@@ -33,6 +32,12 @@ $(function()
                 var albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                 this.filteredLibContent.append(albumView.render().el);
             }
+        },
+        showPlayList: function(playList)
+        {
+            this.filteredLibContent.empty();
+            var playListView = new ui.PlayListFullView({model:playList});
+            this.filteredLibContent.append(playListView.render().el);
         },
         handleDragStart:function(e)
         {

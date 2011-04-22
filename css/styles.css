@@ -76,7 +76,7 @@ ul li
     background-color:#ff6900!important;
     color:black!important;
 }
-.selected_artist h1
+.selected-lib-item h1
 {
    background-color:#ff6900!important;
    color:black!important;
@@ -194,32 +194,32 @@ footer#player
     display:inline-block;
 }
 
-article.artist-data
+article.lib-item-data
 {
     border-bottom: 1px solid #939393;
     padding: 15px 0px 15px 0px;
 }
-article.artist-data label:after
+article.lib-item-data label:after
 {
     content:': '
 }
 
-.artist_info
+.lib-item-info
 {
     -webkit-box-flex: 2;
 }
-.artist_info h1
+.lib-item-info h1
 {
     color:black;
     text-transform: uppercase;
     margin-bottom:15px;
     font-weight:bold;
 }
-.artist_info div, .artist_info label
+.lib-item-info div, .lib-item-info label
 {
     font-size:11px;
 }
-.artist_info label
+.lib-item-info label
 {
     font-weight:bold;
     color:black;
@@ -537,11 +537,46 @@ span.info_image img
     margin-right:20px;
     width:80px;
 }
+#playlist_toolbar
+{
+    margin-bottom:10px;
+}
+#new_play_list:focus
+{
+    background-color:#FF6900;
+}
 #clear_playlist
 {
     cursor:pointer;
     font-weight:bold;
     float:right;
+}
+#library_menu header h1
+{
+    display:inline-block;
+    margin-right:5px;
+    cursor:pointer;
+}
+#library_menu header h1:hover
+{
+    text-decoration:underline;
+}
+#library_menu header h1:after
+{
+    content:'/';
+    margin-left:5px;
+}
+#library_menu header h1:last-child:after
+{
+    content:'';
+}
+.library_content_panel
+{
+    display:none;
+}
+#artists_library_content
+{
+    display:block;
 }
 .hidden
 {

@@ -16,17 +16,19 @@ $(function()
         statEL:$('#playing_list footer'),
         songInfoTpl: $('#song_info_tpl').html(),
         playlistStatTpl: $('#playlist_stat_tpl').html(),
+        newPlayListName:$('#new_play_list'),
         events:
         {
             'dragover':'dragOverFiles',
             'drop':'dropFiles',
+            'blur #new_play_list':'savePlayList',
             'click #clear_playlist':'clearPlaylist'
         },
         initialize: function()
         {
             this.songs=new SongsList;//should be first in this method!
-            _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL',
-             'currentSong','randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist');
+            _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
+             'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist','savePlayList');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -47,6 +49,15 @@ $(function()
         {
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
             return this;
+        },
+        savePlayList:function()
+        {
+            var newPlaylistName=this.newPlayListName.val();
+            if('Unsaved list'!=newPlaylistName)
+            {
+                var playList=new PlayList({name:newPlaylistName,songs:this.songs});
+                AppController.libraryMenu.playLists.create(playList);
+            }
         },
         clearPlaylist:function()
         {

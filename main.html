@@ -14,6 +14,7 @@
     <script src="js/lib/jquery-ui-1.8.11.custom.min.js"></script>
     <script src="js/lib/underscore-min.js"></script>
     <script src="js/lib/backbone-min.js"></script>
+    <script src="js/lib/backbone-localstorage.js"></script>
     <script src="js/lib/uuid.js"></script>
     <script src="js/lib/id3.reader.js" ></script>
     <script src="js/api/lastfm.js"></script>
@@ -29,6 +30,8 @@
     <script src="js/app/ui.audio.js"></script>
     <script src="js/app/ui.player.js"></script>
     <script src="js/app/ui.library.js"></script>
+    <script src="js/app/ui.artist.view.js"></script>
+    <script src="js/app/ui.playlist.view.js"></script>
     <script src="js/app/ui.album.js"></script>
     <script src="js/app/ui.visualization.js"></script>
     <script src="js/app/settings.js"></script>
@@ -71,8 +74,9 @@
 </section>
 <section id="playing_visualization"></section>
 <section id="library_menu" class="info_panel scrollable_content left_layout_panel">
-    <header><h1>Artists</h1></header>
-    <section id="library_content"></section>
+    <header><h1 id="show_artists">Artists</h1><h1 id="show_playlists">Playlists</h1></header>
+    <section id="artists_library_content" class="library_content_panel"></section>
+    <section id="playlists_library_content" class="library_content_panel"></section>
 </section>
 <section id="filtered_lib" class="info_panel scrollable_content middle_layout_panel">
     <header><h1>Albums</h1></header>
@@ -81,10 +85,8 @@
 <section id="playing_list" class="info_panel scrollable_content right_layout_panel">
     <header class="box"><h1>Now playing</h1></header>
     <section id="song_info_view"></section>
-    <section id="playlist_toolbar"><span contenteditable="true">Unsaved list</span><span id="clear_playlist">-</span></section>
-    <section id="playing_songs">
-        <label>Drop files here</label>
-    </section>
+    <section id="playlist_toolbar"><input id="new_play_list" value="Unsaved list" maxlength="18"><span id="clear_playlist">-</span></section>
+    <section id="playing_songs"><label>Drop files here</label></section>
     <footer></footer>
 </section>
 <footer id="player">
@@ -112,13 +114,19 @@
     <div class="delete_song cell" title="Remove song"><span class="control ui-icon ui-icon-close"></span></div>
 </script>
 <script type="html/template" id="playlist_stat_tpl"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></script>
-
 <script type="html/template" id="artist_tpl">
     <span class="info_image"><img src="<%= image %>"></span>
-    <section class="artist_info">
+    <section class="lib-item-info">
         <h1><%= name %></h1>
         <div class="artist_albums"><% _.each(albums, function(album) { %> <a class="album_link" data-album="<%= album %>"><%= album %></a> <% }); %></div>
         <div class="artist_genres"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
+        <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+    </section>
+</script>
+<script type="html/template" id="saved_playlist_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="lib-item-info">
+        <h1><%= name %></h1>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
     </section>
 </script>
@@ -128,6 +136,12 @@
     <section class="detailed_album_info">
         <h1><%= name %></h1>
         <span class="release_date"><%= releaseDate %></span>
+    </section>
+</script>
+<script type="html/template" id="detailed_playlist_info_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="detailed_album_info">
+        <h1><%= name %></h1>
     </section>
 </script>
 <script type="html/template" id="song_info_tpl">

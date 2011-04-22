@@ -147,7 +147,11 @@ musicDao.addSong = function(song)
     var store = trans.objectStore('song');
     var request = store.put(song.toJSON(),song.id);
 
-    request.onsuccess = function(e){console.log('saved song='+song.toJSON());console.log(e);};
+    request.onsuccess = function(e)
+    {
+        console.log('saved song=');
+        console.log(song.toJSON());
+    };
     request.onerror = musicDao.handleError;
 };
 musicDao.addArtist = function(artist)
@@ -169,4 +173,19 @@ musicDao.deleteSong = function(id,success)
     //todo (anton) also delete from filesystem
     request.onsuccess = function(e){success();};
     request.onerror = musicDao.handleError;
+};
+//saving playlists to teh localStorage
+musicDao.getPlayLists=function()
+{
+    var savedPlayLists=JSON.parse(window.localStorage.getItem('saved_playlists'))||[];
+    return new PlayLists(savedPlayLists);
+};
+musicDao.savePlayLists=function(playLists)
+{
+    window.localStorage.setItem('saved_playlists',JSON.stringify(playLists));
+};
+musicDao.addPlayList=function(playList)
+{
+    var newPlayLists=musicDao.getPlayLists().add(playList);
+    musicDao.savePlayLists(newPlayLists);
 };
