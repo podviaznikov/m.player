@@ -20,7 +20,7 @@ musicDao.db = null;
 musicDao.open = function(callback)
 {
     var request = indexedDB.open('music_db_v10','mPlayer');
-    var version = '1'
+    var version = '1';
     request.onsuccess = function(e)
     {
         musicDao.db = e.target.result;

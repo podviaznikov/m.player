@@ -1,7 +1,7 @@
 {
   "name": "m.Player",
   "description": "Offline Music Player",
-  "version": "0.9.13",
+  "version": "0.9.14",
   "app": {
     "launch": {
       "local_path": "main.html"  
