@@ -1,8 +1,9 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
+    //mime = require('mime'),
     app = express.createServer();
-
+//mime.define({'text/cache-manifest': ['mf']});
 app.configure(function()
 {
     app.use(connect.favicon(__dirname + '/public/16.png'));
@@ -15,7 +16,7 @@ app.configure(function()
 });
 app.get('/app.mf', function(req, res)
 {
-    res.header('Content-Type', 'text/cache-manifest');
+    res.contentType('text/cache-manifest');
     res.sendfile(__dirname + '/public/app.mf');
 });
 app.listen(8090);
