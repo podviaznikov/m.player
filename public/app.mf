@@ -13,7 +13,7 @@ js/app/ui.detailed.view.js
 js/app/ui.library.js
 js/app/ui.player.js
 js/app/ui.playlist.js
-js/app/ui.playlists.js
+js/app/ui.playlists.view.js
 js/app/songlist.js
 js/app/ui.visualization.js
 js/fs/fs.core.js
