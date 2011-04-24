@@ -3,8 +3,11 @@
   "description": "Offline Music Player",
   "version": "0.9.15",
   "app": {
+    "urls": [
+      "http://ws.audioscrobbler.com"
+    ],
     "launch": {
-      "local_path": "index.html"
+      "web_url": "http://192.168.56.101:8090/"
     }
   },
   "icons": {

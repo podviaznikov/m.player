@@ -59,3 +59,5 @@ css/icons/sound.png
 css/icons/sound_hover.png
 css/icons/stop.png
 css/icons/stop_hover.png
+NETWORK:
+http://ws.audioscrobbler.com
