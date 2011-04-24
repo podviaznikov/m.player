@@ -4,7 +4,7 @@
   "version": "0.9.14",
   "app": {
     "launch": {
-      "local_path": "main.html"  
+      "local_path": "index.html"
     }
   },
   "icons": {

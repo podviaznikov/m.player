@@ -8,10 +8,17 @@ app.configure(function()
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
     app.use(express.logger());
+    //router
+    app.use(app.router);
     //public folder for static files
     app.use(express.static(__dirname + '/public'));
 });
+app.get('/offline.manifest', function(req, res)
+{
+    res.header('Content-Type', 'text/cache-manifest');
+    //res.end('CACHE MANIFEST');
+    res.sendfile(__dirname + '/public/app.mf');
+});
+app.listen(8090);
 
-app.listen(8084);
-
-util.log('started on 8084');
+util.log('started on 8090');
