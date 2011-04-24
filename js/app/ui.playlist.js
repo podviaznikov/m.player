@@ -28,7 +28,7 @@ $(function()
         {
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
-             'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist','savePlayList');
+             'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist','savePlayList','setPlayListName');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -49,6 +49,10 @@ $(function()
         {
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
             return this;
+        },
+        setPlayListName:function(newName)
+        {
+            this.newPlayListName.val(newName);
         },
         savePlayList:function()
         {

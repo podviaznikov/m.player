@@ -338,12 +338,12 @@ span.info_image img
     min-height:120px;
     height:120px;
 }
-.album_full_info_panel
+.lib_item_full_info_panel
 {
     border-bottom: 1px solid #939393;
     padding: 15px 0px 15px 0px;
 }
-.album_full_info_panel:first-child
+.lib_item_full_info_panel:first-child
 {
     padding: 0px 0px 15px 0px;
 }

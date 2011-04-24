@@ -98,6 +98,15 @@ var PlayList = Backbone.Model.extend(
 //        var genres=_.map(songs, function(song){ return song.genre; });
 //        return _.uniq(genres);
 //    }
+    initialize:function(attrs)
+    {
+        var songsList=[];
+        _.each(attrs.songs,function(song,key)
+        {
+            songsList[key]=new Song({attributes:song});
+        });
+        this.set({'songsList':new SongsList(songsList)});
+    }
 });
 var PlayLists = Backbone.Collection.extend(
 {

@@ -31,7 +31,6 @@ $(function()
                 songsCount:this.model.get('songs').length
             });
             $(this.el).html(html);
-
             return this;
         },
         selectPlayList: function()

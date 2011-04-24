@@ -14,7 +14,6 @@ var AppController=
 
 		this.appView = new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;
-		this.albumInfoView = new ui.AlbumInfoView;
 		this.visualizationView = new ui.VisualizationView;
         this.visualizationView.el.height(newHeight);
         musicDao.open(this.onDBLoad);

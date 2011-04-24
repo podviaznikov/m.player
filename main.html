@@ -31,8 +31,8 @@
     <script src="js/app/ui.player.js"></script>
     <script src="js/app/ui.library.js"></script>
     <script src="js/app/ui.artist.view.js"></script>
-    <script src="js/app/ui.playlist.view.js"></script>
-    <script src="js/app/ui.album.js"></script>
+    <script src="js/app/ui.playlists.view.js"></script>
+    <script src="js/app/ui.detailed.view.js"></script>
     <script src="js/app/ui.visualization.js"></script>
     <script src="js/app/settings.js"></script>
     <script src="js/app/store.js"></script>
@@ -85,7 +85,7 @@
 <section id="playing_list" class="info_panel scrollable_content right_layout_panel">
     <header class="box"><h1>Now playing</h1></header>
     <section id="song_info_view"></section>
-    <section id="playlist_toolbar"><input id="new_play_list" value="Unsaved list" maxlength="18"><span id="clear_playlist">-</span></section>
+    <section id="playlist_toolbar"><input id="new_play_list" value="Unsaved list" maxlength="18"><span id="clear_playlist" title="Clear playlist">-</span></section>
     <section id="playing_songs"><label>Drop files here</label></section>
     <footer></footer>
 </section>
@@ -139,9 +139,11 @@
     </section>
 </script>
 <script type="html/template" id="detailed_playlist_info_tpl">
-    <span class="info_image"><img src="<%= image %>"></span>
-    <section class="detailed_album_info">
-        <h1><%= name %></h1>
+    <section class="box">
+        <span class="info_image"><img src="<%= image %>"></span>
+        <section class="detailed_album_info">
+            <h1><%= name %></h1>
+        </section>
     </section>
 </script>
 <script type="html/template" id="song_info_tpl">
