@@ -16,7 +16,6 @@ app.configure(function()
 });
 app.get('/app.mf', function(req, res)
 {
-    console.log('METHOD IS WORKING!');
     res.contentType('text/cache-manifest');
     res.sendfile(__dirname + '/public/app.mf');
 });

@@ -1,4 +1,7 @@
 CACHE MANIFEST
 index.html
 css/*
-js/*
+js/api/*
+js/app/*
+js/fs/*
+js/lib/*
