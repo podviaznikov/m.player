@@ -1,9 +1,9 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
-    //mime = require('mime'),
+    mime = require('mime'),
     app = express.createServer();
-//mime.define({'text/cache-manifest': ['mf']});
+mime.define({'text/cache-manifest': ['mf']});
 app.configure(function()
 {
     app.use(connect.favicon(__dirname + '/public/16.png'));
@@ -16,6 +16,7 @@ app.configure(function()
 });
 app.get('/app.mf', function(req, res)
 {
+    console.log('METHOD IS WORKING!');
     res.contentType('text/cache-manifest');
     res.sendfile(__dirname + '/public/app.mf');
 });
