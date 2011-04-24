@@ -13,10 +13,9 @@ app.configure(function()
     //public folder for static files
     app.use(express.static(__dirname + '/public'));
 });
-app.get('/offline.manifest', function(req, res)
+app.get('/app.mf', function(req, res)
 {
     res.header('Content-Type', 'text/cache-manifest');
-    //res.end('CACHE MANIFEST');
     res.sendfile(__dirname + '/public/app.mf');
 });
 app.listen(8090);
