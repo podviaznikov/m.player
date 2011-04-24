@@ -1,7 +1,7 @@
 CACHE MANIFEST
 index.html
-css/*
-js/api/last.fm
+16.png
+js/api/lastfm.js
 js/app/controller.js
 js/app/models.js
 js/app/settings.js
@@ -29,4 +29,10 @@ js/lib/jquery-ui-1.8.11.custom.min.js
 js/lib/jquery.min.js
 js/lib/underscore-min.js
 js/lib/uuid.js
-
+css/styles.css
+css/1024.css
+css/1280.css
+css/600.css
+css/700.css
+css/800.css
+css/900.css
