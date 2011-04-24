@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player</title>
+    <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.11.custom.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel='stylesheet' media='screen and (min-width: 1025px) and (max-width: 1280px)' href='css/1280.css' />
+    <link rel='stylesheet' media='screen and (min-width: 901px) and (max-width: 1024px)' href='css/1024.css' />
+    <link rel='stylesheet' media='screen and (min-width: 801px) and (max-width: 900px)' href='css/900.css' />
+    <link rel='stylesheet' media='screen and (min-width: 701px) and (max-width: 800px)' href='css/800.css' />
+    <link rel='stylesheet' media='screen and (min-width: 601px) and (max-width: 700px)' href='css/700.css' />
+    <link rel='stylesheet' media='screen and (max-width: 600px)' href='css/600.css' />
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/jquery-ui-1.8.11.custom.min.js"></script>
+    <script src="js/lib/underscore-min.js"></script>
+    <script src="js/lib/backbone-min.js"></script>
+    <script src="js/lib/backbone-localstorage.js"></script>
+    <script src="js/lib/uuid.js"></script>
+    <script src="js/lib/id3.reader.js" ></script>
+    <script src="js/api/lastfm.js"></script>
+    <script src="js/fs/fs.ext.js"></script>
+    <script src="js/fs/fs.core.js"></script>
+    <script src="js/fs/fs.util.js"></script>
+    <script src="js/fs/fs.reader.js"></script>
+    <script src="js/fs/fs.writer.js"></script>
+    <script src="js/app/models.js"></script>
+    <script src="js/app/ui.app.js"></script>
+    <script src="js/app/ui.songslist.js"></script>
+    <script src="js/app/ui.playlist.js"></script>
+    <script src="js/app/ui.audio.js"></script>
+    <script src="js/app/ui.player.js"></script>
+    <script src="js/app/ui.library.js"></script>
+    <script src="js/app/ui.artist.view.js"></script>
+    <script src="js/app/ui.playlists.view.js"></script>
+    <script src="js/app/ui.detailed.view.js"></script>
+    <script src="js/app/ui.visualization.js"></script>
+    <script src="js/app/settings.js"></script>
+    <script src="js/app/store.js"></script>
+    <script src="js/app/controller.js"></script>
+    <script>$(function(){AppController.init();});</script>
+</head>
+<body>
+<section id="how_to_use" class="info_panel help_panel hidden left_layout_panel">
+    <header><h1>How to use</h1></header>
+    <section>
+    <p>m.player - is modern offline audio player that works just in browser. You can drop music files from your file sytem
+    inside the player and play them right now or come back later.</p>
+    <p>Player has library using which you can navigate through you music. Library populated automatically each time
+        you add new files to play. Information in the library integrated with last.fm service.</p>
+    <p>All you music stored locally in the filesystem used by application. This is possible using HTML 5 technology.</p>
+    <p>Project is open-source. You can join development <a href="https://github.com/podviaznikov/m.player">here</a>.</p>
+    </section>
+</section>
+<section id="hot_keys" class="info_panel help_panel hidden middle_layout_panel">
+    <header><h1>Hot keys</h1></header>
+    <section>
+        <div class="hot_key_row"><div class="cell key_combination">Space</div><div class="cell">Play/Pause</div></div>
+        <div class="hot_key_row"><div class="cell key_combination">Enter</div><div class="cell">Play selected track</div></div>
+        <div class="hot_key_row"><div class="cell key_combination">Key up</div><div class="cell">Select previous track</div></div>
+        <div class="hot_key_row"><div class="cell key_combination">Key down</div><div class="cell">Select next track</div></div>
+    </section>
+</section>
+<section id="contributions" class="info_panel help_panel hidden right_layout_panel">
+    <header><h1>Thanks</h1></header>
+    <section>
+        <span><a href="http://documentcloud.github.com/underscore/">underscore.js</a> - utility library for JavaScript.</span>
+        <span><a href="http://documentcloud.github.com/backbone/">backbone.js</a> - tine MVC framework that helped to organize code.</span>
+        <span><a href="http://jquery.com/">jQuery</a> - most famous JavaScript library for dealing with DOM</span>
+        <span><a href="http://jqueryui.com/">jQuery UI</a> - set of UI widgets.</span>
+        <span><a href="https://github.com/podviaznikov/fs.js">fs.js</a> - simple wrapper for HTML 5 File Api.</span>
+        <span><a href="https://github.com/antimatter15/js-id3v2">fs.js</a> - ID3v2 reader for JavaScript.</span>
+        <span><a href="http://last.fm">last.fm</a> - great music service.</span>
+    </section>
+</section>
+<section id="playing_visualization"></section>
+<section id="library_menu" class="info_panel scrollable_content left_layout_panel">
+    <header><h1 id="show_artists">Artists</h1><h1 id="show_playlists">Playlists</h1></header>
+    <section id="artists_library_content" class="library_content_panel"></section>
+    <section id="playlists_library_content" class="library_content_panel"></section>
+</section>
+<section id="filtered_lib" class="info_panel scrollable_content middle_layout_panel">
+    <header><h1>Albums</h1></header>
+    <section id="filtered_lib_content"></section>
+</section>
+<section id="playing_list" class="info_panel scrollable_content right_layout_panel">
+    <header class="box"><h1>Now playing</h1></header>
+    <section id="song_info_view"></section>
+    <section id="playlist_toolbar"><input id="new_play_list" value="Unsaved list" maxlength="18"><span id="clear_playlist" title="Clear playlist">-</span></section>
+    <section id="playing_songs"><label>Drop files here</label></section>
+    <footer></footer>
+</section>
+<footer id="player">
+    <span id="shuffle_toggle" class="control off" title="Turn shuffle on"></span>
+    <span id="repeat_toggle" class="control on" title="Turn repeat off"></span>
+    <span id="stop_song" class="control" title="Stop"></span>
+    <span id="previous_song" class="control" title="Previous"></span>
+    <span id="play_toggle" class="control paused" title="Play"></span>
+    <span id="next_song" class="control" title="Next"></span>
+    <span id="sound_toggle" class="control on" title="Mute"></span>
+    <span id="volume_gutter" title="Volume"><span id="volume_handle" class="control ui-slider-handle"></span></span>
+    <span id="music_gutter" title="Seek"><span id="music_handle" class="control ui-slider-handle"></span></span>
+    <label id="time_counter">0:00</label>
+    <span id="help" class="control off" title="Help">?</span>
+    <span id="expand" class="control on" title="Full screen mode"></span>
+    <audio id="player_ctrl"></audio>
+</footer>
+<article id="album_info_view" class="box"></article>
+<script type="html/template" id="song_tpl">
+    <div class="song cell track_number"><%= track %></div>
+    <div class="song cell"><%= title %></div>
+</script>
+<script type="html/template" id="song_mini_tpl">
+    <div class="song cell"><%= title %></div>
+    <div class="delete_song cell" title="Remove song"><span class="control ui-icon ui-icon-close"></span></div>
+</script>
+<script type="html/template" id="playlist_stat_tpl"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></script>
+<script type="html/template" id="artist_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="lib-item-info">
+        <h1><%= name %></h1>
+        <div class="artist_albums"><% _.each(albums, function(album) { %> <a class="album_link" data-album="<%= album %>"><%= album %></a> <% }); %></div>
+        <div class="artist_genres"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
+        <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+    </section>
+</script>
+<script type="html/template" id="saved_playlist_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="lib-item-info">
+        <h1><%= name %></h1>
+        <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+    </section>
+</script>
+<script type="html/template" id="visualization_tpl"><img src="<%= image %>"></script>
+<script type="html/template" id="detailed_album_info_tpl">
+    <span class="info_image"><img src="<%= image %>"></span>
+    <section class="detailed_album_info">
+        <h1><%= name %></h1>
+        <span class="release_date"><%= releaseDate %></span>
+    </section>
+</script>
+<script type="html/template" id="detailed_playlist_info_tpl">
+    <section class="box">
+        <span class="info_image"><img src="<%= image %>"></span>
+        <section class="detailed_album_info">
+            <h1><%= name %></h1>
+        </section>
+    </section>
+</script>
+<script type="html/template" id="song_info_tpl">
+    <span id="song_image" class="info_image"><img src="<%= image %>"></span>
+    <section id="song_info">
+        <h1><%= name %></h1>
+        <span class="data_info_row"><%= album %></span>
+        <span class="data_info_row"><%= artist %></span>
+        <span class="data_info_row"><%= year %></span>
+    </section>
+</script>
+</body>
+</html>
