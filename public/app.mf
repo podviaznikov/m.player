@@ -9,9 +9,9 @@ js/app/store.js
 js/app/ui.app.js
 js/app/ui.artist.view.js
 js/app/ui.audio.js
-js/app/detailed.view.js
-js/app/library.js
-js/app/player.js
+js/app/ui.detailed.view.js
+js/app/ui.library.js
+js/app/ui.player.js
 js/app/ui.playlist.js
 js/app/ui.playlists.js
 js/app/songlist.js
