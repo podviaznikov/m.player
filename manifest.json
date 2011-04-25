@@ -4,7 +4,8 @@
   "version": "0.9.15",
   "app": {
     "urls": [
-      "http://ws.audioscrobbler.com"
+      "http://ws.audioscrobbler.com",
+      "http://*.last.fm"
     ],
     "launch": {
       "web_url": "http://192.168.56.101:8090/"

@@ -61,3 +61,6 @@ css/icons/stop.png
 css/icons/stop_hover.png
 NETWORK:
 http://ws.audioscrobbler.com
+http://userserve-ak.last.fm
+FALLBACK:
+http://userserve-ak.last.fm/serve/*.png /css/images/no_picture.png
