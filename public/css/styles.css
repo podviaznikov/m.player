@@ -103,17 +103,20 @@ footer#player
 {
     height: 4px;
     padding: 2px;
-    border-radius: 0px!important;
     background: white;
     width:65%;
     vertical-align:middle;
+    position:relative;
 }
 #music_handle
 {
     height: 10px;
     width: 20px;
-    border-radius: 0px!important;
     top: -2px;
+    margin-left: -.6em;
+    position: absolute;
+    z-index: 2;
+    background: #F6F6F6;
 }
 
 #player_info_panel
@@ -153,7 +156,6 @@ footer#player
     width:50px;
     height:4px;
     padding: 2px;
-    border-radius: 0px!important;
     background: white;
     margin-left:5px;
     margin-right:60px;
@@ -164,7 +166,6 @@ footer#player
 {
     height:10px;
     width:10px;
-    border-radius:0px;
     top:-2px;
     margin-left: -.6em;
     position: absolute;
@@ -190,10 +191,7 @@ footer#player
     border: 0;
     background-position: 0 0;
 }
-.ui-widget-header
-{
-    background: #FF6900!important;
-}
+
 .control
 {
     cursor:pointer;
@@ -204,17 +202,13 @@ footer#player
 }
 
 /**jquery UI changed*/
-.ui-slider-range
+.ui-widget-header
 {
-    border-radius:0px!important;
+    background:#ff6900;
 }
 .ui-widget-header
 {
-    background:#ff6900!important;
-}
-.ui-widget-content
-{
-    border:0px!important;
+    background: #FF6900;
 }
 .info_panel
 {
