@@ -63,4 +63,6 @@ NETWORK:
 http://ws.audioscrobbler.com
 http://userserve-ak.last.fm
 FALLBACK:
-http://userserve-ak.last.fm/serve/*.png /css/images/no_picture.png
+http://userserve-ak.last.fm/serve/126/*.png /css/images/no_picture.png
+http://userserve-ak.last.fm/serve/126/*.jpg /css/images/no_picture.png
+/js/api/lastfm.js /js/api/lastfm-offline.js
