@@ -1,7 +1,6 @@
 CACHE MANIFEST
 index.html
 16.png
-js/api/lastfm.js
 js/app/controller.js
 js/app/models.js
 js/app/settings.js

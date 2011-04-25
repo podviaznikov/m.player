@@ -117,6 +117,7 @@ footer#player
     position: absolute;
     z-index: 2;
     background: #F6F6F6;
+    border: 1px solid #CCC;
 }
 
 #player_info_panel
