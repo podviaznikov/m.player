@@ -13,17 +13,14 @@ var lastFM=
     {
         callback('css/images/no_picture.png');
     },
-
     getAlbumImage:function(artist,album,callback)
     {
         callback('css/images/no_picture.png');
     },
-
     getAlbumPoster:function(artist,album,callback)
     {
         callback('css/images/no_picture.png');
     },
-
     getAlbumInfo:function(artist,album,callback)
     {
         var image='css/images/no_picture.png';
