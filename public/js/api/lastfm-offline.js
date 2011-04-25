@@ -21,7 +21,7 @@ var lastFM=
 
     getAlbumPoster:function(artist,album,callback)
     {
-       callback('css/images/no_picture.png');
+        callback('css/images/no_picture.png');
     },
 
     getAlbumInfo:function(artist,album,callback)
@@ -30,7 +30,6 @@ var lastFM=
         var albumName=album;
         var releaseDate='na';
         var songsCount='na';
-
         callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
     }
 };
