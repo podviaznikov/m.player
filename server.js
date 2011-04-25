@@ -20,5 +20,4 @@ app.get('/app.mf', function(req, res)
     res.sendfile(__dirname + '/public/app.mf');
 });
 app.listen(80);
-
 util.log('started on 80');
