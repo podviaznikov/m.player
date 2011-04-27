@@ -1,14 +1,10 @@
 {
   "name": "m.Player",
   "description": "Offline Music Player",
-  "version": "0.9.15",
+  "version": "0.9.16",
   "app": {
-    "urls": [
-      "http://ws.audioscrobbler.com",
-      "http://*.last.fm"
-    ],
     "launch": {
-      "web_url": "http://player.enginimation.info"
+        "local_path": "index.html"
     }
   },
   "icons": {
