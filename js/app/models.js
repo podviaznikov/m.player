@@ -105,7 +105,7 @@ var PlayList = Backbone.Model.extend(
         {
             songsList[key]=new Song({attributes:song});
         });
-        this.set({'songsList':new SongsList(songsList)});
+        this.set({songsList:new SongsList(songsList)});
     }
 });
 var PlayLists = Backbone.Collection.extend(
