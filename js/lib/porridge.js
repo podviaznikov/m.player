@@ -13,11 +13,13 @@
  */
 "use strict";
 var global = this;
+//browsers API
 var indexedDB = global.indexedDB || global.webkitIndexedDB;
 var IDBTransaction = global.IDBTransaction || global.webkitIDBTransaction;
 var IDBKeyRange = global.IDBKeyRange || global.webkitIDBKeyRange;
-var porridge=
+var Porridge=
 {
+    version:'0.3',
     db:null,
     log:function(e)
     {
@@ -34,13 +36,13 @@ var porridge=
         request.onsuccess = function(e)
         {
             var db = e.target.result;
-            porridge.db = db;
+            Porridge.db = db;
             // We can only create Object stores in a setVersion transaction;
             if(version!= db.version)
             {
                 var setVersionReq = db.setVersion(version);
                 // onsuccess is the only place we can create Object Stores
-                setVersionReq.onfailure = handleError||porridge.log;
+                setVersionReq.onfailure = handleError||Porridge.log;
                 setVersionReq.onsuccess = function(e)
                 {
                     //create store store
@@ -53,11 +55,11 @@ var porridge=
                             for(var k=0;k<storeDef.indexes.length;k++)
                             {
                                 var indexDef=storeDef.indexes[k];
-                                store.createIndex(indexDef.name, indexDef.name);
+                                store.createIndex(indexDef.name, indexDef.field||indexDef.name);
                             }
                         }
                     }
-                    porridge.log('initialized db');
+                    Porridge.log('initialized db');
                     handleSuccess();
                 };
             }
@@ -68,11 +70,10 @@ var porridge=
 
         };
         request.onfailure = handleError||this.log;
-
     },
     all:function(entityName,handleOne,handleAll,handleError)
     {
-        var trans = this.db.transaction(entityName, IDBTransaction.READ_WRITE, 0);
+        var trans = this.db.transaction([entityName], IDBTransaction.READ_WRITE, 0);
         var store = trans.objectStore(entityName);
         // Get everything from the store;
         var request = store.openCursor();
@@ -101,12 +102,12 @@ var porridge=
         var store = trans.objectStore(entityName);
         var request = store.put(entity,key);
 
-        request.onsuccess = porridge.info;
+        request.onsuccess = Porridge.info;
         request.onerror = handleError||this.log;
     },
     remove:function(entityName,id,success,handleError)
     {
-        var trans = this.db.transaction(entityName, IDBTransaction.READ_WRITE, 0);
+        var trans = this.db.transaction([entityName], IDBTransaction.READ_WRITE, 0);
         var store = trans.objectStore(entityName);
 
         var request = store.delete(id);
@@ -115,7 +116,7 @@ var porridge=
     },
     allByKey:function(entityName,keyName,keyValue,handleOne,handleAll,handleError)
     {
-        var trans = this.db.transaction(entityName, IDBTransaction.READ_WRITE, 0);
+        var trans = this.db.transaction([entityName], IDBTransaction.READ_WRITE, 0);
         var store = trans.objectStore(entityName);
         var index = store.index(keyName);
         var range = new IDBKeyRange.only(keyValue);
@@ -141,6 +142,4 @@ var porridge=
 
         request.onerror = handleError||this.log;
     }
-
-
 }

@@ -16,7 +16,14 @@ var AppController=
 		this.playerCtrl=new ui.PlayerCtrl;
 		this.visualizationView = new ui.VisualizationView;
         this.visualizationView.el.height(newHeight);
-        musicDao.open(this.onDBLoad);
+        var config=
+        {
+            dbName:'music_db_v14',
+            dbDescription:'mPlayer',
+            dbVersion:'1',
+            stores:[Song.definition,Artist.definition]
+        };
+        Porridge.init(config,this.onDBLoad);
 
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
         //$(document.body).bind("online", this.checkNetworkStatus);

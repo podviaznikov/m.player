@@ -23,22 +23,27 @@ $(function()
             var self=this;
             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists');
+            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded');
             this.artists.bind('add',this.addArtist);
+            this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
             this.playLists.bind('refresh',this.addPlayLists);
 
-            this.artists.fetch(function()
-            {
-                var lastArtist=settings.getLastArtist();
-                if(lastArtist)
-                {
-                    var lastPlayedArtist = self.artists.findByName(lastArtist);
-                    lastPlayedArtist.view.selectArtist();
-                }
-            });
+            this.artists.fetch();
 
             this.playLists.fetch();
+        },
+        allArtistsLoaded:function()
+        {
+            var lastArtist=settings.getLastArtist();
+            if(lastArtist)
+            {
+                var lastPlayedArtist = this.artists.findByName(lastArtist);
+                if(lastPlayedArtist && lastPlayedArtist.view)
+                {
+                    lastPlayedArtist.view.selectArtist();
+                }
+            }
         },
         showArtists:function()
         {
@@ -55,6 +60,7 @@ $(function()
             if(artist.get('name'))
             {
                 var view = new ui.ArtistMenuView({model:artist});
+                artist.view=view;
                 this.artistsContent.append(view.render().el);
             }
         },

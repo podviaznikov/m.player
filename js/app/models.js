@@ -4,7 +4,7 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var Song = Backbone.Model.extend(
+var Song = Porridge.Model.extend(
 {
     defaults:
     {
@@ -13,40 +13,26 @@ var Song = Backbone.Model.extend(
         artist:'no artist',
         year:'no year',
         genre:'no genre'
+    }
 
-    },
-    initialize:function()
+},
+{
+    definition:
     {
-        if(!this.get('id'))
-        {
-            this.id=UUID.generate();
-            this.set({id:this.id});
-        }
+        name:'song',
+        key:'id',
+        indexes:[{name:'artists',field:'artist'}]
     }
 });
-var SongsList = Backbone.Collection.extend(
+var SongsList = Porridge.Collection.extend(
 {
     model: Song,
-    initialize:function()
-    {
-        _.bindAll(this,'handleSongLoad');
-    },
     comparator: function(song)
     {
         return song.get('track');
-    },
-
-    handleSongLoad:function(model)
-    {
-        this.add(model);
-    },
-    fetch: function(name,allLoaded)
-    {
-        musicDao.getAllArtistSongs(name,this.handleSongLoad,allLoaded);
-        return this;
     }
 });
-var Artist = Backbone.Model.extend(
+var Artist = Porridge.Model.extend(
 {
     initialize:function()
     {
@@ -57,7 +43,8 @@ var Artist = Backbone.Model.extend(
             this.set({id:this.id});
         }
         this.songs = new SongsList;
-        this.songs.fetch(this.get('name'),this.setParameterFromSongs);
+        this.songs.bind('retrieved',this.setParameterFromSongs);
+        this.songs.fetchByKey('artists',this.get('name'));
     },
 
     setParameterFromSongs:function()
@@ -67,22 +54,18 @@ var Artist = Backbone.Model.extend(
         var songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
     }
+},
+{
+    definition:
+    {
+        name:'artist',
+        key:'name'
+    }
 });
 
-var ArtistsList = Backbone.Collection.extend(
+var ArtistsList = Porridge.Collection.extend(
 {
     model: Artist,
-
-    fetch: function(allLoaded)
-    {
-        var collection = this;
-        var handleArtistLoad = function(model)
-        {
-            collection.add(model);
-        };
-        musicDao.getAllArtists(handleArtistLoad,allLoaded);
-        return this;
-    },
 
     findByName:function(artistName)
     {

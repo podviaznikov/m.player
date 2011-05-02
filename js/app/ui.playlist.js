@@ -241,11 +241,11 @@ $(function()
                         {
                             if(!writeError)
                             {
-                                musicDao.addSong(song);
+                                song.save();
                                 lastFM.getArtistImage(artist.get('name'),function(image)
                                 {
                                     artist.set({image:image});
-                                    musicDao.addArtist(artist);
+                                    artist.save();
                                 });
                                 AppController.playlistView.songs.add(song);
                             }
@@ -314,16 +314,16 @@ $(function()
         {
             var id=this.el.dataset.id;
             var filename=this.el.dataset.filename;
-            musicDao.deleteSong(id,function()
-            {
-                fs.util.remove(filename,function(er)
-                {
-                    if(er)
-                    {
-                        console.log('Error happened while deleting file='+filename);
-                    }
-                });
-            });
+//            musicDao.deleteSong(id,function()
+//            {
+//                fs.util.remove(filename,function(er)
+//                {
+//                    if(er)
+//                    {
+//                        console.log('Error happened while deleting file='+filename);
+//                    }
+//                });
+//            });
             $(this.el).remove();
         }
     });
