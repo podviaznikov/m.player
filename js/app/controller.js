@@ -9,8 +9,8 @@ var AppController=
 	init:function()
 	{
 	    _.bindAll(this,'onDBLoad');
-        var newHeight = $(window).height()-75;
-        $('body .scrollable_content').height(newHeight);
+        var newHeight = $(window).height()-105;
+        $('.scrollable_panel').height(newHeight);
 
 		this.appView = new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;

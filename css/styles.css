@@ -31,10 +31,13 @@ body.fullscreen
 {
     background-color:black;
 }
+.scrollable_panel
+{
+    overflow-y: auto;
+}
 section.info_panel
 {
     height: 100%;
-    overflow-y: auto;
     vertical-align:middle;
     margin-bottom:200px;
     margin-top:25px;
