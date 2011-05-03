@@ -15,11 +15,12 @@ $(function()
         events:
         {
             'click':'selectArtist',
+            'click .delete_artist':'deleteArtist',
             'click .album_link': 'selectAlbum'
         },
         initialize:function()
         {
-            _.bindAll(this, 'addOne', 'addAll', 'render','selectArtist','selectAlbum');
+            _.bindAll(this, 'addOne', 'addAll', 'render','selectArtist','deleteArtist','selectAlbum');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
@@ -45,7 +46,11 @@ $(function()
             $(this.el).addClass('selected-lib-item');
             AppController.songsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
         },
-
+        deleteArtist:function()
+        {
+            this.model.destroy();
+            this.$(this.el).remove();
+        },
         selectAlbum:function(e)
         {
             var album = e.currentTarget.dataset.album;

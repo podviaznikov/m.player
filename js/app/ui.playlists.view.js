@@ -14,11 +14,12 @@ $(function()
         tpl:$('#saved_playlist_tpl').html(),
         events:
         {
-            'click':'selectPlayList'
+            'click':'selectPlayList',
+            'click .delete_playlist':'deletePlaylist'
         },
         initialize:function()
         {
-            _.bindAll(this, 'addOne', 'addAll', 'render','selectPlayList');
+            _.bindAll(this, 'addOne', 'addAll', 'render','selectPlayList','deletePlaylist');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
@@ -38,6 +39,11 @@ $(function()
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             AppController.songsView.showPlayList(this.model);
+        },
+        deletePlaylist:function()
+        {
+            this.model.destroy();
+            this.$(this.el).remove();
         }
     });
 });

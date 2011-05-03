@@ -64,16 +64,18 @@ $(function()
         savePlayList:function()
         {
             var newPlaylistName=this.newPlayListName.val();
-            if(!this.playList)
+            if(newPlaylistName!='Unsaved list')
             {
-                this.playList=new PlayList();
+                if(!this.playList)
+                {
+                    this.playList=new PlayList();
+                }
+                var songs=this.songs.toJSON();
+                this.playList.set({name:newPlaylistName,songs:songs});
+                this.playList.save();
+                AppController.libraryMenu.playLists.add(this.playList);
             }
-            var songs=this.songs.toJSON();
-            this.playList.set({name:newPlaylistName,songs:songs});
-            this.playList.save();
-            AppController.libraryMenu.playLists.add(this.playList);
         },
-
         clearPlaylist:function()
         {
             this.songsEl.empty();

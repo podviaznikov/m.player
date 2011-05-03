@@ -84,7 +84,6 @@ ul li
    background-color:#ff6900!important;
    color:black!important;
 }
-
 .delete_song
 {
     display:none;
@@ -223,6 +222,11 @@ article.lib-item-data
 {
     border-bottom: 1px solid #939393;
     padding: 15px 0px 15px 0px;
+}
+article.lib-item-data .command_link
+{
+    display:none;
+    margin-right:10px;
 }
 article.lib-item-data label:after
 {
@@ -570,6 +574,14 @@ span.info_image img
     margin-right:20px;
     width:80px;
 }
+.lib-item-info footer
+{
+    text-align: right;
+}
+footer.saved_playlist_toolbar
+{
+    margin-top: 40px;
+}
 #playlist_toolbar
 {
     margin-bottom:10px;
@@ -580,9 +592,15 @@ span.info_image img
 }
 #clear_playlist
 {
-    cursor:pointer;
-    font-weight:bold;
     float:right;
+}
+.command_link
+{
+    cursor:pointer;
+}
+.command_link:hover
+{
+    color:#FF6900;
 }
 #library_menu header h1
 {
@@ -612,6 +630,11 @@ span.info_image img
 {
     display:block;
 }
+.selected-lib-item .command_link
+{
+    display:inline-block!important;
+}
+
 .hidden
 {
     display:none;

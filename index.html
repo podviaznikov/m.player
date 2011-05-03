@@ -90,7 +90,7 @@
 <section id="playing_list" class="info_panel right_layout_panel">
     <header class="box"><h1>Now playing</h1></header>
     <section id="song_info_view"></section>
-    <section id="playlist_toolbar"><input id="new_play_list" value="Unsaved list" maxlength="18"><span id="clear_playlist" title="Clear playlist">-</span></section>
+    <section id="playlist_toolbar"><input id="new_play_list" value="Unsaved list" maxlength="18"><span id="clear_playlist" class="command_link" title="Clear playlist">Clear</span></section>
     <section id="playing_songs" class="scrollable_panel"><label>Drop files here</label></section>
     <footer></footer>
 </section>
@@ -126,6 +126,9 @@
         <div class="artist_albums"><% _.each(albums, function(album) { %> <a class="album_link" data-album="<%= album %>"><%= album %></a> <% }); %></div>
         <div class="artist_genres"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+        <footer>
+            <span class="delete_artist command_link">Delete</span>
+        </footer>
     </section>
 </script>
 <script type="html/template" id="saved_playlist_tpl">
@@ -133,6 +136,9 @@
     <section class="lib-item-info">
         <h1><%= name %></h1>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+        <footer class="saved_playlist_toolbar">
+            <span class="delete_playlist command_link">Delete</span>
+        </footer>
     </section>
 </script>
 <script type="html/template" id="visualization_tpl"><img src="<%= image %>"></script>
