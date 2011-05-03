@@ -18,10 +18,10 @@ var AppController=
         this.visualizationView.el.height(newHeight);
         var config=
         {
-            dbName:'music_db_v14',
-            dbDescription:'mPlayer',
+            dbName:'mdb_v6',
+            dbDescription:'m.player database',
             dbVersion:'1',
-            stores:[Song.definition,Artist.definition]
+            stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,this.onDBLoad);
 
@@ -35,9 +35,9 @@ var AppController=
      */
 	onDBLoad:function()
 	{
+        this.playlistView = new ui.PlayListView;
         this.libraryMenu = new ui.LibraryMenu;
         this.songsView = new ui.SongsView;
-        this.playlistView = new ui.PlayListView;
 	}
 //    checkNetworkStatus:function()
 //    {

@@ -59,8 +59,10 @@ $(function()
             var newPlaylistName=this.newPlayListName.val();
             if('Unsaved list'!=newPlaylistName)
             {
-                var playList=new PlayList({name:newPlaylistName,songs:this.songs});
-                AppController.libraryMenu.playLists.create(playList);
+                var songs=this.songs.toJSON();
+                var playList=new PlayList({name:newPlaylistName,songs:songs});
+                playList.save();
+                AppController.libraryMenu.playLists.add(playList);
             }
         },
         clearPlaylist:function()
@@ -235,18 +237,26 @@ $(function()
                         songData.fileName=uniqueFileName;
                         songData.originalFileName=initialFile.name;
                         song.set(songData);
-                        var artist = new Artist({name:song.get('artist')});
+
                         //save file
                         fs.write.file(initialFile,function(writeError)
                         {
                             if(!writeError)
                             {
                                 song.save();
-                                lastFM.getArtistImage(artist.get('name'),function(image)
+                                var artistName = song.get('artist');
+                                var artist=AppController.libraryMenu.artists.findByName(artistName);
+                                if(!artist)
                                 {
-                                    artist.set({image:image});
-                                    artist.save();
-                                });
+                                    artist = new Artist({name:song.get('artist')});
+                                    lastFM.getArtistImage(artist.get('name'),function(image)
+                                    {
+                                        artist.set({image:image});
+                                        artist.save();
+                                        AppController.libraryMenu.artists.add(artist);
+                                    });
+                                }
+
                                 AppController.playlistView.songs.add(song);
                             }
                         },uniqueFileName);

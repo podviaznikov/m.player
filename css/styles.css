@@ -340,10 +340,18 @@ article.lib-item-data label:after
         margin-bottom:20px;
         font-weight:bold;
     }
+    #song_info .data_info_row
+    {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 220px;
+    }
 .data_info_row
 {
     display:block;
 }
+
 span.info_image
 {
     -webkit-box-flex: 1;
@@ -587,6 +595,7 @@ span.info_image img
 {
     content:'/';
     margin-left:5px;
+    text-decoration:none;
 }
 #library_menu header h1:last-child:after
 {

@@ -66,7 +66,7 @@ $(function()
             {
                 model:song,
                 key:key,
-                songs:this.model.get('songsList').models,
+                songs:this.model.get('songs'),
                 playListName:this.model.get('name')
             });
             song.view = view;
@@ -101,7 +101,6 @@ $(function()
         }
     });
 
-
     ui.SongView = Backbone.View.extend(
     {
         className:'song-data',
@@ -116,7 +115,6 @@ $(function()
         {
             _.bindAll(this,'selectSong','selectForPlaying','render');
         },
-
         render: function()
         {
             this.el.draggable=true;
@@ -141,15 +139,15 @@ $(function()
             this.selectSong();
             var album=this.model.get('album');
             var artist=this.model.get('artist');
-            var albumSongs=this.options.songs;
-            AppController.playlistView.songs.refresh(albumSongs);
+            var songs=this.options.songs;
+            AppController.playlistView.songs.refresh(songs);
             if(this.options.playListName)
             {
                 AppController.playlistView.setPlayListName(this.options.playListName);
             }
             settings.saveLastAlbum(album);
             settings.saveLastArtist(artist);
-            settings.savePlayList(albumSongs);
+            settings.savePlayList(songs);
         }
     });
 

@@ -11,10 +11,9 @@ var Song = Porridge.Model.extend(
         album:'no album',
         title:'no title',
         artist:'no artist',
-        year:'no year',
+        year:'',
         genre:'no genre'
     }
-
 },
 {
     definition:
@@ -73,7 +72,7 @@ var ArtistsList = Porridge.Collection.extend(
     }
 });
 
-var PlayList = Backbone.Model.extend(
+var PlayList = Porridge.Model.extend(
 {
 //    getGenres:function()
 //    {
@@ -81,18 +80,24 @@ var PlayList = Backbone.Model.extend(
 //        var genres=_.map(songs, function(song){ return song.genre; });
 //        return _.uniq(genres);
 //    }
-    initialize:function(attrs)
+//    initialize:function(attrs)
+//    {
+//        var songsList=[];
+//        //_.each(attrs.songs,function(song,key)
+////        {
+////            songsList[key]=new Song({attributes:song});
+////        });
+////        this.set({songsList:new SongsList(songsList)});
+//    }
+},
+{
+    definition:
     {
-        var songsList=[];
-        _.each(attrs.songs,function(song,key)
-        {
-            songsList[key]=new Song({attributes:song});
-        });
-        this.set({songsList:new SongsList(songsList)});
+        name:'playlist',
+        key:'name'
     }
 });
-var PlayLists = Backbone.Collection.extend(
+var PlayLists = Porridge.Collection.extend(
 {
-    model: PlayList,
-    localStorage: new Store("saved_playlists")
+    model: PlayList
 });

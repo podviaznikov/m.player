@@ -49,6 +49,8 @@
         you add new files to play. Information in the library integrated with last.fm service.</p>
     <p>All you music stored locally in the filesystem used by application. This is possible using HTML 5 technology.</p>
     <p>Project is open-source. You can join development <a href="https://github.com/podviaznikov/m.player">here</a>.</p>
+    <p>Current version is 1.0. A lot of new functionality will be implemented in the upcoming months.</p>
+    <p>Project is build by Enginimation Studio. Feel free Contact <a href="mailto:hello@enginimation.info">us</a> in any time with any reason.</p>
     </section>
 </section>
 <section id="hot_keys" class="info_panel help_panel hidden middle_layout_panel">
@@ -56,6 +58,8 @@
     <section>
         <div class="hot_key_row"><div class="cell key_combination">Space</div><div class="cell">Play/Pause</div></div>
         <div class="hot_key_row"><div class="cell key_combination">Enter</div><div class="cell">Play selected track</div></div>
+        <div class="hot_key_row"><div class="cell key_combination">Delete</div><div class="cell">Delete selected track from playlist</div></div>
+        <div class="hot_key_row"><div class="cell key_combination">Escape</div><div class="cell">Return to normal mode</div></div>
         <div class="hot_key_row"><div class="cell key_combination">Key up</div><div class="cell">Select previous track</div></div>
         <div class="hot_key_row"><div class="cell key_combination">Key down</div><div class="cell">Select next track</div></div>
     </section>
@@ -113,7 +117,7 @@
 </script>
 <script type="html/template" id="song_mini_tpl">
     <div class="song cell"><%= title %></div>
-    <div class="delete_song cell" title="Remove song"><span class="control ui-icon ui-icon-close"></span></div>
+    <div class="delete_song cell" title="Remove song"><span class="control"></span></div>
 </script>
 <script type="html/template" id="playlist_stat_tpl"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></script>
 <script type="html/template" id="artist_tpl">

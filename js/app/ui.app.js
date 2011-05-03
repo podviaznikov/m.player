@@ -11,33 +11,29 @@ $(function()
     ui.AppView = Backbone.View.extend(
     {
         el: $('body'),
+        infoPanels:$('section.info_panel'),
+        helpPanels:$('section.help_panel'),
         events:
         {
             'keyup':'keyPressed'
         },
-
-        render:function()
-        {
-            return this;
-        },
         showHelp:function()
         {
             this.el.removeClass('fullscreen');
-            $('section.info_panel').addClass('hidden scrollable_content');
-            $('section.help_panel').removeClass('hidden');
+            this.infoPanels.addClass('hidden scrollable_content');
+            this.helpPanels.removeClass('hidden');
         },
         hideHelp:function()
         {
             $('section.info_panel.scrollable_content').removeClass('hidden');
-            $('section.help_panel').addClass('hidden');
+            this.helpPanels.addClass('hidden');
         },
         enterNowPlayingMode:function()
         {
-            $('section.info_panel').addClass('hidden');
+            this.infoPanels.addClass('hidden');
             this.el.addClass('fullscreen');
             AppController.visualizationView.show();
         },
-
         enterRegularPlayerMode:function()
         {
             this.el.removeClass('fullscreen');
@@ -63,6 +59,17 @@ $(function()
             else if(keyCode==32)//space
             {
                 AppController.playerCtrl.togglePause();
+            }
+            else if(keyCode==46)//delete
+            {
+                //delete song from playlist
+                AppController.playlistView.currentSong().view.remove();
+            }
+            else if(keyCode==27)//escape
+            {
+                //comeback to the normal view
+                AppController.playerCtrl.regularPlayerMode();
+                AppController.playerCtrl.turnOffHelpMode();
             }
         }
     });
