@@ -28,7 +28,8 @@ $(function()
         {
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
-             'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist','savePlayList','setPlayListName');
+             'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist',
+                    'savePlayList','setPlayListModel','removePlayListModel');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -50,21 +51,29 @@ $(function()
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
             return this;
         },
-        setPlayListName:function(newName)
+        setPlayListModel:function(playList)
         {
-            this.newPlayListName.val(newName);
+            this.playList = playList;
+            this.newPlayListName.val(this.playList.get('name'));
+        },
+        removePlayListModel:function()
+        {
+            this.playList = null;
+            this.newPlayListName.val('Unsaved list');
         },
         savePlayList:function()
         {
             var newPlaylistName=this.newPlayListName.val();
-            if('Unsaved list'!=newPlaylistName)
+            if(!this.playList)
             {
-                var songs=this.songs.toJSON();
-                var playList=new PlayList({name:newPlaylistName,songs:songs});
-                playList.save();
-                AppController.libraryMenu.playLists.add(playList);
+                this.playList=new PlayList();
             }
+            var songs=this.songs.toJSON();
+            this.playList.set({name:newPlaylistName,songs:songs});
+            this.playList.save();
+            AppController.libraryMenu.playLists.add(this.playList);
         },
+
         clearPlaylist:function()
         {
             this.songsEl.empty();

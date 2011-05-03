@@ -67,7 +67,7 @@ $(function()
                 model:song,
                 key:key,
                 songs:this.model.get('songs'),
-                playListName:this.model.get('name')
+                playList:this.model
             });
             song.view = view;
             $(this.el).append(view.render().el);
@@ -141,9 +141,13 @@ $(function()
             var artist=this.model.get('artist');
             var songs=this.options.songs;
             AppController.playlistView.songs.refresh(songs);
-            if(this.options.playListName)
+            if(this.options.playList)
             {
-                AppController.playlistView.setPlayListName(this.options.playListName);
+                AppController.playlistView.setPlayListModel(this.options.playList);
+            }
+            else
+            {
+                AppController.playlistView.removePlayListModel();
             }
             settings.saveLastAlbum(album);
             settings.saveLastArtist(artist);

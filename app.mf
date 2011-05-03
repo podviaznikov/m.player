@@ -20,7 +20,7 @@ js/fs/fs.io.js
 js/fs/fs.reader.js
 js/fs/fs.util.js
 js/fs/fs.writer.js
-js/lib/backbone-localstorage.js
+js/lib/backbone-indexdb.js
 js/lib/backbone-min.js
 js/lib/id3.reader.js
 js/lib/jquery-ui-1.8.11.custom.min.js

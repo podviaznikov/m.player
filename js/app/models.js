@@ -94,7 +94,7 @@ var PlayList = Porridge.Model.extend(
     definition:
     {
         name:'playlist',
-        key:'name'
+        key:'id'
     }
 });
 var PlayLists = Porridge.Collection.extend(
