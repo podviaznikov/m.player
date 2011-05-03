@@ -127,7 +127,7 @@
         <div class="artist_genres"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
         <footer>
-            <span class="delete_artist command_link">Delete</span>
+            <span class="delete_artist command_link" title="Delete this artist from library">Delete</span>
         </footer>
     </section>
 </script>
@@ -137,7 +137,7 @@
         <h1><%= name %></h1>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
         <footer class="saved_playlist_toolbar">
-            <span class="delete_playlist command_link">Delete</span>
+            <span class="delete_playlist command_link" title="Delete this playlist">Delete</span>
         </footer>
     </section>
 </script>

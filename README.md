@@ -1,5 +1,5 @@
-# m.Player - offline browser music player
-m.Player build on top of the HTML5 technologies and wonderful javascript libraries. Currently you can find it only in Chrome Web Store (https://chrome.google.com/webstore/detail/lhjjnnhpfomdbcgnmkejhacbcdppljic) and http://player.enginimation.info.
+# m.player - offline browser music player
+m.player build on top of the HTML5 technologies and wonderful javascript libraries. Currently you can find it only in Chrome Web Store (https://chrome.google.com/webstore/detail/lhjjnnhpfomdbcgnmkejhacbcdppljic) and http://player.enginimation.info.
 
 
 ## Feedback
