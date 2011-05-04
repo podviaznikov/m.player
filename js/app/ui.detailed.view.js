@@ -108,12 +108,13 @@ $(function()
         events:
         {
             'click .song':'selectSong',
+            'click .delete_album_song':'deleteSong',
             'dblclick .song':'selectForPlaying',
             'click .delete_song': 'deleteSong'
         },
         initialize:function()
         {
-            _.bindAll(this,'selectSong','selectForPlaying','render');
+            _.bindAll(this,'selectSong','deleteSong','selectForPlaying','render');
         },
         render: function()
         {
@@ -133,6 +134,11 @@ $(function()
         {
             $('.song-data').removeClass('selected_song');
             $(this.el).addClass('selected_song');
+        },
+        deleteSong:function()
+        {
+            this.model.destroy();//todo implement deleting file from filesystem
+            this.model.view.remove();
         },
         selectForPlaying:function()
         {

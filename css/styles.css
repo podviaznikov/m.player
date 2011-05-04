@@ -60,6 +60,22 @@ div.artist_albums
 {
     background-color: #f0f0f0;
 }
+.delete_album_song
+{
+    color:white;
+    opacity:0;
+    float:right;
+    margin-right:5px;
+}
+.delete_album_song:hover
+{
+    color:black;
+}
+.selected_song .delete_album_song
+{
+    display:table-cell;
+    opacity:1;
+}
 .cell
 {
     display:inline-block;
