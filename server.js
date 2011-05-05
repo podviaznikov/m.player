@@ -17,7 +17,7 @@ app.configure(function()
 app.get('/app.mf', function(req, res)
 {
     res.contentType('text/cache-manifest');
-    res.sendfile(__dirname + '/public/app.mf');
+    res.sendfile(__dirname + '/app.mf');
 });
 app.listen(80);
-util.log('started on 80');
+util.log('started app on 80');
