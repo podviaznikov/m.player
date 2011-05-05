@@ -3,8 +3,11 @@
   "description": "Offline Music Player",
   "version": "1.0",
   "app": {
+    "urls": [
+      "*://localhost/"
+    ],
     "launch": {
-        "local_path": "index.html"
+      "web_url": "http://localhost/"
     }
   },
   "icons": {
