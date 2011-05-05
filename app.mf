@@ -21,11 +21,12 @@ js/fs/fs.reader.js
 js/fs/fs.util.js
 js/fs/fs.writer.js
 js/lib/backbone-indexdb.js
+js/lib/porridge.js
+js/lib/underscore-min.js
 js/lib/backbone-min.js
 js/lib/id3.reader.js
 js/lib/jquery-ui-1.8.11.custom.min.js
 js/lib/jquery.min.js
-js/lib/underscore-min.js
 js/lib/uuid.js
 css/styles.css
 css/1024.css
