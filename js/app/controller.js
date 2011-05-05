@@ -8,7 +8,6 @@ var AppController=
 {
 	init:function()
 	{
-	    _.bindAll(this,'onDBLoad');
         var newHeight = $(window).height()-105;
         $('.scrollable_panel').height(newHeight);
 
@@ -18,12 +17,17 @@ var AppController=
         this.visualizationView.el.height(newHeight);
         var config=
         {
-            dbName:'mdb_v7',
+            dbName:'mdb_v8',
             dbDescription:'m.player database',
             dbVersion:'1',
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
-        Porridge.init(config,this.onDBLoad);
+        Porridge.init(config,function()
+        {
+            AppController.playlistView = new ui.PlayListView;
+            AppController.libraryMenu = new ui.LibraryMenu;
+            AppController.songsView = new ui.SongsView;
+        })//this.onDBLoad);
 
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
         //$(document.body).bind("online", this.checkNetworkStatus);

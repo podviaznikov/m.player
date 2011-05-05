@@ -4,10 +4,10 @@
   "version": "1.0",
   "app": {
     "urls": [
-      "*://localhost/"
+      "*://enginimation.no.de/"
     ],
     "launch": {
-      "web_url": "http://localhost/"
+      "web_url": "http://enginimation.no.de/"
     }
   },
   "icons": {
