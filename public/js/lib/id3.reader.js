@@ -582,5 +582,3 @@ parseFile: function(file, onComplete)
 	return [reader, ID3v2.parseStream(read, onComplete)];
 }
 }
-
-

@@ -16,8 +16,8 @@ js/app/ui.songslist.js
 js/app/ui.visualization.js
 js/lib/fs.min.js
 js/backbone.bundle.js
-js/lib/id3.reader.js
-js/lib/jquery-ui-1.8.11.custom.min.js
+js/lib/id3.reader.min.js
+js/lib/jquery-ui.min.js
 js/lib/jquery.min.js
 css/styles.css
 css/1024.css

@@ -107,7 +107,7 @@ $(function()
         tpl:$('#song_tpl').html(),
         events:
         {
-            'click .song':'selectSong',
+            'click':'selectSong',
             'click .delete_album_song':'deleteSong',
             'dblclick .song':'selectForPlaying',
             'click .delete_song': 'deleteSong'
