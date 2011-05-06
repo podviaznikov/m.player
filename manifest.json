@@ -4,10 +4,10 @@
   "version": "1.0",
   "app": {
     "urls": [
-      "*://enginimation.no.de/"
+      "*://player.enginimation.com/"
     ],
     "launch": {
-      "web_url": "http://enginimation.no.de/"
+      "web_url": "http://player.enginimation.com/"
     }
   },
   "icons": {

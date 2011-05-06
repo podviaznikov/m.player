@@ -1,5 +1,5 @@
-// m.Player
-// (c) 2011 Anton Podviaznikov, Enginimation Studio (http://enginimation.info).
+// m.player
+// (c) 2011 Enginimation Studio (http://enginimation.com).
 // m.player may be freely distributed under the MIT license.
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player.

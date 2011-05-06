@@ -11,18 +11,17 @@
     <link rel='stylesheet' media='screen and (max-width: 600px)' href='css/600.css' />
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/jquery-ui-1.8.11.custom.min.js"></script>
+    <!--
     <script src="js/lib/underscore-min.js"></script>
     <script src="js/lib/backbone-min.js"></script>
     <script src="js/lib/uuid.js"></script>
-    <script src="js/lib/id3.reader.js" ></script>
     <script src="js/lib/porridge.js"></script>
-    <script src="js/api/lastfm.js"></script>
     <script src="js/lib/backbone-indexdb.js"></script>
-    <script src="js/fs/fs.ext.js"></script>
-    <script src="js/fs/fs.core.js"></script>
-    <script src="js/fs/fs.util.js"></script>
-    <script src="js/fs/fs.reader.js"></script>
-    <script src="js/fs/fs.writer.js"></script>
+    -->
+    <script src="js/backbone.bundle.js"></script>
+    <script src="js/lib/id3.reader.js" ></script>
+    <script src="js/api/lastfm.js"></script>
+    <script src="js/lib/fs.min.js"></script>
     <script src="js/app/models.js"></script>
     <script src="js/app/ui.app.js"></script>
     <script src="js/app/ui.songslist.js"></script>
@@ -49,7 +48,7 @@
     <p>All you music stored locally in the filesystem used by application. This is possible using HTML 5 technology.</p>
     <p>Project is open-source. You can join development <a href="https://github.com/podviaznikov/m.player">here</a>.</p>
     <p>Current version is 1.0. A lot of new functionality will be implemented in the upcoming months.</p>
-    <p>Project is build by Enginimation Studio. Feel free Contact <a href="mailto:hello@enginimation.info">us</a> in any time with any reason.</p>
+    <p>Project is build by Enginimation Studio. Feel free Contact <a href="mailto:hello@enginimation.com">us</a> in any time with any reason.</p>
     </section>
 </section>
 <section id="hot_keys" class="info_panel help_panel hidden middle_layout_panel">
@@ -113,7 +112,6 @@
 <script type="html/template" id="song_tpl">
     <div class="song cell track_number"><%= track %></div>
     <div class="song cell"><%= title %></div>
-    <div class="song cell">Del</div>
     <div class="song cell delete_album_song">Delete</div>
 </script>
 <script type="html/template" id="song_mini_tpl">

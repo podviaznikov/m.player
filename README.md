@@ -1,5 +1,5 @@
-# m.player - offline browser music player
-m.player build on top of the HTML5 technologies and wonderful javascript libraries. Currently you can find it only in Chrome Web Store (https://chrome.google.com/webstore/detail/lhjjnnhpfomdbcgnmkejhacbcdppljic) and http://player.enginimation.info.
+# m.player - offline/online browser music player
+m.player build on top of the HTML5 technologies and wonderful javascript libraries. Currently you can find it only in Chrome Web Store (https://chrome.google.com/webstore/detail/lhjjnnhpfomdbcgnmkejhacbcdppljic) and http://player.enginimation.com.
 
 
 ## Feedback
@@ -13,7 +13,7 @@ List of issues/features can be found here (https://github.com/podviaznikov/m.pla
 
 (The MIT License)
 
-Copyright (c) 2011 Anton Podviaznikov, Enginimation Studio (http://enginimation.info)
+Copyright (c) 2011 Enginimation Studio (http://enginimation.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

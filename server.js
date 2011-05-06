@@ -1,9 +1,12 @@
+// m.player
+// (c) 2011 Enginimation Studio (http://enginimation.com).
+// m.player may be freely distributed under the MIT license.
+// For all details and documentation:
+// https://github.com/podviaznikov/m.player
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
-    mime = require('mime'),
     app = express.createServer();
-mime.define({'text/cache-manifest': ['mf']});
 app.configure(function()
 {
     app.use(connect.favicon(__dirname + '/public/16.png'));
@@ -22,5 +25,4 @@ app.get('/app.mf', function(req, res)
     res.sendfile(__dirname + '/app.mf');
 });
 app.listen(80);
-
 util.log('started app on 80');
