@@ -29,7 +29,7 @@ $(function()
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
              'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist',
-                    'savePlayList','setPlayListModel','removePlayListModel');
+              'playSongModel','savePlayList','setPlayListModel','removePlayListModel');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -190,15 +190,7 @@ $(function()
                 nextSongId=indexOfSelectedSong+1;
             }
             var nextSong=this.songs.at(nextSongId);
-            if(playSong)
-            {
-                this.destroyFileURL();
-                nextSong.view.playSong();
-            }
-            else
-            {
-                nextSong.view.selectSong();
-            }
+            this.playSongModel(nextSong,playSong);
         },
         previous:function(playSongFlag)
         {
@@ -209,15 +201,23 @@ $(function()
                 indexOfSelectedSong=this.songs.length;//to have last one
             }
             var previousSong=this.songs.at(indexOfSelectedSong-1);
+            this.playSongModel(previousSong,playSong);
+        },
+        playSongModel:function(song,playSong)
+        {
             if(playSong)
             {
                 this.destroyFileURL();
-                previousSong.view.playSong();
+                if(song && song.view)
+                {
+                    song.view.playSong();
+                }
             }
-            else
+            else if(!playSong && song && song.view)
             {
-                previousSong.view.selectSong();
+                song.view.selectSong();
             }
+
         },
         handleFileSelect:function(files)
         {

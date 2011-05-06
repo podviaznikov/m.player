@@ -1,5 +1,5 @@
 {
-  "name": "m.Player",
+  "name": "m.player",
   "description": "Offline Music Player",
   "version": "1.0",
   "app": {
