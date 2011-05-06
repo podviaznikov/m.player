@@ -267,7 +267,6 @@ $(function()
                                         AppController.libraryMenu.artists.add(artist);
                                     });
                                 }
-
                                 AppController.playlistView.songs.add(song);
                             }
                         },uniqueFileName);

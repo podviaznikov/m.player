@@ -5,7 +5,6 @@
 // https://github.com/podviaznikov/m.player
 "use strict";
 var ui={};
-var global = window;
 $(function()
 {
     ui.AppView = Backbone.View.extend(
@@ -13,31 +12,42 @@ $(function()
         el: $('body'),
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
+        mainPanels:$('section.main_panel'),
+        isRegularMode:true,
         events:
         {
             'keyup':'keyPressed'
         },
         showHelp:function()
         {
+            this.isRegularMode=false;
             this.el.removeClass('fullscreen');
             this.infoPanels.addClass('hidden');
             this.helpPanels.removeClass('hidden');
         },
         hideHelp:function()
         {
+            this.isRegularMode=true;
             this.infoPanels.removeClass('hidden');
             this.helpPanels.addClass('hidden');
         },
-        enterNowPlayingMode:function()
+        showFullScreen:function()
         {
             this.infoPanels.addClass('hidden');
             this.el.addClass('fullscreen');
             AppController.visualizationView.show();
         },
-        enterRegularPlayerMode:function()
+        hideFullScreen:function()
         {
             this.el.removeClass('fullscreen');
-            this.infoPanels.removeClass('hidden');
+            if(this.isRegularMode)
+            {
+                this.mainPanels.removeClass('hidden');
+            }
+            else
+            {
+                this.helpPanels.removeClass('hidden');
+            }
             AppController.visualizationView.hide();
         },
         keyPressed:function(event)
@@ -68,7 +78,7 @@ $(function()
             else if(keyCode==27)//escape
             {
                 //comeback to the normal view
-                AppController.playerCtrl.regularPlayerMode();
+                AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
             }
         }

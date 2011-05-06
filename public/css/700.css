@@ -2,12 +2,12 @@ section.info_panel
 {
     display:none;
 }
-#playing_list
+#playing_list,#how_to_use
 {
     display:block;
     width:100%;
 }
-#playing_list.hidden
+#playing_list.hidden,#how_to_use.hidden
 {
     display:none;
 }

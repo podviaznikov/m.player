@@ -37,8 +37,8 @@ $(function()
             'click #shuffle_toggle.off':'shuffleOn',
             'click #repeat_toggle.on':'repeatOff',
             'click #repeat_toggle.off':'repeatOn',
-            'click #expand.on':'nowPlayingMode',
-            'click #expand.off':'regularPlayerMode',
+            'click #expand.on':'turnOnFullScreen',
+            'click #expand.off':'turnOffFullScreen',
             'click #help.on':'turnOffHelpMode',
             'click #help.off':'turnOnHelpMode'
 
@@ -46,7 +46,7 @@ $(function()
         initialize:function()
         {
             this.bind('audio:update',this.updateAudioProgress);
-            _.bindAll(this,'togglePause','changedVolume','nowPlayingMode','regularPlayerMode',
+            _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode');
             this.audioEL = new ui.AudioElement({player:this});
             this.volumeGutter.slider(
@@ -71,19 +71,19 @@ $(function()
             this.helpModeToggle.addClass('off');
             AppController.appView.hideHelp();
         },
-        nowPlayingMode:function()
+        turnOnFullScreen:function()
         {
             this.playerModeToggle.removeClass('on');
             this.playerModeToggle.addClass('off');
             this.playerModeToggle.attr('title','Library mode');
-            AppController.appView.enterNowPlayingMode();
+            AppController.appView.showFullScreen();
         },
-        regularPlayerMode:function()
+        turnOffFullScreen:function()
         {
             this.playerModeToggle.removeClass('off');
             this.playerModeToggle.addClass('on');
             this.playerModeToggle.attr('title','Full screen mode');
-            AppController.appView.enterRegularPlayerMode();
+            AppController.appView.hideFullScreen();
         },
         changedVolume:function(e,ui)
         {
