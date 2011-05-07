@@ -3,33 +3,6 @@ ID3v2 =
 	parseStream: function(stream, onComplete)
     {
 
-	var PICTURE_TYPES =
-    {
-		"0": "Other",
-		"1": "32x32 pixels 'file icon' (PNG only)",
-		"2": "Other file icon",
-		"3": "Cover (front)",
-		"4": "Cover (back)",
-		"5": "Leaflet page",
-		"6": "Media (e.g. lable side of CD)",
-		"7": "Lead artist/lead performer/soloist",
-		"8": "Artist/performer",
-		"9": "Conductor",
-		"A": "Band/Orchestra",
-		"B": "Composer",
-		"C": "Lyricist/text writer",
-		"D": "Recording Location",
-		"E": "During recording",
-		"F": "During performance",
-		"10": "Movie/video screen capture",
-		"11": "A bright coloured fish", //<--- WTF?
-		"12": "Illustration",
-		"13": "Band/artist logotype",
-		"14": "Publisher/Studio logotype"
-	}
-
-	//from: http://bitbucket.org/moumar/ruby-mp3info/src/tip/lib/mp3info/id3v2.rb
-	//TODO: replace with something longer
 	var TAGS =
     {
     "AENC": "Audio encryption",
@@ -469,11 +442,9 @@ ID3v2 =
 	return tag;
 },
 
-parseFile: function(file, onComplete)
+parseFile: function(binData, onComplete)
 {
- 	var reader = new FileReader();
-
-	var pos = 0, 
+	var pos = 0,
 			bits_required = 0, 
 			handle = function(){},
 			maxdata = Infinity;
@@ -487,24 +458,21 @@ parseFile: function(file, onComplete)
 	}
 	var responseText = '';
 	(function(){
-		if(reader.result){
-			responseText = reader.result;
+		if(binData){
+			responseText = binData;
 		}
-		if(reader.result.length > maxdata) reader.abort();
-	
+
 		if(responseText.length > pos + bits_required && bits_required){
 			var data = responseText.substr(pos, bits_required);
 			var arrdata = data.split('').map(function(e){return e.charCodeAt(0) & 0xff});
 			pos += bits_required;
 			bits_required = 0;
 			if(handle(data, arrdata) === false){
-				reader.abort();
 				return;
 			}
 		}
 		setTimeout(arguments.callee, 0);
 	})()
-	reader.readAsBinaryString(file);
-	return [reader, ID3v2.parseStream(read, onComplete)];
+	return [ID3v2.parseStream(read, onComplete)];
 }
 }

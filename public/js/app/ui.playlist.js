@@ -230,7 +230,7 @@ $(function()
                     return;
                 }
                 var initialFile = initialFile;
-                ID3v2.parseFile(initialFile,function(tags)
+                ID3v2.parseFile(data,function(tags)
                 {
                     var songData = tags;
                     var song = new Song();
@@ -262,8 +262,7 @@ $(function()
                             AppController.playlistView.songs.add(song);
                         }
                     },uniqueFileName);
-
-                });
+               });
             });
         }
     });

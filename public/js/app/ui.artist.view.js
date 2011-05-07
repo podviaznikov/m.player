@@ -14,7 +14,7 @@ $(function()
         events:
         {
             'click':'selectArtist',
-            'dbclick':'playArtistSongs',
+            'dblclick':'playArtistSongs',
             'click .delete_artist':'deleteArtist',
             'click .album_link': 'selectAlbum'
         },

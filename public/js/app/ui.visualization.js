@@ -11,7 +11,6 @@ $(function()
     {
         el: $('#playing_visualization'),
         tpl: $('#visualization_tpl').html(),
-
         initialize: function()
         {
             _.bindAll(this,'selectSong','render','show','hide','renderAlbumPoster');
