@@ -18,7 +18,6 @@ $(function()
         newPlayListName:$('#new_play_list'),
         events:
         {
-            'dragover':'dragOverFiles',
             'drop':'dropFiles',
             'blur #new_play_list':'savePlayList',
             'click #clear_playlist':'clearPlaylist'
@@ -27,8 +26,8 @@ $(function()
         {
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
-             'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist',
-              'playSongModel','savePlayList','setPlayListModel','removePlayListModel','processAudioFile','setSongsAndPlay');
+             'randomSong','renderAlbumInfo','render','clearPlaylist',
+              'playSongModel','savePlayList','setPlayListModel','removePlayListModel','setSongsAndPlay');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -105,26 +104,19 @@ $(function()
                 this.songs.each(this.addOne);
             }
         },
-        dragOverFiles:function(e)
-        {
-            e.stopPropagation();
-            e.preventDefault();
-        },
         dropFiles:function(e)
         {
             e.stopPropagation();
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
-            var files=dataTransfer.files;
-            if(files && files.length>0)
-            {
-                this.handleFileSelect(e.originalEvent.dataTransfer.files); // handle FileList object.
-            }
-            else
+            if(dataTransfer&&dataTransfer.getData('text/plain'))
             {
                 var songJSON=JSON.parse(dataTransfer.getData('text/plain'));
-                var song = new Song(songJSON);
-                this.songs.add(song);
+                if(songJSON)
+                {
+                    var song = new Song(songJSON);
+                    this.songs.add(song);
+                }
             }
         },
         selectSong:function(song)
@@ -220,55 +212,6 @@ $(function()
             {
                 song.view.selectSong();
             }
-        },
-        handleFileSelect:function(files)
-        {
-            var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
-            _.each(audioFiles,this.processAudioFile);
-        },
-        processAudioFile:function(file)
-        {
-            fs.read.fileAsBinaryString(file, function(readError,data,initialFile)
-            {
-                if(readError)
-                {
-                    return;
-                }
-                var initialFile = initialFile;
-                ID3v2.parseFile(data,function(tags)
-                {
-                    var songData = tags;
-                    var song = new Song();
-
-                    var uniqueFileName=song.id+initialFile.extension();
-
-                    songData.fileName=uniqueFileName;
-                    songData.originalFileName=initialFile.name;
-                    song.set(songData);
-
-                    //save file
-                    fs.write.file(initialFile,function(writeError)
-                    {
-                        if(!writeError)
-                        {
-                            song.save();
-                            var artistName = song.get('artist');
-                            var artist=AppController.libraryMenu.artists.findByName(artistName);
-                            if(!artist)
-                            {
-                                artist = new Artist({name:song.get('artist')});
-                                lastFM.getArtistImage(artist.get('name'),function(image)
-                                {
-                                    artist.set({image:image});
-                                    artist.save();
-                                    AppController.libraryMenu.artists.add(artist);
-                                });
-                            }
-                            AppController.playlistView.songs.add(song);
-                        }
-                    },uniqueFileName);
-               });
-            });
         }
     });
 

@@ -16,7 +16,74 @@ $(function()
         isRegularMode:true,
         events:
         {
-            'keyup':'keyPressed'
+            'keyup':'keyPressed',
+            'dragover':'dragOverFiles',
+            'drop':'dropFiles'
+        },
+        dragOverFiles:function(e)
+        {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        dropFiles:function(e)
+        {
+            e.stopPropagation();
+            e.preventDefault();
+            var dataTransfer=e.originalEvent.dataTransfer;
+            var files=dataTransfer.files;
+            if(files && files.length>0)
+            {
+                this.handleFileSelect(e.originalEvent.dataTransfer.files); // handle FileList object.
+            }
+        },
+        handleFileSelect:function(files)
+        {
+            var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
+            _.each(audioFiles,this.processAudioFile);
+        },
+        processAudioFile:function(file)
+        {
+            fs.read.fileAsBinaryString(file, function(readError,data,initialFile)
+            {
+                if(readError)
+                {
+                    return;
+                }
+                var initialFile = initialFile;
+                ID3v2.parseFile(data,function(tags)
+                {
+                    var songData = tags;
+                    var song = new Song();
+
+                    var uniqueFileName=song.id+initialFile.extension();
+
+                    songData.fileName=uniqueFileName;
+                    songData.originalFileName=initialFile.name;
+                    song.set(songData);
+
+                    //save file
+                    fs.write.file(initialFile,function(writeError)
+                    {
+                        if(!writeError)
+                        {
+                            song.save();
+                            var artistName = song.get('artist');
+                            var artist=AppController.libraryMenu.artists.findByName(artistName);
+                            if(!artist)
+                            {
+                                artist = new Artist({name:song.get('artist')});
+                                lastFM.getArtistImage(artist.get('name'),function(image)
+                                {
+                                    artist.set({image:image});
+                                    artist.save();
+                                    AppController.libraryMenu.artists.add(artist);
+                                });
+                            }
+                            AppController.playlistView.songs.add(song);
+                        }
+                    },uniqueFileName);
+               });
+            });
         },
         showHelp:function()
         {
@@ -83,5 +150,4 @@ $(function()
             }
         }
     });
-
 });

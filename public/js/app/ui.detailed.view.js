@@ -54,7 +54,7 @@ $(function()
                 name:this.model.get('name')
             });
             $(this.el).append(html);
-            this.model.get('songs').each(this.addSong);
+            _.each(this.model.get('songs'),this.addSong);
             return this;
         },
         addSong:function(song,key)
