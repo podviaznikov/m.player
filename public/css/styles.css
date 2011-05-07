@@ -322,11 +322,13 @@ article.lib-item-data label:after
     margin: auto;
     text-align: center;
     overflow:hidden;
+    vertical-align:middle;
 }
 #playing_visualization img
 {
     margin:10px;
     max-height: 100%;
+    display:inline-block;
 }
 #playing_list footer
 {
