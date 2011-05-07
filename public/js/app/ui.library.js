@@ -18,8 +18,7 @@ $(function()
         },
         initialize:function()
         {
-            var self=this;
-            this.artists=new ArtistsList;//should be first in this method!
+             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded');
             this.artists.bind('add',this.addArtist);
@@ -55,7 +54,7 @@ $(function()
         },
         addArtist: function(artist)
         {
-            if(artist.get('name')&& !this.artists.findByName(artist.get('name')))
+            if(artist.get('name'))//&& !this.artists.findByName(artist.get('name')))
             {
                 var view = new ui.ArtistMenuView({model:artist});
                 artist.view=view;
