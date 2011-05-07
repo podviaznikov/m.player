@@ -100,10 +100,6 @@ ul li
    background-color:#ff6900!important;
    color:black!important;
 }
-.delete_song
-{
-    display:none;
-}
 
 /**player*/
 footer#player

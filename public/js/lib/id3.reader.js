@@ -301,9 +301,7 @@ ID3v2 =
 		"125": "Dance Hall"
 		};
 		
-	var tag = {
-		pictures: []
-	};
+	var tag = {};
 	
 	
 	var max_size = Infinity;
@@ -311,27 +309,6 @@ ID3v2 =
 	function read(bytes, callback){
 		stream(bytes, callback, max_size);
 	}
-	
-	
-	function encode_64(input) {
-		var output = "", i = 0, l = input.length,
-		key = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", 
-		chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-		while (i < l) {
-			chr1 = input.charCodeAt(i++);
-			chr2 = input.charCodeAt(i++);
-			chr3 = input.charCodeAt(i++);
-			enc1 = chr1 >> 2;
-			enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-			enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-			enc4 = chr3 & 63;
-			if (isNaN(chr2)) enc3 = enc4 = 64;
-			else if (isNaN(chr3)) enc4 = 64;
-			output = output + key.charAt(enc1) + key.charAt(enc2) + key.charAt(enc3) + key.charAt(enc4);
-		}
-		return output;
-	}
-
 
 
 	function parseDuration(ms){
@@ -376,59 +353,9 @@ ID3v2 =
 		}
 		return size;
 	}
-	
-	function parseImage(str){
-		var TextEncoding = str.charCodeAt(0);
-		str = str.substr(1);
-		var MimeTypePos = str.indexOf('\0');
-		var MimeType = str.substr(0, MimeTypePos);
-		str = str.substr(MimeTypePos+1);
-		var PictureType = str.charCodeAt(0);
-		var TextPictureType = PICTURE_TYPES[PictureType.toString(16).toUpperCase()];
-		str = str.substr(1);
-		var DescriptionPos = str.indexOf('\0');
-		var Description = str.substr(0, DescriptionPos);
-		str = str.substr(DescriptionPos+1);
-		var PictureData = str;
-		var Magic = PictureData.split('').map(function(e){return String.fromCharCode(e.charCodeAt(0) & 0xff)}).join('');
-		return {
-			dataURL: 'data:'+MimeType+';base64,'+encode_64(Magic),
-			PictureType: TextPictureType,
-			Description: Description,
-			MimeType: MimeType
-		};
-	}
-	
-	function parseImage2(str){
-		var TextEncoding = str.charCodeAt(0);
-		str = str.substr(1);
-		var Type = str.substr(0, 3);
-		str = str.substr(3);
-		
-		var PictureType = str.charCodeAt(0);
-		var TextPictureType = PICTURE_TYPES[PictureType.toString(16).toUpperCase()];
-		
-		str = str.substr(1);
-		var DescriptionPos = str.indexOf('\0');
-		var Description = str.substr(0, DescriptionPos);
-		str = str.substr(DescriptionPos+1);
-		var PictureData = str;
-		var Magic = PictureData.split('').map(function(e){return String.fromCharCode(e.charCodeAt(0) & 0xff)}).join('');
-		return {
-			dataURL: 'data:img/'+Type+';base64,'+encode_64(Magic),
-			PictureType: TextPictureType,
-			Description: Description,
-			MimeType: MimeType
-		};
-	}
+
 
 	var TAG_HANDLERS = {
-		"APIC": function(size, s, a){
-			tag.pictures.push(parseImage(s));
-		},
-		"PIC": function(size, s, a){
-			tag.pictures.push(parseImage2(s));
-		},
 		"TLEN": function(size, s, a){
 			tag.Length = parseDuration(s);
 		},
@@ -544,8 +471,7 @@ ID3v2 =
 
 parseFile: function(file, onComplete)
 {
-
-	var reader = new FileReader();
+ 	var reader = new FileReader();
 
 	var pos = 0, 
 			bits_required = 0, 

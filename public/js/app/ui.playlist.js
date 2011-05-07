@@ -45,7 +45,7 @@ $(function()
                 }
             }
         },
-        render: function()
+        render:function()
         {
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
             return this;
@@ -82,7 +82,7 @@ $(function()
             settings.savePlayList(this.songs);
             this.render();
         },
-        addOne: function(song)
+        addOne:function(song)
         {
             if(song.get('fileName'))
             {
@@ -92,7 +92,7 @@ $(function()
                 this.songsEl.append(view.render().el);
             }
         },
-        addAll: function()
+        addAll:function()
         {
             if(this.songs.length!=0)
             {
@@ -100,12 +100,12 @@ $(function()
                 this.songs.each(this.addOne);
             }
         },
-        dragOverFiles: function(e)
+        dragOverFiles:function(e)
         {
             e.stopPropagation();
             e.preventDefault();
         },
-        dropFiles: function(e)
+        dropFiles:function(e)
         {
             e.stopPropagation();
             e.preventDefault();
@@ -266,7 +266,6 @@ $(function()
                 });
             });
         }
-
     });
 
     ui.SongMiniView = Backbone.View.extend(
@@ -276,14 +275,12 @@ $(function()
         events:
         {
             'click .song':'selectSong',
-            'dblclick .song':'playSong',
-            'click .delete_song': 'deleteSong'
+            'dblclick .song':'playSong'
         },
         initialize:function()
         {
             _.bindAll(this,'render','selectSong','playSong','deleteSong','songFileLoaded');
         },
-
         render: function()
         {
             this.el.draggable=true;
@@ -301,7 +298,7 @@ $(function()
             $(this.el).html(html);
             return this;
         },
-        selectSong: function()
+        selectSong:function()
         {
             $('.song-data').removeClass('selected_song');
             $(this.el).addClass('selected_song');
@@ -319,23 +316,6 @@ $(function()
         {
             this.options.playlist.trigger('url:create',url);
             AppController.playerCtrl.play(url);
-        },
-
-        deleteSong: function()
-        {
-            var id=this.el.dataset.id;
-            var filename=this.el.dataset.filename;
-//            musicDao.deleteSong(id,function()
-//            {
-//                fs.util.remove(filename,function(er)
-//                {
-//                    if(er)
-//                    {
-//                        console.log('Error happened while deleting file='+filename);
-//                    }
-//                });
-//            });
-            $(this.el).remove();
         }
     });
 
