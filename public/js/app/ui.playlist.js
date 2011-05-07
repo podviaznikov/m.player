@@ -118,6 +118,10 @@ $(function()
                     this.songs.add(song);
                 }
             }
+            else
+            {
+                AppController.appView.dropFiles(e);
+            }
         },
         selectSong:function(song)
         {
