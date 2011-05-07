@@ -71,4 +71,110 @@ $(function()
             this.playLists.each(this.addPlayList);
         }
     });
+
+        ui.ArtistMenuView = Backbone.View.extend(
+    {
+        className:'lib-item-data box',
+        tagName: 'article',
+        tpl:$('#artist_tpl').html(),
+        events:
+        {
+            'click':'selectArtist',
+            'dblclick':'playArtistSongs',
+            'click .delete_artist':'deleteArtist',
+            'click .album_link': 'selectAlbum',
+            'dbclick .album_link':'playAlbumSongs'
+        },
+        initialize:function()
+        {
+            _.bindAll(this, 'addOne', 'addAll', 'render','selectArtist','playArtistSongs',
+                    'deleteArtist','selectAlbum','playAlbumSongs');
+            this.model.songs.bind('all',this.render);
+            this.model.bind('change',this.render);
+            this.model.view=this;
+        },
+        render: function()
+        {
+            var html = _.template(this.tpl,
+            {
+                image:this.model.get('image'),
+                name:this.model.get('name'),
+                albums:this.model.get('albums'),
+                genres:this.model.get('genres'),
+                songsCount:this.model.get('songsCount')
+            });
+            $(this.el).html(html);
+
+            return this;
+        },
+        selectArtist:function()
+        {
+            $('.lib-item-data').removeClass('selected-lib-item');
+            $(this.el).addClass('selected-lib-item');
+            AppController.songsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
+        },
+        playArtistSongs:function()
+        {
+            this.selectArtist();
+            AppController.playlistView.setSongsAndPlay(this.model.songs.models);
+        },
+        playAlbumSongs:function(e)
+        {
+            var album = e.currentTarget.dataset.album;
+            var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
+            AppController.songsView.songs.refresh(albumSongs);
+            AppController.playlistView.setSongsAndPlay(albumSongs);
+        },
+        deleteArtist:function()
+        {
+            this.model.destroy();
+            this.$(this.el).remove();
+        },
+        selectAlbum:function(e)
+        {
+            var album = e.currentTarget.dataset.album;
+            var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
+            AppController.songsView.songs.refresh(albumSongs);
+        }
+    });
+
+        ui.PlayListMenuView = Backbone.View.extend(
+    {
+        className:'lib-item-data box',
+        tagName: 'article',
+        tpl:$('#saved_playlist_tpl').html(),
+        events:
+        {
+            'click':'selectPlayList',
+            'click .delete_playlist':'deletePlaylist'
+        },
+        initialize:function()
+        {
+            _.bindAll(this, 'addOne', 'addAll', 'render','selectPlayList','deletePlaylist');
+            this.model.bind('change',this.render);
+            this.model.view=this;
+        },
+        render: function()
+        {
+            var html = _.template(this.tpl,
+            {
+                image:'css/images/no_picture.png',
+                name:this.model.get('name'),
+                songsCount:this.model.get('songs').length
+            });
+            $(this.el).html(html);
+            return this;
+        },
+        selectPlayList: function()
+        {
+            $('.lib-item-data').removeClass('selected-lib-item');
+            $(this.el).addClass('selected-lib-item');
+            AppController.songsView.showPlayList(this.model);
+        },
+        deletePlaylist:function()
+        {
+            this.model.destroy();
+            this.$(this.el).remove();
+        }
+    });
 });

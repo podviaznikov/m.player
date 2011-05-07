@@ -5,13 +5,11 @@ js/app/controller.js
 js/app/models.js
 js/app/settings.js
 js/app/ui.app.js
-js/app/ui.artist.view.js
 js/app/ui.audio.js
 js/app/ui.detailed.view.js
 js/app/ui.library.js
 js/app/ui.player.js
 js/app/ui.playlist.js
-js/app/ui.playlists.view.js
 js/app/ui.songslist.js
 js/app/ui.visualization.js
 js/lib/fs.min.js
