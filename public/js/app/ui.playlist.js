@@ -28,7 +28,7 @@ $(function()
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
              'randomSong','renderAlbumInfo','render','handleFileSelect','clearPlaylist',
-              'playSongModel','savePlayList','setPlayListModel','removePlayListModel');
+              'playSongModel','savePlayList','setPlayListModel','removePlayListModel','processAudioFile');
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.createdFileURL);
             this.songs.bind('add',this.addOne);
@@ -215,65 +215,58 @@ $(function()
             {
                 song.view.selectSong();
             }
-
         },
         handleFileSelect:function(files)
         {
-            for (var i = 0; i<files.length; i++)
+            var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
+            _.each(audioFiles,this.processAudioFile);
+        },
+        processAudioFile:function(file)
+        {
+            fs.read.fileAsBinaryString(file, function(readError,data,initialFile)
             {
-                var file = files[i];
-                //audio/*
-                if(!file.type.match('audio/mp3'))
+                if(readError)
                 {
-                    continue;
+                    return;
                 }
-
-                //read data
-                fs.read.fileAsBinaryString(file, function(readError,data,initialFile)
+                var initialFile = initialFile;
+                ID3v2.parseFile(initialFile,function(tags)
                 {
-                    if(readError)
+                    var songData = tags;
+                    var song = new Song();
+
+                    var uniqueFileName=song.id+initialFile.extension();
+
+                    songData.fileName=uniqueFileName;
+                    songData.originalFileName=initialFile.name;
+                    song.set(songData);
+
+                    //save file
+                    fs.write.file(initialFile,function(writeError)
                     {
-                        return;
-                    }
-                    var initialFile = initialFile;
-                    ID3v2.parseFile(initialFile,function(tags)
-                    {
-                        var songData = tags;
-                        var song = new Song();
-
-                        var uniqueFileName=song.id+initialFile.extension();
-
-                        songData.fileName=uniqueFileName;
-                        songData.originalFileName=initialFile.name;
-                        song.set(songData);
-
-                        //save file
-                        fs.write.file(initialFile,function(writeError)
+                        if(!writeError)
                         {
-                            if(!writeError)
+                            song.save();
+                            var artistName = song.get('artist');
+                            var artist=AppController.libraryMenu.artists.findByName(artistName);
+                            if(!artist)
                             {
-                                song.save();
-                                var artistName = song.get('artist');
-                                var artist=AppController.libraryMenu.artists.findByName(artistName);
-                                if(!artist)
+                                artist = new Artist({name:song.get('artist')});
+                                lastFM.getArtistImage(artist.get('name'),function(image)
                                 {
-                                    artist = new Artist({name:song.get('artist')});
-                                    lastFM.getArtistImage(artist.get('name'),function(image)
-                                    {
-                                        artist.set({image:image});
-                                        artist.save();
-                                        AppController.libraryMenu.artists.add(artist);
-                                    });
-                                }
-                                AppController.playlistView.songs.add(song);
+                                    artist.set({image:image});
+                                    artist.save();
+                                    AppController.libraryMenu.artists.add(artist);
+                                });
                             }
-                        },uniqueFileName);
+                            AppController.playlistView.songs.add(song);
+                        }
+                    },uniqueFileName);
 
-                    });
                 });
-
-            }
+            });
         }
+
     });
 
     ui.SongMiniView = Backbone.View.extend(
