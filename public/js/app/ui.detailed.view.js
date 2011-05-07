@@ -106,12 +106,12 @@ $(function()
         {
             'click':'selectSong',
             'click .delete_album_song':'deleteSong',
-            'dblclick .song':'selectForPlaying',
+            'dblclick .song':'playSongs',
             'click .delete_song': 'deleteSong'
         },
         initialize:function()
         {
-            _.bindAll(this,'selectSong','deleteSong','onDeleteSong','selectForPlaying','render');
+            _.bindAll(this,'selectSong','deleteSong','onDeleteSong','playSongs','render');
         },
         render: function()
         {
@@ -142,11 +142,11 @@ $(function()
             this.model.albumView.remove();
             fs.util.remove(this.model.get('originalFileName'));
         },
-        selectForPlaying:function()
+        playSongs:function()
         {
             this.selectSong();
             var songs=this.options.songs;
-            AppController.playlistView.songs.refresh(songs);
+            AppController.playlistView.setSongsAndPlay(songs);
             if(this.options.playList)
             {
                 AppController.playlistView.setPlayListModel(this.options.playList);
