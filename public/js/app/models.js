@@ -8,11 +8,11 @@ var Song = Porridge.Model.extend(
 {
     defaults:
     {
-        album:'no album',
-        title:'no title',
-        artist:'no artist',
+        album:'No information',
+        title:'No information',
+        artist:'No information',
         year:'',
-        genre:'no genre'
+        genre:''
     }
 },
 {
