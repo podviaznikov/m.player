@@ -175,7 +175,7 @@ $(function()
         playPlayList:function()
         {
            this.selectPlayList();
-            AppController.playlistView.setSongsAndPlay(this.model.get('songs').models);
+            AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         },
         deletePlaylist:function()
         {

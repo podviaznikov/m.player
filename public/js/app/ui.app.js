@@ -150,4 +150,43 @@ $(function()
             }
         }
     });
+
+    ui.VisualizationView = Backbone.View.extend(
+    {
+        el: $('#playing_visualization'),
+        tpl: $('#visualization_tpl').html(),
+        initialize:function()
+        {
+            _.bindAll(this,'selectSong','render','show','hide','renderAlbumPoster');
+        },
+        selectSong:function(song)
+        {
+            this.model = song;
+        },
+        show:function()
+        {
+            this.el.show();
+            this.render();
+        },
+        hide:function()
+        {
+            this.el.hide();
+        },
+        renderAlbumPoster:function(image)
+        {
+            var html = _.template(this.tpl,
+            {
+                image:image
+            });
+            $(this.el).html(html);
+        },
+        render:function()
+        {
+            if(this.model)
+            {
+                lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
+            }
+            return this;
+        }
+    });
 });
