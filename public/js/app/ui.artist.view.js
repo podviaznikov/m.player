@@ -49,7 +49,7 @@ $(function()
         playArtistSongs:function()
         {
             this.selectArtist();
-            AppController.playlistView.setSongsAndPlay(this.model.songs);
+            AppController.playlistView.setSongsAndPlay(this.model.songs.models);
         },
         deleteArtist:function()
         {
