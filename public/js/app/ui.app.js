@@ -18,7 +18,7 @@ $(function()
         {
             'keyup':'keyPressed',
             'dragover':'dragOverFiles',
-            'drop':'dropFiles'
+            'drop .main_panel':'dropFiles'
         },
         initialize:function()
         {
