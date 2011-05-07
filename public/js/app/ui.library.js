@@ -138,7 +138,7 @@ $(function()
         }
     });
 
-        ui.PlayListMenuView = Backbone.View.extend(
+     ui.PlayListMenuView = Backbone.View.extend(
     {
         className:'lib-item-data box',
         tagName: 'article',
@@ -146,15 +146,16 @@ $(function()
         events:
         {
             'click':'selectPlayList',
+            'dblclick':'playPlayList',
             'click .delete_playlist':'deletePlaylist'
         },
         initialize:function()
         {
-            _.bindAll(this, 'addOne', 'addAll', 'render','selectPlayList','deletePlaylist');
+            _.bindAll(this, 'addOne', 'addAll', 'render','selectPlayList','playPlayList','deletePlaylist');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
-        render: function()
+        render:function()
         {
             var html = _.template(this.tpl,
             {
@@ -165,11 +166,16 @@ $(function()
             $(this.el).html(html);
             return this;
         },
-        selectPlayList: function()
+        selectPlayList:function()
         {
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             AppController.songsView.showPlayList(this.model);
+        },
+        playPlayList:function()
+        {
+           this.selectPlayList();
+            AppController.playlistView.setSongsAndPlay(this.model.get('songs').models);
         },
         deletePlaylist:function()
         {

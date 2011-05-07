@@ -38,26 +38,26 @@ $(function()
         className: 'lib_item_full_info_panel',
         tagName: 'article',
         tpl:$('#detailed_playlist_info_tpl').html(),
+        events:
+        {
+            'click':'playSongs'
+        },
         initialize: function()
         {
-            _.bindAll(this, 'addSong','render');
+            _.bindAll(this, 'addSong','render','playSongs');
         },
         render:function()
         {
-            var self=this;
             var html = _.template(this.tpl,
             {
                 image:'css/images/no_picture.png',
                 name:this.model.get('name')
             });
             $(this.el).append(html);
-            _.each(this.model.get('songs'),function(song,key)
-            {
-                self.addSong(song,key);
-            });
+            this.model.get('songs').each(this.addSong);
             return this;
         },
-        addSong: function(song,key)
+        addSong:function(song,key)
         {
             var song=new Song(song);
             var view = new ui.SongView(
@@ -69,6 +69,10 @@ $(function()
             });
             song.albumView = view;
             $(this.el).append(view.render().el);
+        },
+        playSongs:function()
+        {
+            AppController.playlistView.setSongsAndPlay(this.model.get('songs').models);
         }
     });
 
@@ -77,9 +81,13 @@ $(function()
         className: 'detailed_album_info_panel box',
         tagName: 'section',
         tpl:$('#detailed_album_info_tpl').html(),
-        initialize: function()
+        events:
         {
-            _.bindAll(this,'renderAlbumInfo','render');
+            'click':'playSongs'
+        },
+        initialize:function()
+        {
+            _.bindAll(this,'renderAlbumInfo','render','playSongs');
         },
         renderAlbumInfo:function(data)
         {
@@ -95,6 +103,10 @@ $(function()
         {
             lastFM.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
             return this;
+        },
+        playSongs:function()
+        {
+            AppController.playlistView.setSongsAndPlay(this.model.songs);
         }
     });
 

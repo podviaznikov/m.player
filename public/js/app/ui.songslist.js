@@ -44,8 +44,11 @@ $(function()
             var dataTransferObj=event.dataTransfer;
             dataTransferObj.effectAllowed = 'move';
             var songId=event.srcElement.dataset['id'];
-            var song = this.songs.get(songId);
-            dataTransferObj.setData('text/plain', JSON.stringify(song.toJSON()));
+            if(this.songs)
+            {
+                var song = this.songs.get(songId);
+                dataTransferObj.setData('text/plain', JSON.stringify(song.toJSON()));
+            }
         }
     });
 
