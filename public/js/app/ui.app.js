@@ -20,6 +20,11 @@ $(function()
             'dragover':'dragOverFiles',
             'drop':'dropFiles'
         },
+        initialize:function()
+        {
+            _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','processAudioFile','showHelp',
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed()')
+        },
         dragOverFiles:function(e)
         {
             e.stopPropagation();

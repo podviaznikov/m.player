@@ -72,7 +72,7 @@ $(function()
         },
         playSongs:function()
         {
-            AppController.playlistView.setSongsAndPlay(this.model.get('songs').models);
+            AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         }
     });
 
