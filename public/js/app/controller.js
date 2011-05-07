@@ -27,29 +27,12 @@ var AppController=
             AppController.playlistView = new ui.PlayListView;
             AppController.libraryMenu = new ui.LibraryMenu;
             AppController.songsView = new ui.SongsView;
-        })//this.onDBLoad);
+        });
 
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
         //$(document.body).bind("online", this.checkNetworkStatus);
         //$(document.body).bind("offline", this.checkNetworkStatus);
         //this.checkNetworkStatus();
-	},
-    /**
-     * Load UI components that are depended on connection to the storage(indexDB).
-     */
-	onDBLoad:function()
-	{
-        this.playlistView = new ui.PlayListView;
-        this.libraryMenu = new ui.LibraryMenu;
-        this.songsView = new ui.SongsView;
 	}
-//    checkNetworkStatus:function()
-//    {
-//        if (navigator.onLine) {
-//            alert('Online');
-//        }
-//        else {
-//            alert('Offline');
-//        }
-//    }
+
 };

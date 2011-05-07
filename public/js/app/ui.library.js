@@ -4,7 +4,6 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var global = window;
 $(function()
 {
     ui.LibraryMenu = Backbone.View.extend(
@@ -12,7 +11,6 @@ $(function()
         el: $('#library_menu'),
         artistsContent: $('#artists_library_content'),
         playListsContent: $('#playlists_library_content'),
-
         events:
         {
             'click #show_artists':'showArtists',

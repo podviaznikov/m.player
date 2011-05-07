@@ -4,14 +4,12 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var global = window;
 $(function()
 {
     ui.AlbumView = Backbone.View.extend(
     {
         className: 'lib_item_full_info_panel',
         tagName: 'article',
-
         initialize: function()
         {
             _.bindAll(this, 'addSong','render');
@@ -69,7 +67,7 @@ $(function()
                 songs:this.model.get('songs'),
                 playList:this.model
             });
-            song.view = view;
+            song.albumView = view;
             $(this.el).append(view.render().el);
         }
     });
@@ -79,7 +77,6 @@ $(function()
         className: 'detailed_album_info_panel box',
         tagName: 'section',
         tpl:$('#detailed_album_info_tpl').html(),
-
         initialize: function()
         {
             _.bindAll(this,'renderAlbumInfo','render');
@@ -114,7 +111,7 @@ $(function()
         },
         initialize:function()
         {
-            _.bindAll(this,'selectSong','deleteSong','selectForPlaying','render');
+            _.bindAll(this,'selectSong','deleteSong','onDeleteSong','selectForPlaying','render');
         },
         render: function()
         {
@@ -137,14 +134,17 @@ $(function()
         },
         deleteSong:function()
         {
-            this.model.destroy();//todo implement deleting file from filesystem
-            this.model.view.remove();
+            this.model.bind('destroy',this.onDeleteSong)
+            this.model.destroy();
+        },
+        onDeleteSong:function()
+        {
+            this.model.albumView.remove();
+            fs.util.remove(this.model.get('originalFileName'));
         },
         selectForPlaying:function()
         {
             this.selectSong();
-            var album=this.model.get('album');
-            var artist=this.model.get('artist');
             var songs=this.options.songs;
             AppController.playlistView.songs.refresh(songs);
             if(this.options.playList)
@@ -155,8 +155,8 @@ $(function()
             {
                 AppController.playlistView.removePlayListModel();
             }
-            settings.saveLastAlbum(album);
-            settings.saveLastArtist(artist);
+            settings.saveLastAlbum(this.model.get('album'));
+            settings.saveLastArtist(this.model.get('artist'));
             settings.savePlayList(songs);
         }
     });

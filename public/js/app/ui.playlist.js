@@ -4,7 +4,6 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var global = window;
 $(function()
 {
     ui.PlayListView = Backbone.View.extend(
@@ -138,7 +137,6 @@ $(function()
                 album:this.selectedSong.get('album'),
                 year:this.selectedSong.get('year')
             }));
-
         },
         createdFileURL:function(url)
         {

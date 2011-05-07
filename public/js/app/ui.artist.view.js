@@ -4,7 +4,6 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var global = window;
 $(function()
 {
     ui.ArtistMenuView = Backbone.View.extend(
@@ -15,12 +14,14 @@ $(function()
         events:
         {
             'click':'selectArtist',
+            'dbclick':'playArtistSongs',
             'click .delete_artist':'deleteArtist',
             'click .album_link': 'selectAlbum'
         },
         initialize:function()
         {
-            _.bindAll(this, 'addOne', 'addAll', 'render','selectArtist','deleteArtist','selectAlbum');
+            _.bindAll(this, 'addOne', 'addAll', 'render','selectArtist','playArtistSongs',
+                    'deleteArtist','selectAlbum');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
@@ -39,12 +40,16 @@ $(function()
 
             return this;
         },
-
-        selectArtist: function()
+        selectArtist:function()
         {
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             AppController.songsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
+        },
+        playArtistSongs:function()
+        {
+            this.selectArtist();
+            AppController.playlistView.songs.refresh(this.model.songs);
         },
         deleteArtist:function()
         {

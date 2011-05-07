@@ -4,7 +4,6 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var global = window;
 $(function()
 {
     ui.SongsView = Backbone.View.extend(
@@ -20,7 +19,7 @@ $(function()
             _.bindAll(this, 'showAlbums','showPlayList','handleDragStart');
             this.mapping={};
         },
-        showAlbums: function(albums,artist,songs)
+        showAlbums:function(albums,artist,songs)
         {
             this.filteredLibContent.empty();
             this.songs=songs;
@@ -33,7 +32,7 @@ $(function()
                 this.filteredLibContent.append(albumView.render().el);
             }
         },
-        showPlayList: function(playList)
+        showPlayList:function(playList)
         {
             this.filteredLibContent.empty();
             var playListView = new ui.PlayListFullView({model:playList});

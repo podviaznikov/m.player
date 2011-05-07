@@ -41,7 +41,6 @@ $(function()
             'click #expand.off':'turnOffFullScreen',
             'click #help.on':'turnOffHelpMode',
             'click #help.off':'turnOnHelpMode'
-
         },
         initialize:function()
         {

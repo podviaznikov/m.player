@@ -4,7 +4,6 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var global = window;
 $(function()
 {
     ui.AudioElement = Backbone.View.extend(
