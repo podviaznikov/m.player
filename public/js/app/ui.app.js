@@ -92,7 +92,10 @@ $(function()
                     }
                 },song.get('fileName'));
             });
-            var allArtists=songs.pluck('artist');
+            var allArtists=songs.map(function(song)
+            {
+                return song.get('artist');
+            });
             var artists=_.unique(allArtists);
             _.each(artists,function(artistName)
             {
