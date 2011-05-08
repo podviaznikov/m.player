@@ -73,7 +73,7 @@ $(function()
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
-                    songs[index]=song;
+                    songs.add(song);
                     saveToLib(songs,files);
                 });
             });
