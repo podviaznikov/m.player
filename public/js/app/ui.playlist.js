@@ -230,9 +230,9 @@ $(function()
         },
         initialize:function()
         {
-            _.bindAll(this,'render','selectSong','playSong','deleteSong','songFileLoaded');
+            _.bindAll(this,'render','selectSong','playSong','songFileLoaded');
         },
-        render: function()
+        render:function()
         {
             this.el.draggable=true;
             this.el.dataset.filename=this.model.get('fileName');
