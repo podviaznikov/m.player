@@ -25,11 +25,11 @@ $(function()
         initialize: function()
         {
             this.songs=new SongsList;//should be first in this method!
-            _.bindAll(this, 'addOne', 'addAll','createFileURL','destroyFileURL','currentSong',
+            _.bindAll(this, 'addOne', 'addAll','saveFileURL','destroyFileURL','currentSong', 'currentSongIndex',
              'randomSong','renderAlbumInfo','render','clearPlaylist',
               'playSongModel','savePlayList','setPlayListModel','removePlayListModel','setSongsAndPlay');
             this.bind('song:select',this.selectSong);
-            this.bind('url:create',this.createdFileURL);
+            this.bind('url:create',this.saveFileURL);
             this.songs.bind('add',this.addOne);
             this.songs.bind('refresh',this.addAll);
             this.songs.bind('all',this.render);
@@ -139,7 +139,7 @@ $(function()
                 year:this.selectedSong.get('year')
             }));
         },
-        createdFileURL:function(url)
+        saveFileURL:function(url)
         {
             this.fileURL=url;
         },

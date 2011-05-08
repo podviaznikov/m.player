@@ -10,10 +10,9 @@ js/app/ui.player.js
 js/app/ui.playlist.js
 js/app/ui.songslist.js
 js/lib/fs.min.js
-js/lib/underscore.js
 js/backbone.bundle.js
 js/lib/id3.reader.js
-js/lib/jquery-ui.min.js
+js/lib/jquery-ui-full.min.js
 js/lib/jquery.min.js
 css/styles.css
 css/1024.css
