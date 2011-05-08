@@ -61,7 +61,7 @@ $(function()
         },
         parseFilesMetaData:function(filesContents,audioFiles)
         {
-            var songs=[];
+            var songs=new SongsList;
             var files=audioFiles;
             var saveToLib = _.after(files.length,this.saveDataToLib);
             _.each(filesContents,function(data,index)
@@ -80,7 +80,7 @@ $(function()
         },
         saveDataToLib:function(songs,audioFiles)
         {
-            _.each(songs,function(song,index)
+            songs.each(function(song,index)
             {
                 var initialFile=audioFiles[index];
                 fs.write.file(initialFile,function(writeError)
@@ -92,13 +92,14 @@ $(function()
                     }
                 },song.get('fileName'));
             });
-            _.each(songs,function(song)
+            var allArtists=songs.pluck('artist');
+            var artists=_.unique(allArtists);
+            _.each(artists,function(artistName)
             {
-                var artistName = song.get('artist');
                 var artist=AppController.libraryMenu.artists.findByName(artistName);
                 if(!artist)
                 {
-                    artist = new Artist({name:song.get('artist')});
+                    artist = new Artist({name:artistName});
                     lastFM.getArtistImage(artist.get('name'),function(image)
                     {
                         artist.set({image:image});
