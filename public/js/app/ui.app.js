@@ -62,22 +62,23 @@ $(function()
         parseFilesMetaData:function(filesContents,audioFiles)
         {
             var songs=[];
-            var saveToLib=_.after(filesContents.length,this.saveDataToLib);
+            var files=audioFiles;
+            var saveToLib = _.after(files.length,this.saveDataToLib);
             _.each(filesContents,function(data,index)
             {
                 ID3v2.parseFile(data,function(tags)
                 {
-                    var initialFile = audioFiles[index];
+                    var initialFile = files[index];
                     var song = new Song();
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
                     songs[index]=song;
-                    saveToLib(audioFiles,songs)
+                    saveToLib(songs,files);
                 });
             });
         },
-        saveDataToLib:function(audioFiles,songs)
+        saveDataToLib:function(songs,audioFiles)
         {
             _.each(songs,function(song,index)
             {
@@ -106,7 +107,6 @@ $(function()
                     });
                 }
             });
-
         },
         processAudioFile:function(file)
         {
