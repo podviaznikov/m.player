@@ -23,7 +23,7 @@ $(function()
         initialize:function()
         {
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','processAudioFile','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed()')
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed')
         },
         dragOverFiles:function(e)
         {
