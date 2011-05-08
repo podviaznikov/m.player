@@ -101,7 +101,11 @@ var lastFM=
                 {
                     image=data.image[2]['#text']||'css/images/no_picture.png';//medium
                 }
-                var albumName = data.name.trim()||album;
+                var albumName = album;
+                if(data&& data.name && data.name.trim())
+                {
+                    albumName=data.name.trim()||album
+                }
                 var releaseDate = data.releasedate.trim().split(',')[0]||'';//getting just date without time
                 var songsCount = data.tracks.length||'';
 
