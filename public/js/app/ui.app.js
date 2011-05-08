@@ -45,17 +45,22 @@ $(function()
         {
             var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
             var filesContents=[];
+            var parseFiles = _.after(audioFiles.length,this.parseFilesMetaData);
             _.each(audioFiles,function(file,index)
             {
-                 fs.read.fileAsBinaryString(file,function(readError,data,initialFile)
+                fs.read.fileAsBinaryString(file,function(readError,data,initialFile)
                 {
                     if(readError)
                     {
                         return;
                     }
                     filesContents[index]=data;
+                    parseFiles(filesContents,audioFiles);
                 });
             });
+        },
+        parseFilesMetaData:function(filesContents,audioFiles)
+        {
             var songs=[];
             _.each(filesContents,function(data,index)
             {
@@ -96,6 +101,7 @@ $(function()
                     });
                 }
             });
+
         },
         processAudioFile:function(file)
         {
