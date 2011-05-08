@@ -8,10 +8,10 @@ $(function()
 {
     ui.LibraryMenu = Backbone.View.extend(
     {
-        el: $('#library_menu'),
-        searchField: $('#library_menu header input'),
-        artistsContent: $('#artists_library_content'),
-        playListsContent: $('#playlists_library_content'),
+        el:$('#library_menu'),
+        searchField:$('#library_menu header input'),
+        artistsContent:$('#artists_library_content'),
+        playListsContent:$('#playlists_library_content'),
         events:
         {
             'click #show_artists':'showArtists',
@@ -89,6 +89,10 @@ $(function()
                     if(artist.get('name').indexOf(filterValue) == -1)
                     {
                         artist.view.hide();
+                    }
+                    else
+                    {
+                        artist.view.show();
                     }
                 });
             }
