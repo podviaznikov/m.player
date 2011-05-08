@@ -23,7 +23,7 @@ $(function()
         initialize:function()
         {
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed')
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','parseFilesMetaData','saveDataToLib')
         },
         dragOverFiles:function(e)
         {
