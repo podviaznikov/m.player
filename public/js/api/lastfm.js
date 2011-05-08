@@ -96,20 +96,32 @@ var lastFM=
             success: function(data)
             {
                 data = data.album;
-                var image = 'css/images/no_picture.png';
-                if(data && data.image[2])
+                if(!data)
                 {
-                    image=data.image[2]['#text']||'css/images/no_picture.png';//medium
-                }
-                var albumName = album;
-                if(data&& data.name && data.name.trim())
-                {
-                    albumName=data.name.trim()||album
-                }
-                var releaseDate = data.releasedate.trim().split(',')[0]||'';//getting just date without time
-                var songsCount = data.tracks.length||'';
+                    var image='css/images/no_picture.png';
+                    var albumName=album;
+                    var releaseDate='na';
+                    var songsCount='na';
 
-                callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
+                    callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
+                }
+                else
+                {
+                    var image = 'css/images/no_picture.png';
+                    if(data && data.image[2])
+                    {
+                        image=data.image[2]['#text']||'css/images/no_picture.png';//medium
+                    }
+                    var albumName = album;
+                    if(data&& data.name && data.name.trim())
+                    {
+                        albumName=data.name.trim()||album
+                    }
+                    var releaseDate = data.releasedate.trim().split(',')[0]||'';//getting just date without time
+                    var songsCount = data.tracks.length||'';
+
+                    callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
+                }
             },
             error: function()
             {
