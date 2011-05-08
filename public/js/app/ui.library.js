@@ -75,7 +75,7 @@ $(function()
         filterLibrary:function()
         {
             var filterValue=this.searchField.val();
-            if(_.(filterValue).isBlank())
+            if(_(filterValue).isBlank())
             {
                 this.artist.each(function(artist)
                 {
