@@ -75,7 +75,7 @@ $(function()
         filterLibrary:function()
         {
             var filterValue=this.searchField.val();
-            if(_s(filterValue).isBlank())
+            if(!filterValue || filterValue=='')
             {
                 this.artist.each(function(artist)
                 {
@@ -86,7 +86,7 @@ $(function()
             {
                 this.artist.each(function(artist)
                 {
-                    if(_s(artist.get('name')).includes(filterValue))
+                    if(artist.get('name').indexOf(filterValue) !== -1)
                     {
                         artist.view.el.hide();
                     }
