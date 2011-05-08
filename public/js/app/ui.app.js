@@ -22,7 +22,7 @@ $(function()
         },
         initialize:function()
         {
-            _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','processAudioFile','showHelp',
+            _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed')
         },
         dragOverFiles:function(e)
@@ -44,11 +44,62 @@ $(function()
         handleFileSelect:function(files)
         {
             var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
-            _.each(audioFiles,this.processAudioFile);
+            var filesContents=[];
+            _.each(audioFiles,function(file,index)
+            {
+                 fs.read.fileAsBinaryString(file,function(readError,data,initialFile)
+                {
+                    if(readError)
+                    {
+                        return;
+                    }
+                    filesContents[index]=data;
+                });
+            });
+            var songs=[];
+            _.each(filesContents,function(data,index)
+            {
+                ID3v2.parseFile(data,function(tags)
+                {
+                    var initialFile = audioFiles[index];
+                    var song = new Song();
+                    tags.fileName=song.id+initialFile.extension();
+                    tags.originalFileName=initialFile.name;
+                    song.set(tags);
+                    songs[index]=song;
+                });
+            });
+            _.each(songs,function(song,index)
+            {
+                var initialFile=audioFiles[index];
+                fs.write.file(initialFile,function(writeError)
+                {
+                    if(!writeError)
+                    {
+                        song.save();
+                        AppController.playlistView.songs.add(song);
+                    }
+                },song.get('fileName'));
+            });
+            _.each(songs,function(song)
+            {
+                var artistName = song.get('artist');
+                var artist=AppController.libraryMenu.artists.findByName(artistName);
+                if(!artist)
+                {
+                    artist = new Artist({name:song.get('artist')});
+                    lastFM.getArtistImage(artist.get('name'),function(image)
+                    {
+                        artist.set({image:image});
+                        artist.save();
+                        AppController.libraryMenu.artists.add(artist);
+                    });
+                }
+            });
         },
         processAudioFile:function(file)
         {
-            fs.read.fileAsBinaryString(file, function(readError,data,initialFile)
+            fs.read.fileAsBinaryString(file,function(readError,data,initialFile)
             {
                 if(readError)
                 {

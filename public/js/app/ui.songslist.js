@@ -118,8 +118,7 @@ $(function()
         {
             'click':'selectSong',
             'click .delete_album_song':'deleteSong',
-            'dblclick .song':'playSongs',
-            'click .delete_song': 'deleteSong'
+            'dblclick .song':'playSongs'
         },
         initialize:function()
         {
@@ -152,7 +151,7 @@ $(function()
         onDeleteSong:function()
         {
             this.model.albumView.remove();
-            fs.util.remove(this.model.get('originalFileName'));
+            fs.util.remove(this.model.get('fileName'));
         },
         playSongs:function()
         {
