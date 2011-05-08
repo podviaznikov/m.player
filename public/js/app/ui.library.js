@@ -77,7 +77,7 @@ $(function()
             var filterValue=this.searchField.val();
             if(!filterValue || filterValue=='')
             {
-                this.artist.each(function(artist)
+                this.artists.each(function(artist)
                 {
                     artist.view.show();
                 });
@@ -86,7 +86,7 @@ $(function()
             {
                 this.artists.each(function(artist)
                 {
-                    if(artist.get('name').indexOf(filterValue) !== -1)
+                    if(artist.get('name').indexOf(filterValue) == -1)
                     {
                         artist.view.hide();
                     }

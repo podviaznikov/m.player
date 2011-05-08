@@ -10,7 +10,7 @@ js/app/ui.player.js
 js/app/ui.playlist.js
 js/app/ui.songslist.js
 js/lib/libs.bundle.js
-js/lib/jquery-ui.min.js
+js/lib/jquery-ui-full.min.js
 js/lib/jquery.min.js
 css/1024.css
 css/1280.css
