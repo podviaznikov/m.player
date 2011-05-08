@@ -62,6 +62,7 @@ $(function()
         parseFilesMetaData:function(filesContents,audioFiles)
         {
             var songs=[];
+            var saveToLib=_.after(filesContents.length,this.saveDataToLib);
             _.each(filesContents,function(data,index)
             {
                 ID3v2.parseFile(data,function(tags)
@@ -72,8 +73,12 @@ $(function()
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
                     songs[index]=song;
+                    saveToLib(audioFiles,songs)
                 });
             });
+        },
+        saveDataToLib:function(audioFiles,songs)
+        {
             _.each(songs,function(song,index)
             {
                 var initialFile=audioFiles[index];
