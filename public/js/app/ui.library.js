@@ -72,7 +72,7 @@ $(function()
         }
     });
 
-        ui.ArtistMenuView = Backbone.View.extend(
+    ui.ArtistMenuView = Backbone.View.extend(
     {
         className:'lib-item-data box',
         tagName: 'article',
@@ -87,7 +87,7 @@ $(function()
         },
         initialize:function()
         {
-            _.bindAll(this, 'addOne', 'addAll', 'render','selectArtist','playArtistSongs',
+            _.bindAll(this, 'render','selectArtist','playArtistSongs',
                     'deleteArtist','selectAlbum','playAlbumSongs');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
@@ -104,7 +104,6 @@ $(function()
                 songsCount:this.model.get('songsCount')
             });
             $(this.el).html(html);
-
             return this;
         },
         selectArtist:function()
@@ -138,7 +137,7 @@ $(function()
         }
     });
 
-     ui.PlayListMenuView = Backbone.View.extend(
+    ui.PlayListMenuView = Backbone.View.extend(
     {
         className:'lib-item-data box',
         tagName: 'article',
@@ -151,7 +150,7 @@ $(function()
         },
         initialize:function()
         {
-            _.bindAll(this, 'addOne', 'addAll', 'render','selectPlayList','playPlayList','deletePlaylist');
+            _.bindAll(this, 'render','selectPlayList','playPlayList','deletePlaylist');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
