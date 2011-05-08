@@ -9,18 +9,20 @@ $(function()
     ui.LibraryMenu = Backbone.View.extend(
     {
         el: $('#library_menu'),
+        searchField: $('#library_menu header input'),
         artistsContent: $('#artists_library_content'),
         playListsContent: $('#playlists_library_content'),
         events:
         {
             'click #show_artists':'showArtists',
-            'click #show_playlists':'showPlayLists'
+            'click #show_playlists':'showPlayLists',
+            'blur input':'filterLibrary'
         },
         initialize:function()
         {
              this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded');
+            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -54,7 +56,7 @@ $(function()
         },
         addArtist: function(artist)
         {
-            if(artist.get('name'))//&& !this.artists.findByName(artist.get('name')))
+            if(artist.get('name'))
             {
                 var view = new ui.ArtistMenuView({model:artist});
                 artist.view=view;
@@ -69,6 +71,27 @@ $(function()
         addPlayLists:function()
         {
             this.playLists.each(this.addPlayList);
+        },
+        filterLibrary:function()
+        {
+            var filterValue=this.searchField.val();
+            if(_.(filterValue).isBlank())
+            {
+                this.artist.each(function(artist)
+                {
+                    artist.view.el.show();
+                });
+            }
+            else
+            {
+                this.artist.each(function(artist)
+                {
+                    if(_(artist.get('name')).includes(filterValue))
+                    {
+                        artist.view.el.hide();
+                    }
+                });
+            }
         }
     });
 
