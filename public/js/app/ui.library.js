@@ -84,7 +84,7 @@ $(function()
             }
             else
             {
-                this.artist.each(function(artist)
+                this.artists.each(function(artist)
                 {
                     if(artist.get('name').indexOf(filterValue) !== -1)
                     {
