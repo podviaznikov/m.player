@@ -79,7 +79,7 @@ $(function()
             {
                 this.artist.each(function(artist)
                 {
-                    artist.view.el.show();
+                    artist.view.show();
                 });
             }
             else
@@ -88,7 +88,7 @@ $(function()
                 {
                     if(artist.get('name').indexOf(filterValue) !== -1)
                     {
-                        artist.view.el.hide();
+                        artist.view.hide();
                     }
                 });
             }
@@ -110,7 +110,7 @@ $(function()
         },
         initialize:function()
         {
-            _.bindAll(this, 'render','selectArtist','playArtistSongs',
+            _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
                     'deleteArtist','selectAlbum','playAlbumSongs');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
@@ -157,7 +157,16 @@ $(function()
             var album = e.currentTarget.dataset.album;
             var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
             AppController.songsView.songs.refresh(albumSongs);
+        },
+        hide:function()
+        {
+            this.$(this.el).hide();
+        },
+        show:function()
+        {
+            this.$(this.el).show();
         }
+
     });
 
     ui.PlayListMenuView = Backbone.View.extend(
