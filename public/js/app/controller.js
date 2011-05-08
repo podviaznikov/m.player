@@ -18,7 +18,7 @@ var AppController=
         this.visualizationView.el.height(newHeight);
         var config=
         {
-            dbName:'mdb_v8',
+            dbName:'mdb',
             dbDescription:'m.player database',
             dbVersion:'1',
             stores:[Song.definition,Artist.definition,PlayList.definition]
