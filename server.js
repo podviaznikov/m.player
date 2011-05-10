@@ -20,9 +20,7 @@ app.configure(function()
 app.get('/app.mf', function(req, res)
 {
     res.header("Content-Type", "text/cache-manifest");
-    //res.contentType('text/cache-manifest');
-    //res.end("CACHE MANIFEST");
     res.sendfile(__dirname + '/app.mf');
 });
-app.listen(80);
-util.log('started app on 80');
+app.listen(8083);
+util.log('started app on 8083');
