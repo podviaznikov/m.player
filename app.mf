@@ -11,7 +11,7 @@ js/app/ui.playlist.js
 js/app/ui.songslist.js
 js/lib/libs.bundle.js
 js/lib/jquery.min.js
-css/mediaqueries.css
+css/mq.css
 css/images/no_picture.png
 NETWORK:
 http://ws.audioscrobbler.com
