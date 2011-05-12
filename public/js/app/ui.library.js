@@ -20,7 +20,7 @@ $(function()
         },
         initialize:function()
         {
-             this.artists=new ArtistsList;//should be first in this method!
+            this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary');
             this.artists.bind('add',this.addArtist);

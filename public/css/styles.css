@@ -246,6 +246,7 @@ article.lib-item-data label:after
     text-transform: uppercase;
     margin-bottom:15px;
     font-weight:bold;
+    cursor:pointer;
 }
 .lib-item-info div, .lib-item-info label
 {
@@ -367,6 +368,7 @@ span.info_image
 {
     -webkit-box-flex: 1;
     margin-right:10px;
+    cursor:pointer;
 }
 span.info_image img
 {
