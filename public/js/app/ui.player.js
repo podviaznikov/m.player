@@ -5,10 +5,8 @@
 // https://github.com/podviaznikov/m.player
 "use strict";
 var global = window;
-$(function()
-{
-    ui.PlayerCtrl = Backbone.View.extend(
-    {
+$(function(){
+    ui.PlayerCtrl = Backbone.View.extend({
         el:$('#player'),
         playToggle:$('#play_toggle'),
         soundToggle:$('#sound_toggle'),
@@ -24,8 +22,7 @@ $(function()
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounter:$('#time_counter'),
-        events:
-        {
+        events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
             'click #stop_song': 'stop',
@@ -42,14 +39,12 @@ $(function()
             'click #help.on':'turnOffHelpMode',
             'click #help.off':'turnOnHelpMode'
         },
-        initialize:function()
-        {
+        initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode');
             this.audioEL = new ui.AudioElement({player:this});
-            this.volumeGutter.slider(
-            {
+            this.volumeGutter.slider({
                 value:settings.getVolume(),
                 step:0.01,
                 range:'min',
@@ -58,39 +53,33 @@ $(function()
                 stop:this.changedVolume
             });
         },
-        turnOnHelpMode:function()
-        {
+        turnOnHelpMode:function(){
             this.helpModeToggle.removeClass('off');
             this.helpModeToggle.addClass('on');
             AppController.appView.showHelp();
         },
-        turnOffHelpMode:function()
-        {
+        turnOffHelpMode:function(){
             this.helpModeToggle.removeClass('on');
             this.helpModeToggle.addClass('off');
             AppController.appView.hideHelp();
         },
-        turnOnFullScreen:function()
-        {
+        turnOnFullScreen:function(){
             this.playerModeToggle.removeClass('on');
             this.playerModeToggle.addClass('off');
             this.playerModeToggle.attr('title','Library mode');
             AppController.appView.showFullScreen();
         },
-        turnOffFullScreen:function()
-        {
+        turnOffFullScreen:function(){
             this.playerModeToggle.removeClass('off');
             this.playerModeToggle.addClass('on');
             this.playerModeToggle.attr('title','Full screen mode');
             AppController.appView.hideFullScreen();
         },
-        changedVolume:function(e,ui)
-        {
+        changedVolume:function(e,ui){
             this.audioEL.setVolume(ui.value);
             settings.saveVolume(ui.value);
         },
-        soundOn:function()
-        {
+        soundOn:function(){
             this.soundToggle.attr('title','Mute');
 
             this.soundToggle.addClass('on');
@@ -100,8 +89,7 @@ $(function()
 
             this.audioEL.setVolume(this.volume||0.5);
         },
-        soundOff:function()
-        {
+        soundOff:function(){
             this.soundToggle.attr('title','Sound');
 
             this.soundToggle.addClass('off');
@@ -112,80 +100,61 @@ $(function()
             this.volume=this.audioEL.getVolume();
             this.audioEL.setVolume(0);
         },
-        shuffleOn:function()
-        {
+        shuffleOn:function(){
             this.shuffleToggle.attr('title','Turn shuffle off');
             this.shuffleToggle.addClass('on');
             this.shuffleToggle.removeClass('off');
             settings.saveShuffle(true);
         },
-        shuffleOff:function()
-        {
+        shuffleOff:function(){
             this.shuffleToggle.attr('title','Turn shuffle on');
             this.shuffleToggle.addClass('off');
             this.shuffleToggle.removeClass('on');
             settings.saveShuffle(false);
         },
-        repeatOn:function()
-        {
+        repeatOn:function(){
             this.repeatToggle.attr('title','Turn repeat off');
             this.repeatToggle.addClass('on');
             this.repeatToggle.removeClass('off');
             settings.saveRepeat(true);
         },
-        repeatOff:function()
-        {
+        repeatOff:function(){
             this.repeatToggle.attr('title','Turn repeat on');
             this.repeatToggle.addClass('off');
             this.repeatToggle.removeClass('on');
             settings.saveRepeat(false);
         },
-        play:function(url)
-        {
+        play:function(url){
             this.playToggle.attr('title','Pause');
             this.playToggle.addClass('playing');
             this.playToggle.removeClass('paused');
             this.audioEL.play(url);
         },
-        resume:function()
-        {
+        resume:function(){
             this.play();
         },
-        pause:function()
-        {
+        pause:function(){
             this.$(this.playToggle).attr('title','Play');
             this.$(this.playToggle).addClass('paused');
             this.$(this.playToggle).removeClass('playing');
             this.audioEL.pause();
         },
-        togglePause:function()
-        {
+        togglePause:function(){
             var isPaused = this.$(this.playToggle).hasClass('paused');
-            if(isPaused)
-            {
-                this.play();
-            }
-            else
-            {
-                this.pause();
-            }
+            isPaused?this.play()?this.pause();
         },
-        stop:function()
-        {
+        stop:function(){
             this.playToggle.addClass('paused');
             this.playToggle.removeClass('playing');
             this.audioEL.stop();
         },
-        previous:function()
-        {
+        previous:function(){
             AppController.playlistView.previous();
         },
-        next:function()
-        {
+        next:function(){
             AppController.playlistView.next();
         },
-        updateAudioProgress: function(duration,currentTime)
-        {
+        updateAudioProgress:function(duration,currentTime){
             var self = this,
                 timeInSeconds = parseInt(currentTime, 10),
                 rem = parseInt(duration - currentTime, 10),
@@ -193,34 +162,28 @@ $(function()
                 mins = Math.floor(currentTime/60,10),
                 secs = timeInSeconds - mins*60,
                 timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs);
-            if(rem==0)
-            {
+            if(rem==0){
                 this.next();
             }
             this.timeCounter.text(timeCounter);
-            if (!this.manualSeekMusicSlider)
-            {
+            if (!this.manualSeekMusicSlider){
                 var posPer=pos + '%';
                 this.handleMusicProgress.css('left',posPer);
                 this.$('#music_gutter .ui-slider-range').width(posPer);
             }
-            if (!this.loadedMusicSlider)
-            {
+            if (!this.loadedMusicSlider){
                 this.loadedMusicSlider = true;
 
-                $('#music_gutter').slider(
-                {
+                $('#music_gutter').slider({
                     value:0,
                     step: 0.01,
                     range: "min",
                     max: duration,
                     animate: true,
-                    start: function()
-                    {
+                    start:function(){
                         self.manualSeekMusicSlider = true;
                     },
-                    stop:function(e,ui)
-                    {
+                    stop:function(e,ui){
                         self.manualSeekMusicSlider = false;
                         self.audioEL.setTime(ui.value);
                     }

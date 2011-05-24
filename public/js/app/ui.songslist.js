@@ -4,52 +4,38 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-$(function()
-{
-    ui.AlbumView = Backbone.View.extend(
-    {
+$(function(){
+    ui.AlbumView = Backbone.View.extend({
         className: 'lib_item_full_info_panel',
         tagName: 'article',
-        initialize: function()
-        {
+        initialize: function(){
             _.bindAll(this, 'addSong','render');
         },
-        render:function()
-        {
-            var self=this;
+        render:function(){
             this.albumInfoView = new ui.AlbumInfoView({model:this.model});
             $(this.el).append(this.albumInfoView.render().el);
-            _.each(this.model.songs,function(song,key)
-            {
-                self.addSong(song,key);
-            });
+            _.each(this.model.songs,this.addSong);
             return this;
         },
-        addSong: function(song,key)
-        {
+        addSong:function(song,key){
             var view = new ui.SongView({model:song,key:key,songs:this.model.songs});
             song.view = view;
             $(this.el).append(view.render().el);
         }
     });
 
-    ui.PlayListFullView = Backbone.View.extend(
-    {
+    ui.PlayListFullView = Backbone.View.extend({
         className: 'lib_item_full_info_panel',
         tagName: 'article',
         tpl:$('#detailed_playlist_info_tpl').html(),
-        events:
-        {
+        events:{
             'click':'playSongs'
         },
-        initialize: function()
-        {
+        initialize: function(){
             _.bindAll(this, 'addSong','render','playSongs');
         },
-        render:function()
-        {
-            var html = _.template(this.tpl,
-            {
+        render:function(){
+            var html = _.template(this.tpl,{
                 image:'css/images/no_picture.png',
                 name:this.model.get('name')
             });
@@ -57,11 +43,9 @@ $(function()
             _.each(this.model.get('songs'),this.addSong);
             return this;
         },
-        addSong:function(song,key)
-        {
+        addSong:function(song,key){
             var song=new Song(song);
-            var view = new ui.SongView(
-            {
+            var view = new ui.SongView({
                 model:song,
                 key:key,
                 songs:this.model.get('songs'),
@@ -70,100 +54,80 @@ $(function()
             song.albumView = view;
             $(this.el).append(view.render().el);
         },
-        playSongs:function()
-        {
+        playSongs:function(){
             AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         }
     });
 
-    ui.AlbumInfoView = Backbone.View.extend(
-    {
+    ui.AlbumInfoView = Backbone.View.extend({
         className: 'detailed_album_info_panel box',
         tagName: 'section',
         tpl:$('#detailed_album_info_tpl').html(),
-        events:
-        {
+        events:{
             'click':'playSongs'
         },
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this,'renderAlbumInfo','render','playSongs');
         },
-        renderAlbumInfo:function(data)
-        {
-            var html = _.template(this.tpl,
-            {
+        renderAlbumInfo:function(data){
+            var html = _.template(this.tpl,{
                 image:data.image,
                 name:data.name,
                 releaseDate:data.releaseDate
             });
             $(this.el).append(html);
         },
-        render:function()
-        {
+        render:function(){
             lastFM.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
             return this;
         },
-        playSongs:function()
-        {
+        playSongs:function(){
             AppController.playlistView.setSongsAndPlay(this.model.songs);
         }
     });
 
-    ui.SongView = Backbone.View.extend(
-    {
+    ui.SongView = Backbone.View.extend({
         className:'song-data',
         tpl:$('#song_tpl').html(),
-        events:
-        {
+        events:{
             'click':'selectSong',
             'click .delete_album_song':'deleteSong',
             'dblclick .song':'playSongs'
         },
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this,'selectSong','deleteSong','onDeleteSong','playSongs','render');
         },
-        render: function()
-        {
+        render:function(){
             this.el.draggable=true;
             this.el.dataset.songname=this.model.get('title');
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
-            var html = _.template(this.tpl,
-            {
+            var html = _.template(this.tpl,{
                 track:this.model.get('track')||this.options.key+1,
                 title:this.model.get('title')
             });
             $(this.el).html(html);
             return this;
         },
-        selectSong: function()
-        {
+        selectSong:function(){
             $('.song-data').removeClass('selected_song');
             $(this.el).addClass('selected_song');
         },
-        deleteSong:function()
-        {
+        deleteSong:function(){
             this.model.bind('destroy',this.onDeleteSong)
             this.model.destroy();
         },
-        onDeleteSong:function()
-        {
+        onDeleteSong:function(){
             this.model.albumView.remove();
             fs.util.remove(this.model.get('fileName'));
         },
-        playSongs:function()
-        {
+        playSongs:function(){
             this.selectSong();
             var songs=this.options.songs;
             AppController.playlistView.setSongsAndPlay(songs);
-            if(this.options.playList)
-            {
+            if(this.options.playList){
                 AppController.playlistView.setPlayListModel(this.options.playList);
-            }
-            else
-            {
+            }else{
                 AppController.playlistView.removePlayListModel();
             }
             settings.saveLastAlbum(this.model.get('album'));
@@ -172,25 +136,20 @@ $(function()
         }
     });
 
-    ui.SongsView = Backbone.View.extend(
-    {
+    ui.SongsView = Backbone.View.extend({
         el:$('#filtered_lib'),
         filteredLibContent:$('#filtered_lib_content'),
-        events:
-        {
+        events:{
             'dragstart':'handleDragStart'
         },
-        initialize: function()
-        {
+        initialize:function(){
             _.bindAll(this, 'showAlbums','showPlayList','handleDragStart');
             this.mapping={};
         },
-        showAlbums:function(albums,artist,songs)
-        {
+        showAlbums:function(albums,artist,songs){
             this.filteredLibContent.empty();
             this.songs=songs;
-            for(var i=0;i<albums.length;i++)
-            {
+            for(var i=0;i<albums.length;i++){
                 var album=albums[i];
                 var albumSongs=songs.filter(function(song){return song.get('album')===album;});
                 this.mapping[album]=albumSongs;
@@ -198,20 +157,17 @@ $(function()
                 this.filteredLibContent.append(albumView.render().el);
             }
         },
-        showPlayList:function(playList)
-        {
+        showPlayList:function(playList){
             this.filteredLibContent.empty();
             var playListView = new ui.PlayListFullView({model:playList});
             this.filteredLibContent.append(playListView.render().el);
         },
-        handleDragStart:function(e)
-        {
+        handleDragStart:function(e){
             var event=e.originalEvent;
             var dataTransferObj=event.dataTransfer;
             dataTransferObj.effectAllowed = 'move';
             var songId=event.srcElement.dataset['id'];
-            if(this.songs)
-            {
+            if(this.songs){
                 var song = this.songs.get(songId);
                 dataTransferObj.setData('text/plain', JSON.stringify(song.toJSON()));
             }

@@ -221,7 +221,6 @@ footer#player
 {
     display:inline-block;
 }
-
 article.lib-item-data
 {
     border-bottom: 1px solid #939393;
@@ -234,7 +233,7 @@ article.lib-item-data .command_link
 }
 article.lib-item-data label:after
 {
-    content:': '
+    content:': ';
 }
 .lib-item-info
 {

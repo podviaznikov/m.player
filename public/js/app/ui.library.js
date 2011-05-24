@@ -4,22 +4,18 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-$(function()
-{
-    ui.LibraryMenu = Backbone.View.extend(
-    {
+$(function(){
+    ui.LibraryMenu = Backbone.View.extend({
         el:$('#library_menu'),
         searchField:$('#library_menu header input'),
         artistsContent:$('#artists_library_content'),
         playListsContent:$('#playlists_library_content'),
-        events:
-        {
+        events:{
             'click #show_artists':'showArtists',
             'click #show_playlists':'showPlayLists',
             'blur input':'filterLibrary'
         },
-        initialize:function()
-        {
+        initialize:function(){
             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary');
@@ -32,66 +28,49 @@ $(function()
 
             this.playLists.fetch();
         },
-        allArtistsLoaded:function()
-        {
+        allArtistsLoaded:function(){
             var lastArtist=settings.getLastArtist();
-            if(lastArtist)
-            {
+            if(lastArtist){
                 var lastPlayedArtist = this.artists.findByName(lastArtist);
-                if(lastPlayedArtist && lastPlayedArtist.view)
-                {
+                if(lastPlayedArtist && lastPlayedArtist.view){
                     lastPlayedArtist.view.selectArtist();
                 }
             }
         },
-        showArtists:function()
-        {
+        showArtists:function(){
             this.artistsContent.show();
             this.playListsContent.hide();
         },
-        showPlayLists:function()
-        {
+        showPlayLists:function(){
             this.artistsContent.hide();
             this.playListsContent.show();
         },
-        addArtist: function(artist)
-        {
-            if(artist.get('name'))
-            {
+        addArtist:function(artist){
+            if(artist.get('name')){
                 var view = new ui.ArtistMenuView({model:artist});
                 artist.view=view;
                 this.artistsContent.append(view.render().el);
             }
         },
-        addPlayList:function(playList)
-        {
+        addPlayList:function(playList){
             var view = new ui.PlayListMenuView({model:playList});
             this.playListsContent.append(view.render().el);
         },
-        addPlayLists:function()
-        {
+        addPlayLists:function(){
             this.playLists.each(this.addPlayList);
         },
-        filterLibrary:function()
-        {
+        filterLibrary:function(){
             var filterValue=this.searchField.val();
-            if(!filterValue || filterValue=='')
-            {
+            if(!filterValue || filterValue==''){
                 this.artists.each(function(artist)
                 {
                     artist.view.show();
                 });
-            }
-            else
-            {
-                this.artists.each(function(artist)
-                {
-                    if(artist.get('name').indexOf(filterValue) == -1)
-                    {
+            }else{
+                this.artists.each(function(artist){
+                    if(artist.get('name').indexOf(filterValue) == -1){
                         artist.view.hide();
-                    }
-                    else
-                    {
+                    }else{
                         artist.view.show();
                     }
                 });
@@ -99,31 +78,26 @@ $(function()
         }
     });
 
-    ui.ArtistMenuView = Backbone.View.extend(
-    {
+    ui.ArtistMenuView = Backbone.View.extend({
         className:'lib-item-data box',
         tagName: 'article',
         tpl:$('#artist_tpl').html(),
-        events:
-        {
+        events:{
             'click':'selectArtist',
             'dblclick':'playArtistSongs',
             'click .delete_artist':'deleteArtist',
             'click .album_link': 'selectAlbum',
             'dbclick .album_link':'playAlbumSongs'
         },
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
                     'deleteArtist','selectAlbum','playAlbumSongs');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
         },
-        render: function()
-        {
-            var html = _.template(this.tpl,
-            {
+        render: function(){
+            var html = _.template(this.tpl,{
                 image:this.model.get('image'),
                 name:this.model.get('name'),
                 albums:this.model.get('albums'),
@@ -133,67 +107,54 @@ $(function()
             $(this.el).html(html);
             return this;
         },
-        selectArtist:function()
-        {
+        selectArtist:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             AppController.songsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
         },
-        playArtistSongs:function()
-        {
+        playArtistSongs:function(){
             this.selectArtist();
             AppController.playlistView.setSongsAndPlay(this.model.songs.models);
         },
-        playAlbumSongs:function(e)
-        {
+        playAlbumSongs:function(e){
             var album = e.currentTarget.dataset.album;
             var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
             AppController.songsView.songs.refresh(albumSongs);
             AppController.playlistView.setSongsAndPlay(albumSongs);
         },
-        deleteArtist:function()
-        {
+        deleteArtist:function(){
             this.model.destroy();
             this.$(this.el).remove();
         },
-        selectAlbum:function(e)
-        {
+        selectAlbum:function(e){
             var album = e.currentTarget.dataset.album;
             var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
             AppController.songsView.songs.refresh(albumSongs);
         },
-        hide:function()
-        {
+        hide:function(){
             this.$(this.el).hide();
         },
-        show:function()
-        {
+        show:function(){
             this.$(this.el).show();
         }
-
     });
 
-    ui.PlayListMenuView = Backbone.View.extend(
-    {
+    ui.PlayListMenuView = Backbone.View.extend({
         className:'lib-item-data box',
         tagName: 'article',
         tpl:$('#saved_playlist_tpl').html(),
-        events:
-        {
+        events:{
             'click':'selectPlayList',
             'dblclick':'playPlayList',
             'click .delete_playlist':'deletePlaylist'
         },
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this, 'render','selectPlayList','playPlayList','deletePlaylist');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
-        render:function()
-        {
-            var html = _.template(this.tpl,
-            {
+        render:function(){
+            var html = _.template(this.tpl,{
                 image:'css/images/no_picture.png',
                 name:this.model.get('name'),
                 songsCount:this.model.get('songs').length
@@ -201,19 +162,16 @@ $(function()
             $(this.el).html(html);
             return this;
         },
-        selectPlayList:function()
-        {
+        selectPlayList:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             AppController.songsView.showPlayList(this.model);
         },
-        playPlayList:function()
-        {
+        playPlayList:function(){
            this.selectPlayList();
             AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         },
-        deletePlaylist:function()
-        {
+        deletePlaylist:function(){
             this.model.destroy();
             this.$(this.el).remove();
         }

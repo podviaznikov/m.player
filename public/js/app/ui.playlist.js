@@ -4,10 +4,8 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-$(function()
-{
-    ui.PlayListView = Backbone.View.extend(
-    {
+$(function(){
+    ui.PlayListView = Backbone.View.extend({
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),
         songsEl:$('#playing_list #playing_songs'),
@@ -16,14 +14,12 @@ $(function()
         songInfoTpl: $('#song_info_tpl').html(),
         playlistStatTpl: $('#playlist_stat_tpl').html(),
         newPlayListName:$('#new_play_list'),
-        events:
-        {
+        events:{
             'drop':'dropFiles',
             'blur #new_play_list':'savePlayList',
             'click #clear_playlist':'clearPlaylist'
         },
-        initialize: function()
-        {
+        initialize: function(){
             this.songs=new SongsList;//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','saveFileURL','destroyFileURL','currentSong', 'currentSongIndex',
              'randomSong','renderAlbumInfo','render','clearPlaylist',
@@ -34,43 +30,34 @@ $(function()
             this.songs.bind('refresh',this.addAll);
             this.songs.bind('all',this.render);
             var playlist=settings.getPlayList();
-            if(playlist)
-            {
+            if(playlist){
                 this.songs.refresh(playlist.models);
                 var lastSong=settings.getLastSong();
-                if(lastSong)
-                {
+                if(lastSong){
                     this.selectSong(new Song(lastSong));
                 }
             }
         },
-        render:function()
-        {
+        render:function(){
             this.statEL.html(_.template(this.playlistStatTpl,{songsCount:this.songs.length}));
             return this;
         },
-        setSongsAndPlay:function(songs)
-        {
+        setSongsAndPlay:function(songs){
             this.songs.refresh(songs);
             this.songs.first().view.playSong();
         },
-        setPlayListModel:function(playList)
-        {
+        setPlayListModel:function(playList){
             this.playList = playList;
             this.newPlayListName.val(this.playList.get('name'));
         },
-        removePlayListModel:function()
-        {
+        removePlayListModel:function(){
             this.playList = null;
             this.newPlayListName.val('Unsaved list');
         },
-        savePlayList:function()
-        {
+        savePlayList:function(){
             var newPlaylistName=this.newPlayListName.val();
-            if(newPlaylistName!='Unsaved list')
-            {
-                if(!this.playList)
-                {
+            if(newPlaylistName!='Unsaved list'){
+                if(!this.playList){
                     this.playList=new PlayList();
                 }
                 var songs=this.songs.toJSON();
@@ -79,59 +66,46 @@ $(function()
                 AppController.libraryMenu.playLists.add(this.playList);
             }
         },
-        clearPlaylist:function()
-        {
+        clearPlaylist:function(){
             this.songsEl.empty();
             this.songs.refresh([]);
             settings.savePlayList(this.songs);
             this.render();
         },
-        addOne:function(song)
-        {
-            if(song.get('fileName'))
-            {
+        addOne:function(song){
+            if(song.get('fileName')){
                 this.dropFileLabel.remove();
                 var view = new ui.SongMiniView({model:song,playlist:this});
                 song.view = view;
                 this.songsEl.append(view.render().el);
             }
         },
-        addAll:function()
-        {
-            if(this.songs.length!=0)
-            {
+        addAll:function(){
+            if(this.songs.length!=0){
                 this.songsEl.empty();
                 this.songs.each(this.addOne);
             }
         },
-        dropFiles:function(e)
-        {
+        dropFiles:function(e){
             e.stopPropagation();
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
-            if(dataTransfer&&dataTransfer.getData('text/plain'))
-            {
+            if(dataTransfer&&dataTransfer.getData('text/plain')){
                 var songJSON=JSON.parse(dataTransfer.getData('text/plain'));
-                if(songJSON)
-                {
+                if(songJSON){
                     var song = new Song(songJSON);
                     this.songs.add(song);
                 }
-            }
-            else
-            {
+            }else{
                 AppController.appView.dropFiles(e);
             }
         },
-        selectSong:function(song)
-        {
+        selectSong:function(song){
             this.selectedSong=song;
             lastFM.getAlbumImage(this.selectedSong.get('artist'),this.selectedSong.get('album'),this.renderAlbumInfo);
         },
-        renderAlbumInfo:function(image)
-        {
-            this.infoEl.html(_.template(this.songInfoTpl,
-            {
+        renderAlbumInfo:function(image){
+            this.infoEl.html(_.template(this.songInfoTpl,{
                 image:image,
                 name:this.selectedSong.get('title'),
                 artist:this.selectedSong.get('artist'),
@@ -139,50 +113,37 @@ $(function()
                 year:this.selectedSong.get('year')
             }));
         },
-        saveFileURL:function(url)
-        {
+        saveFileURL:function(url){
             this.fileURL=url;
         },
-        destroyFileURL:function()
-        {
-            if(this.fileURL)
-            {
+        destroyFileURL:function(){
+            if(this.fileURL){
                 fs.util.destroyFileURL(this.fileURL);
             }
         },
-        randomSong:function()
-        {
+        randomSong:function(){
             var randomSong=Math.floor(Math.random()*this.songs.length);
-            if(randomSong==this.currentSong())
-            {
+            if(randomSong==this.currentSong()){
                 return this.randomSong();
             }
             return randomSong;
         },
-        currentSong:function()
-        {
+        currentSong:function(){
             return this.songs.at(this.currentSongIndex());
         },
-        currentSongIndex:function()
-        {
+        currentSongIndex:function(){
             return this.songs.indexOf(this.selectedSong);
         },
-        next:function(playSongFlag)
-        {
+        next:function(playSongFlag){
             var playSong=playSongFlag==false? false : true;
             var nextSongId = -1;
-            if(playSong && settings.isShuffle())
-            {
+            if(playSong && settings.isShuffle()){
                 nextSongId=this.randomSong();
-            }
-            else
-            {
+            }else{
                 var indexOfSelectedSong=this.currentSongIndex();
-                if(indexOfSelectedSong==this.songs.length-1)
-                {
+                if(indexOfSelectedSong==this.songs.length-1){
                     indexOfSelectedSong=-1;//to have first one
-                    if(!settings.isRepeat())
-                    {
+                    if(!settings.isRepeat()){
                         playSong=false;
                     }
                 }
@@ -191,56 +152,44 @@ $(function()
             var nextSong=this.songs.at(nextSongId);
             this.playSongModel(nextSong,playSong);
         },
-        previous:function(playSongFlag)
-        {
+        previous:function(playSongFlag){
             var playSong=playSongFlag==false? false : true;
             var indexOfSelectedSong=this.currentSongIndex();
-            if(indexOfSelectedSong==0)
-            {
+            if(indexOfSelectedSong==0){
                 indexOfSelectedSong=this.songs.length;//to have last one
             }
             var previousSong=this.songs.at(indexOfSelectedSong-1);
             this.playSongModel(previousSong,playSong);
         },
-        playSongModel:function(song,playSong)
-        {
-            if(playSong)
-            {
+        playSongModel:function(song,playSong){
+            if(playSong){
                 this.destroyFileURL();
-                if(song && song.view)
-                {
+                if(song && song.view){
                     song.view.playSong();
                 }
-            }
-            else if(!playSong && song && song.view)
-            {
+            }else if(!playSong && song && song.view){
                 song.view.selectSong();
             }
         }
     });
 
-    ui.SongMiniView = Backbone.View.extend(
-    {
+    ui.SongMiniView = Backbone.View.extend({
         className:'song-data',
         tpl:$('#song_mini_tpl').html(),
-        events:
-        {
+        events:{
             'click .song':'selectSong',
             'dblclick .song':'playSong'
         },
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this,'render','selectSong','playSong','songFileLoaded');
         },
-        render:function()
-        {
+        render:function(){
             this.el.draggable=true;
             this.el.dataset.filename=this.model.get('fileName');
             this.el.dataset.songname=this.model.get('title');
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
-            var html = _.template(this.tpl,
-            {
+            var html = _.template(this.tpl,{
                 track:this.model.get('track'),
                 title:this.model.get('title'),
                 album:this.model.get('album'),
@@ -249,25 +198,21 @@ $(function()
             $(this.el).html(html);
             return this;
         },
-        selectSong:function()
-        {
+        selectSong:function(){
             $('.song-data').removeClass('selected_song');
             $(this.el).addClass('selected_song');
             this.options.playlist.trigger('song:select',this.model);
             AppController.visualizationView.selectSong(this.model);
         },
-        playSong:function()
-        {
+        playSong:function(){
             settings.saveLastSong(this.model.toJSON());
             this.selectSong();
             var songFileName=this.el.dataset.filename;
             fs.util.createFileURL(songFileName,this.songFileLoaded);
         },
-        songFileLoaded:function(url)
-        {
+        songFileLoaded:function(url){
             this.options.playlist.trigger('url:create',url);
             AppController.playerCtrl.play(url);
         }
     });
-
 });

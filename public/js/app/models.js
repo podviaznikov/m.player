@@ -4,40 +4,29 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player
 "use strict";
-var Song = Porridge.Model.extend(
-{
-    defaults:
-    {
+var Song = Porridge.Model.extend({
+    defaults:{
         album:'No information',
         title:'No information',
         artist:'No information',
         year:'',
         genre:''
     }
-},
-{
-    definition:
-    {
+},{
+    definition:{
         name:'song',
         key:'id',
         indexes:[{name:'artists',field:'artist'}]
     }
 });
-var SongsList = Porridge.Collection.extend(
-{
+var SongsList = Porridge.Collection.extend({
     model: Song,
-    comparator: function(song)
-    {
-        return song.get('track');
-    }
+    comparator: function(song){return song.get('track');}
 });
-var Artist = Porridge.Model.extend(
-{
-    initialize:function()
-    {
+var Artist = Porridge.Model.extend({
+    initialize:function(){
         _.bindAll(this,'setParameterFromSongs');
-        if(!this.get('id'))
-        {
+        if(!this.get('id')){
             this.id=UUID.generate();
             this.set({id:this.id});
         }
@@ -45,35 +34,26 @@ var Artist = Porridge.Model.extend(
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.songs.fetchByKey('artists',this.get('name'));
     },
-
-    setParameterFromSongs:function()
-    {
+    setParameterFromSongs:function(){
         var albums = _.uniq(this.songs.pluck('album'));
         var genres = _.uniq(this.songs.pluck('genre'));
         var songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
     }
-},
-{
-    definition:
-    {
+},{
+    definition:{
         name:'artist',
         key:'name'
     }
 });
-
-var ArtistsList = Porridge.Collection.extend(
-{
+var ArtistsList = Porridge.Collection.extend({
     model: Artist,
-
-    findByName:function(artistName)
-    {
+    findByName:function(artistName){
         return this.find(function(artist){ return artist.get('name') == artistName; });
     }
 });
 
-var PlayList = Porridge.Model.extend(
-{
+var PlayList = Porridge.Model.extend({
 //    getGenres:function()
 //    {
 //        var songs=this.get('songs');
@@ -89,15 +69,10 @@ var PlayList = Porridge.Model.extend(
 ////        });
 ////        this.set({songsList:new SongsList(songsList)});
 //    }
-},
-{
-    definition:
-    {
+},{
+    definition:{
         name:'playlist',
         key:'id'
     }
 });
-var PlayLists = Porridge.Collection.extend(
-{
-    model: PlayList
-});
+var PlayLists = Porridge.Collection.extend({model: PlayList});

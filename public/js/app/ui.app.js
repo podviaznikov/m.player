@@ -5,69 +5,53 @@
 // https://github.com/podviaznikov/m.player
 "use strict";
 var ui={};
-$(function()
-{
-    ui.AppView = Backbone.View.extend(
-    {
+$(function(){
+    ui.AppView = Backbone.View.extend({
         el: $('body'),
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
         mainPanels:$('section.main_panel'),
         isRegularMode:true,
-        events:
-        {
+        events:{
             'keyup':'keyPressed',
             'dragover':'dragOverFiles',
             'drop .main_panel':'dropFiles'
         },
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','parseFilesMetaData','saveDataToLib')
         },
-        dragOverFiles:function(e)
-        {
+        dragOverFiles:function(e){
             e.stopPropagation();
             e.preventDefault();
         },
-        dropFiles:function(e)
-        {
+        dropFiles:function(e){
             e.stopPropagation();
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
             var files=dataTransfer.files;
-            if(files && files.length>0)
-            {
+            if(files && files.length>0){
                 this.handleFileSelect(e.originalEvent.dataTransfer.files); // handle FileList object.
             }
         },
-        handleFileSelect:function(files)
-        {
+        handleFileSelect:function(files){
             var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
             var filesContents=[];
             var parseFiles = _.after(audioFiles.length,this.parseFilesMetaData);
-            _.each(audioFiles,function(file,index)
-            {
-                fs.read.fileAsBinaryString(file,function(readError,data,initialFile)
-                {
-                    if(readError)
-                    {
-                        return;
-                    }
+            _.each(audioFiles,function(file,index){
+                fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
+                    if(readError){return;}
                     filesContents[index]=data;
                     parseFiles(filesContents,audioFiles);
                 });
             });
         },
-        parseFilesMetaData:function(filesContents,audioFiles)
-        {
+        parseFilesMetaData:function(filesContents,audioFiles){
             var songs=new SongsList;
             var files=audioFiles;
             var saveToLib = _.after(files.length,this.saveDataToLib);
-            _.each(filesContents,function(data,index)
-            {
-                ID3v2.parseFile(data,function(tags)
-                {
+            _.each(filesContents,function(data,index){
+                ID3v2.parseFile(data,function(tags){
                     var initialFile = files[index];
                     var song = new Song();
                     tags.fileName=song.id+initialFile.extension();
@@ -78,33 +62,25 @@ $(function()
                 });
             });
         },
-        saveDataToLib:function(songs,audioFiles)
-        {
-            songs.each(function(song,index)
-            {
+        saveDataToLib:function(songs,audioFiles){
+            songs.each(function(song,index){
                 var initialFile=audioFiles[index];
-                fs.write.file(initialFile,function(writeError)
-                {
-                    if(!writeError)
-                    {
+                fs.write.file(initialFile,function(writeError){
+                    if(!writeError){
                         song.save();
                         AppController.playlistView.songs.add(song);
                     }
                 },song.get('fileName'));
             });
-            var allArtists=songs.map(function(song)
-            {
+            var allArtists=songs.map(function(song){
                 return song.get('artist');
             });
             var artists=_.unique(allArtists);
-            _.each(artists,function(artistName)
-            {
+            _.each(artists,function(artistName){
                 var artist=AppController.libraryMenu.artists.findByName(artistName);
-                if(!artist)
-                {
+                if(!artist){
                     artist = new Artist({name:artistName});
-                    lastFM.getArtistImage(artist.get('name'),function(image)
-                    {
+                    lastFM.getArtistImage(artist.get('name'),function(image){
                         artist.set({image:image});
                         artist.save();
                         AppController.libraryMenu.artists.add(artist);
@@ -112,17 +88,11 @@ $(function()
                 }
             });
         },
-        processAudioFile:function(file)
-        {
-            fs.read.fileAsBinaryString(file,function(readError,data,initialFile)
-            {
-                if(readError)
-                {
-                    return;
-                }
+        processAudioFile:function(file){
+            fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
+                if(readError){return;}
                 var initialFile = initialFile;
-                ID3v2.parseFile(data,function(tags)
-                {
+                ID3v2.parseFile(data,function(tags){
                     var songData = tags;
                     var song = new Song();
 
@@ -133,18 +103,14 @@ $(function()
                     song.set(songData);
 
                     //save file
-                    fs.write.file(initialFile,function(writeError)
-                    {
-                        if(!writeError)
-                        {
+                    fs.write.file(initialFile,function(writeError){
+                        if(!writeError){
                             song.save();
                             var artistName = song.get('artist');
                             var artist=AppController.libraryMenu.artists.findByName(artistName);
-                            if(!artist)
-                            {
+                            if(!artist){
                                 artist = new Artist({name:song.get('artist')});
-                                lastFM.getArtistImage(artist.get('name'),function(image)
-                                {
+                                lastFM.getArtistImage(artist.get('name'),function(image){
                                     artist.set({image:image});
                                     artist.save();
                                     AppController.libraryMenu.artists.add(artist);
@@ -156,34 +122,27 @@ $(function()
                });
             });
         },
-        showHelp:function()
-        {
+        showHelp:function(){
             this.isRegularMode=false;
             this.el.removeClass('fullscreen');
             this.infoPanels.addClass('hidden');
             this.helpPanels.removeClass('hidden');
         },
-        hideHelp:function()
-        {
+        hideHelp:function(){
             this.isRegularMode=true;
             this.infoPanels.removeClass('hidden');
             this.helpPanels.addClass('hidden');
         },
-        showFullScreen:function()
-        {
+        showFullScreen:function(){
             this.infoPanels.addClass('hidden');
             this.el.addClass('fullscreen');
             AppController.visualizationView.show();
         },
-        hideFullScreen:function()
-        {
+        hideFullScreen:function(){
             this.el.removeClass('fullscreen');
-            if(this.isRegularMode)
-            {
+            if(this.isRegularMode){
                 this.mainPanels.removeClass('hidden');
-            }
-            else
-            {
+            }else{
                 this.helpPanels.removeClass('hidden');
             }
             AppController.visualizationView.hide();
@@ -191,30 +150,19 @@ $(function()
         keyPressed:function(event)
         {
             var keyCode = event.keyCode;
-            if(keyCode==40)//down arrow
-            {
+            if(keyCode==40){//down arrow
                 AppController.playlistView.next(false);
-            }
-            else if(keyCode==38)//up key
-            {
+            } else if(keyCode==38){//up key
                 AppController.playlistView.previous(false);
-            }
-            else if(keyCode==13)//enter
-            {
+            }else if(keyCode==13){//enter
                 AppController.playlistView.destroyFileURL();
                 AppController.playlistView.currentSong().view.playSong();
-            }
-            else if(keyCode==32)//space
-            {
+            }else if(keyCode==32){//space
                 AppController.playerCtrl.togglePause();
-            }
-            else if(keyCode==46)//delete
-            {
+            }else if(keyCode==46){//delete
                 //delete song from playlist
                 AppController.playlistView.currentSong().view.remove();
-            }
-            else if(keyCode==27)//escape
-            {
+            }else if(keyCode==27){//escape
                 //comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
@@ -222,39 +170,28 @@ $(function()
         }
     });
 
-    ui.VisualizationView = Backbone.View.extend(
-    {
+    ui.VisualizationView = Backbone.View.extend({
         el: $('#playing_visualization'),
         tpl: $('#visualization_tpl').html(),
-        initialize:function()
-        {
+        initialize:function(){
             _.bindAll(this,'selectSong','render','show','hide','renderAlbumPoster');
         },
-        selectSong:function(song)
-        {
+        selectSong:function(song){
             this.model = song;
         },
-        show:function()
-        {
+        show:function(){
             this.el.show();
             this.render();
         },
-        hide:function()
-        {
+        hide:function(){
             this.el.hide();
         },
-        renderAlbumPoster:function(image)
-        {
-            var html = _.template(this.tpl,
-            {
-                image:image
-            });
+        renderAlbumPoster:function(image){
+            var html = _.template(this.tpl,{image:image });
             $(this.el).html(html);
         },
-        render:function()
-        {
-            if(this.model)
-            {
+        render:function(){
+            if(this.model){
                 lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
             }
             return this;
