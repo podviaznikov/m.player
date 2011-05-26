@@ -15,11 +15,22 @@ $(function(){
         events:{
             'keyup':'keyPressed',
             'dragover':'dragOverFiles',
-            'drop .main_panel':'dropFiles'
+            'drop .main_panel':'dropFiles',
+            'change #drop_files':'dropFiles',
+            'change #drop_folder':'dropFiles',
+            'click #import_songs_directory':'importMusicDirectory',
+            'click #import_songs_files':'importMusicFiles'
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','parseFilesMetaData','saveDataToLib')
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','parseFilesMetaData','saveDataToLib',
+                    'importMusicDirectory','importMusicFiles')
+        },
+        importMusicDirectory:function(){
+            this.$('#drop_folder').click();
+        },
+        importMusicFiles:function(){
+            this.$('#drop_files').click();
         },
         dragOverFiles:function(e){
             e.stopPropagation();
@@ -28,10 +39,11 @@ $(function(){
         dropFiles:function(e){
             e.stopPropagation();
             e.preventDefault();
-            var dataTransfer=e.originalEvent.dataTransfer;
-            var files=dataTransfer.files;
+            //getting from file input or dragged content
+            var target=e.originalEvent.dataTransfer||e.originalEvent.target;
+            var files = target.files;
             if(files && files.length>0){
-                this.handleFileSelect(e.originalEvent.dataTransfer.files); // handle FileList object.
+               this.handleFileSelect(files); // handle FileList object.
             }
         },
         handleFileSelect:function(files){
@@ -86,40 +98,6 @@ $(function(){
                         AppController.libraryMenu.artists.add(artist);
                     });
                 }
-            });
-        },
-        processAudioFile:function(file){
-            fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
-                if(readError){return;}
-                var initialFile = initialFile;
-                ID3v2.parseFile(data,function(tags){
-                    var songData = tags;
-                    var song = new Song();
-
-                    var uniqueFileName=song.id+initialFile.extension();
-
-                    songData.fileName=uniqueFileName;
-                    songData.originalFileName=initialFile.name;
-                    song.set(songData);
-
-                    //save file
-                    fs.write.file(initialFile,function(writeError){
-                        if(!writeError){
-                            song.save();
-                            var artistName = song.get('artist');
-                            var artist=AppController.libraryMenu.artists.findByName(artistName);
-                            if(!artist){
-                                artist = new Artist({name:song.get('artist')});
-                                lastFM.getArtistImage(artist.get('name'),function(image){
-                                    artist.set({image:image});
-                                    artist.save();
-                                    AppController.libraryMenu.artists.add(artist);
-                                });
-                            }
-                            AppController.playlistView.songs.add(song);
-                        }
-                    },uniqueFileName);
-               });
             });
         },
         showHelp:function(){

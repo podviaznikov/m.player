@@ -3,11 +3,8 @@
   "description": "Offline Music Player",
   "version": "1.0",
   "app": {
-    "urls": [
-      "*://player.enginimation.com/"
-    ],
     "launch": {
-      "web_url": "http://player.enginimation.com/"
+       "local_path": "public/index.html"
     }
   },
   "icons": {

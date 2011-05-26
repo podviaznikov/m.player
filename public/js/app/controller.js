@@ -7,12 +7,6 @@
 var global=window;
 var AppController={
 	init:function(){
-//	    var queryParams=window.location.search;
-//	    if(queryParams && queryParams!='')
-//	    {
-//	        var token=queryParams.split('=')[1];
-//	        getSession(token);
-//	    }
         var newHeight = $(window).height()-105;
         $('.scrollable_panel').height(newHeight);
 

@@ -661,3 +661,12 @@ footer.saved_playlist_toolbar
     padding-left:20px;
     padding-right:10px;
 }
+#drop_files,#drop_folder
+{
+    visibility:hidden;
+}
+#import_songs_directory,#import_songs_files
+{
+    float:right;
+    margin-right:5px;
+}

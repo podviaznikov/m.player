@@ -149,12 +149,14 @@ $(function(){
         showAlbums:function(albums,artist,songs){
             this.filteredLibContent.empty();
             this.songs=songs;
-            for(var i=0;i<albums.length;i++){
-                var album=albums[i];
-                var albumSongs=songs.filter(function(song){return song.get('album')===album;});
-                this.mapping[album]=albumSongs;
-                var albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
-                this.filteredLibContent.append(albumView.render().el);
+            if(albums){
+                for(var i=0;i<albums.length;i++){
+                    var album=albums[i];
+                    var albumSongs=songs.filter(function(song){return song.get('album')===album;});
+                    this.mapping[album]=albumSongs;
+                    var albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
+                    this.filteredLibContent.append(albumView.render().el);
+                }
             }
         },
         showPlayList:function(playList){

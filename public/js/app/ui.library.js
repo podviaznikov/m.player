@@ -48,7 +48,6 @@ $(function(){
         addArtist:function(artist){
             if(artist.get('name')){
                 var view = new ui.ArtistMenuView({model:artist});
-                artist.view=view;
                 this.artistsContent.append(view.render().el);
             }
         },

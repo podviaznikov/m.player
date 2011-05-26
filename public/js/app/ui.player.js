@@ -141,7 +141,7 @@ $(function(){
         },
         togglePause:function(){
             var isPaused = this.$(this.playToggle).hasClass('paused');
-            isPaused?this.play()?this.pause();
+            isPaused?this.play():this.pause();
         },
         stop:function(){
             this.playToggle.addClass('paused');
