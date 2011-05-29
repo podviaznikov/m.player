@@ -29,7 +29,7 @@ app.get('/app.mf', function(req, res)
 });
 app.get('/auth',function(req,res)
 {
-    var token = req.params.token,
+    var token = req.query.token,
         session = lastfm.session();
     util.log('TOKEN'+token);
     session.authorise(token, {
