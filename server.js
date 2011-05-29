@@ -94,15 +94,8 @@ app.get('/artist/:artistName/image',function(req,res){
     var request = lastfm.request('artist.getInfo', {
         artist: req.params.artistName,
         handlers: {
-            success: function(data) {
-                util.log(util.inspect(data));
-                util.log('--');
-                var json = JSON.parse(data);
-                util.log(util.inspect(json.artist));
-                util.log('--');
-                util.log(util.inspect(data.artist.image));
-                util.log('--');
-                util.log(util.inspect(data.artist.image[2]));
+            success: function(apiResp) {
+                var data = JSON.parse(apiResp);
                 if(data && data.artist && data.artist.image[2]){
                     image=data.artist.image[2]['#text']||'css/images/no_picture.png';
                 }
@@ -120,10 +113,29 @@ app.get('/album/:albumTitle/image',function(req,res){
     var request = lastfm.request('artist.getInfo', {
         artist: req.params.artistName,
         handlers: {
-            success: function(data) {
-                util.log(util.inspect(data));
+            success: function(apiResp) {
+                var data = JSON.parse(apiResp);
                 if(data && data.album && data.album.image[2]){
                     image=data.album.image[2]['#text']||'css/images/no_picture.png';
+                }
+                res.send(image);
+            },
+            error: function(error) {
+                res.send(image);
+            }
+        }
+    });
+});
+app.get('/album/:albumTitle/poster',function(req,res){
+    var image='css/images/no_picture.png';
+    util.log('Getting image for='+req.params.albumTitle);
+    var request = lastfm.request('artist.getInfo', {
+        artist: req.params.artistName,
+        handlers: {
+            success: function(apiResp) {
+                var data = JSON.parse(apiResp);
+                if(data && data.album && data.album.image[4]){
+                    image=data.album.image[4]['#text']||'css/images/no_picture.png';
                 }
                 res.send(image);
             },
