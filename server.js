@@ -36,14 +36,14 @@ app.get('/auth',function(req,res)
        handlers: {
           authorised: function(session) {
              var x ={
-                track:
-                {
+//                track:
+//                {
                     name:'Kiwi',
                     artist:
                     {
                         '#text':'Maroon 5'
                     }
-                }
+//                }
              };
              util.log('authorised');
              lastfm.update('nowplaying', session, { track: x } );
