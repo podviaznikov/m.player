@@ -36,16 +36,13 @@ app.get('/auth',function(req,res)
        handlers: {
           authorised: function(session) {
              var x ={
-                nowplaying:{
-                    track:
+                track:
+                {
+                    name:'Kiwi',
+                    artist:
                     {
-                        name:'Kiwi',
-                        artist:
-                        {
-                            '#text':'Maroon 5'
-                        }
-                    },
-
+                        '#text':'Maroon 5'
+                    }
                 }
              };
              util.log('authorised');
