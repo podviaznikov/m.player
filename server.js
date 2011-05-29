@@ -6,6 +6,7 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
+    lastfm = require('lastfm'),
     app = express.createServer();
 app.configure(function()
 {
@@ -21,6 +22,20 @@ app.get('/app.mf', function(req, res)
 {
     res.header("Content-Type", "text/cache-manifest");
     res.sendfile(__dirname + '/app.mf');
+});
+app.get('/auth',function(req,res)
+{
+    var token = req.params.token,
+        session = lastfm.session();
+    util.log('TOKEN'+token);
+    session.authorise(token, {
+       handlers: {
+          authorised: function(session) {
+             util.log('AUTHORISED');
+          }
+       }
+    });
+
 });
 app.listen(8083);
 util.log('started app on 8083');

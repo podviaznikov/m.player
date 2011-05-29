@@ -20,8 +20,8 @@ var Song = Porridge.Model.extend({
     }
 });
 var SongsList = Porridge.Collection.extend({
-    model: Song,
-    comparator: function(song){return song.get('track');}
+    model:Song,
+    comparator:function(song){return song.get('track');}
 });
 var Artist = Porridge.Model.extend({
     initialize:function(){
@@ -47,7 +47,7 @@ var Artist = Porridge.Model.extend({
     }
 });
 var ArtistsList = Porridge.Collection.extend({
-    model: Artist,
+    model:Artist,
     findByName:function(artistName){
         return this.find(function(artist){ return artist.get('name') == artistName; });
     }
