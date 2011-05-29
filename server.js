@@ -50,12 +50,22 @@ app.get('/auth',function(req,res)
              LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull update');
+                util.inspect(track)
              });
              LastFmUpdate.on('error',function(track,error)
              {
                 util.log('unsuccesfull update='+error);
              });
-
+             LastFmUpdate = lastfm.update('scrobble', session, { track: x, timestamp: 12345678} );
+             LastFmUpdate.on('success',function(track)
+             {
+                util.log('succesfull scrobble');
+                util.inspect(track)
+             });
+             LastFmUpdate.on('error',function(track,error)
+             {
+                util.log('scrobble update='+error);
+             });
           }
        }
     });
