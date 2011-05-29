@@ -95,7 +95,11 @@ app.get('/artist/:artistName/image',function(req,res){
         artist: req.params.artistName,
         handlers: {
             success: function(data) {
-                util.log(util.inspect(data));
+                util.log(util.inspect(data.artist));
+                util.log('--');
+                util.log(util.inspect(data.artist.image));
+                util.log('--');
+                util.log(util.inspect(data.artist.image[2]));
                 if(data && data.artist && data.artist.image[2]){
                     image=data.artist.image[2]['#text']||'css/images/no_picture.png';
                 }
