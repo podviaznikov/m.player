@@ -87,7 +87,24 @@ app.get('/auth',function(req,res)
           }
        }
     });
-
+});
+app.get('/artist/:artistName/image',function(req,res){
+    var image='css/images/no_picture.png';
+    util.log('Getting image for='+req.params.artistName);
+    var request = lastfm.request('artist.getInfo', {
+        artist: req.params.artistName,
+        handlers: {
+            success: function(data) {
+                if(data && data.artist && data.artist.image[2]){
+                    image=data.artist.image[2]['#text']||'css/images/no_picture.png';
+                }
+                res.send(image);
+            },
+            error: function(error) {
+                res.send(image);
+            }
+        }
+    });
 });
 app.listen(8083);
 util.log('started app on 8083');
