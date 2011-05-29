@@ -62,17 +62,25 @@ app.get('/auth',function(req,res)
              {
                 util.log('scrobble update='+error);
              });
-             //var LastFmInfo=lastfm.info('user');
              var request = lastfm.request("artist.getInfo", {
-    artist: "Maroon 5",
-    handlers: {
-        success: function(data) {
-            console.log("Success: " + data);
-        },
-        error: function(error) {
-            console.log("Error: " + error.message);
-        }
-    }
+                artist: "Maroon 5",
+                handlers: {
+                    success: function(data) {
+                        console.log("Success: " + data);
+                    },
+                    error: function(error) {
+                        console.log("Error: " + error.message);
+                    }
+            };
+            request = lastfm.request("user.getInfo", {
+            handlers: {
+                success: function(data) {
+                    console.log("Success: " + data);
+                },
+                error: function(error) {
+                    console.log("Error: " + error.message);
+                }
+            }
 });
 
           }
