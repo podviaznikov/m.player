@@ -35,7 +35,9 @@ app.get('/auth',function(req,res)
     session.authorise(token, {
        handlers: {
           authorised: function(session) {
+             var x = "{\"nowplaying\":{\"track\":{\"#text\":\"Run To Your Grave\",\"corrected\":\"0\"},\"artist\":{\"#text\":\"The Mai Shi\",\"corrected\":\"0\"},\"album\":{\"#text\":\"\",\"corrected\":\"0\"},\"albumArtist\":{\"#text\":\"\",\"corrected\":\"0\"},\"ignoredMessage\":{\"#text\":\"\",\"code\":\"0\"}}}";
              util.log('AUTHORISED');
+             lastfm.update('nowplaying', session, { track: x } );
           }
        }
     });
