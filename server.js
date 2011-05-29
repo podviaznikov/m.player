@@ -46,7 +46,16 @@ app.get('/auth',function(req,res)
 //                }
              };
              util.log('authorised');
-             lastfm.update('nowplaying', session, { track: x } );
+             var LastFmUpdate = lastfm.update('nowplaying', session, { track: x } );
+             LastFmUpdate.on('success',function(track)
+             {
+                util.log('succesfull update');
+             });
+             LastFmUpdate.on('error',function(track,error)
+             {
+                util.log('unsuccesfull update='+error);
+             });
+
           }
        }
     });
