@@ -71,17 +71,18 @@ app.get('/auth',function(req,res)
                     error: function(error) {
                         console.log("Error: " + error.message);
                     }
-            };
-            request = lastfm.request("user.getInfo", {
-            handlers: {
-                success: function(data) {
-                    console.log("Success: " + data);
-                },
-                error: function(error) {
-                    console.log("Error: " + error.message);
                 }
-            }
-});
+            });
+            request = lastfm.request("user.getInfo", {
+                handlers: {
+                    success: function(data) {
+                        console.log("Success: " + data);
+                    },
+                    error: function(error) {
+                        console.log("Error: " + error.message);
+                    }
+                }
+            });
 
           }
        }
