@@ -6,7 +6,11 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
-    lastfm = require('lastfm'),
+    LastFmNode = require('lastfm').LastFmNode,
+    lastfm = new LastFmNode({
+        api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
+        secret: '99523abcd47bd54b5cfa10cf9bb81f20'
+    });
     app = express.createServer();
 app.configure(function()
 {
