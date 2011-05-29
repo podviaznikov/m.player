@@ -95,8 +95,28 @@ app.get('/artist/:artistName/image',function(req,res){
         artist: req.params.artistName,
         handlers: {
             success: function(data) {
+                util.log(util.inspect(data));
                 if(data && data.artist && data.artist.image[2]){
                     image=data.artist.image[2]['#text']||'css/images/no_picture.png';
+                }
+                res.send(image);
+            },
+            error: function(error) {
+                res.send(image);
+            }
+        }
+    });
+});
+app.get('/album/:albumTitle/image',function(req,res){
+    var image='css/images/no_picture.png';
+    util.log('Getting image for='+req.params.albumTitle);
+    var request = lastfm.request('artist.getInfo', {
+        artist: req.params.artistName,
+        handlers: {
+            success: function(data) {
+                util.log(util.inspect(data));
+                if(data && data.album && data.album.image[2]){
+                    image=data.album.image[2]['#text']||'css/images/no_picture.png';
                 }
                 res.send(image);
             },
