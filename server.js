@@ -39,12 +39,13 @@ app.get('/auth',function(req,res)
                 nowplaying:{
                     track:
                     {
-                        '#text':'Kiwi'
+                        name:'Kiwi',
+                        artist:
+                        {
+                            '#text':'Maroon 5'
+                        }
                     },
-                    artist:
-                    {
-                        '#text':'Maroon 5'
-                    }
+
                 }
              };
              util.log('authorised');
