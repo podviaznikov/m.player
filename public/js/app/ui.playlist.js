@@ -44,7 +44,10 @@ $(function(){
         },
         setSongsAndPlay:function(songs){
             this.songs.refresh(songs);
-            this.songs.first().view.playSong();
+            var firstSong=this.songs.first();
+            if(firstSong){
+                firstSong.view.playSong();
+            }
         },
         setPlayListModel:function(playList){
             this.playList = playList;
@@ -128,14 +131,10 @@ $(function(){
             }
             return randomSong;
         },
-        currentSong:function(){
-            return this.songs.at(this.currentSongIndex());
-        },
-        currentSongIndex:function(){
-            return this.songs.indexOf(this.selectedSong);
-        },
+        currentSong:function(){return this.songs.at(this.currentSongIndex());},
+        currentSongIndex:function(){return this.songs.indexOf(this.selectedSong);},
         next:function(playSongFlag){
-            var playSong=playSongFlag==false? false : true;
+            var playSong=!playSongFlag;
             var nextSongId = -1;
             if(playSong && settings.isShuffle()){
                 nextSongId=this.randomSong();
@@ -153,7 +152,7 @@ $(function(){
             this.playSongModel(nextSong,playSong);
         },
         previous:function(playSongFlag){
-            var playSong=playSongFlag==false? false : true;
+            var playSong=!playSongFlag;
             var indexOfSelectedSong=this.currentSongIndex();
             if(indexOfSelectedSong==0){
                 indexOfSelectedSong=this.songs.length;//to have last one

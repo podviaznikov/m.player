@@ -12,8 +12,7 @@ var util = require('util'),
         secret: '99523abcd47bd54b5cfa10cf9bb81f20'
     });
     app = express.createServer();
-app.configure(function()
-{
+app.configure(function(){
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
     app.use(express.logger());
@@ -22,13 +21,11 @@ app.configure(function()
     //public folder for static files
     app.use(express.static(__dirname+'/public'));
 });
-app.get('/app.mf', function(req, res)
-{
+app.get('/app.mf', function(req, res){
     res.header("Content-Type", "text/cache-manifest");
     res.sendfile(__dirname + '/app.mf');
 });
-app.get('/auth',function(req,res)
-{
+app.get('/auth',function(req,res){
     var token = req.query.token,
         session = lastfm.session();
     util.log('token='+token);
@@ -62,28 +59,6 @@ app.get('/auth',function(req,res)
              {
                 util.log('scrobble update='+error);
              });
-             var request = lastfm.request("artist.getInfo", {
-                artist: "Maroon 5",
-                handlers: {
-                    success: function(data) {
-                        console.log("Success: " + data);
-                    },
-                    error: function(error) {
-                        console.log("Error: " + error.message);
-                    }
-                }
-            });
-            request = lastfm.request("user.getInfo", {
-                handlers: {
-                    success: function(data) {
-                        console.log("Success: " + data);
-                    },
-                    error: function(error) {
-                        console.log("Error: " + error.message);
-                    }
-                }
-            });
-
           }
        }
     });
@@ -107,11 +82,35 @@ app.get('/artist/:artistName/image',function(req,res){
         }
     });
 });
-app.get('/album/:albumTitle/image',function(req,res){
-    var image='css/images/no_picture.png';
-    util.log('Getting image for='+req.params.albumTitle);
+app.get('/artist/:artistName/bio',function(req,res){
+    util.log('Getting bio for='+req.params.artistName);
+    var bio={};
     var request = lastfm.request('artist.getInfo', {
         artist: req.params.artistName,
+        handlers: {
+            success: function(apiResp) {
+                var data = JSON.parse(apiResp);
+                if(data && data.artist && data.artist.bio){
+                    bio=data.artist.bio;
+                }
+                res.contentType('application/json');
+                res.send(bio);
+            },
+            error: function(error) {
+                //
+                res.contentType('application/json');
+                res.send(bio);
+            }
+        }
+    });
+});
+
+app.get('/artist/:artistName/album/:albumTitle/image',function(req,res){
+    var image='css/images/no_picture.png';
+    util.log('Getting image for='+req.params.albumTitle);
+    var request = lastfm.request('album.getInfo', {
+        artist: req.params.artistName,
+        album:  req.params.albumTitle,
         handlers: {
             success: function(apiResp) {
                 var data = JSON.parse(apiResp);
@@ -126,11 +125,12 @@ app.get('/album/:albumTitle/image',function(req,res){
         }
     });
 });
-app.get('/album/:albumTitle/poster',function(req,res){
+app.get('/artist/:artistName/album/:albumTitle/poster',function(req,res){
     var image='css/images/no_picture.png';
     util.log('Getting image for='+req.params.albumTitle);
-    var request = lastfm.request('artist.getInfo', {
+    var request = lastfm.request('album.getInfo', {
         artist: req.params.artistName,
+        album:  req.params.albumTitle,
         handlers: {
             success: function(apiResp) {
                 var data = JSON.parse(apiResp);
@@ -141,6 +141,48 @@ app.get('/album/:albumTitle/poster',function(req,res){
             },
             error: function(error) {
                 res.send(image);
+            }
+        }
+    });
+});
+app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
+    util.log('Getting image for='+req.params.albumTitle);
+    var request = lastfm.request('album.getInfo', {
+        artist: req.params.artistName,
+        album:  req.params.albumTitle,
+        handlers: {
+            success: function(apiResp) {
+                var data = JSON.parse(apiResp);
+                data = data.album;
+                if(!data){
+                    var image='css/images/no_picture.png';
+                    var albumName=album;
+                    var releaseDate='na';
+                    var songsCount='na';
+                    res.contentType('application/json');
+                    res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
+                }else{
+                    var image = 'css/images/no_picture.png';
+                    if(data && data.image[2]){
+                        image=data.image[2]['#text']||'css/images/no_picture.png';//medium
+                    }
+                    var albumName = album;
+                    if(data&& data.name && data.name.trim()){
+                        albumName=data.name.trim()||album
+                    }
+                    var releaseDate = data.releasedate.trim().split(',')[0]||'';//getting just date without time
+                    var songsCount = data.tracks.length||'';
+                    res.contentType('application/json');
+                    res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
+                }
+           },
+            error: function(error) {
+                var image='css/images/no_picture.png';
+                var albumName=album;
+                var releaseDate='na';
+                var songsCount='na';
+                res.contentType('application/json');
+                res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
             }
         }
     });

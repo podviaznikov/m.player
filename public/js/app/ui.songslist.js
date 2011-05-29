@@ -44,13 +44,13 @@ $(function(){
             return this;
         },
         addSong:function(song,key){
-            var song=new Song(song);
-            var view = new ui.SongView({
-                model:song,
-                key:key,
-                songs:this.model.get('songs'),
-                playList:this.model
-            });
+            var song=new Song(song),
+                view = new ui.SongView({
+                    model:song,
+                    key:key,
+                    songs:this.model.get('songs'),
+                    playList:this.model
+                });
             song.albumView = view;
             $(this.el).append(view.render().el);
         },
@@ -151,10 +151,10 @@ $(function(){
             this.songs=songs;
             if(albums){
                 for(var i=0;i<albums.length;i++){
-                    var album=albums[i];
-                    var albumSongs=songs.filter(function(song){return song.get('album')===album;});
+                    var album=albums[i],
+                        albumSongs=songs.filter(function(song){return song.get('album')===album;}),
+                        albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     this.mapping[album]=albumSongs;
-                    var albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     this.filteredLibContent.append(albumView.render().el);
                 }
             }
@@ -165,10 +165,11 @@ $(function(){
             this.filteredLibContent.append(playListView.render().el);
         },
         handleDragStart:function(e){
-            var event=e.originalEvent;
-            var dataTransferObj=event.dataTransfer;
+            var event=e.originalEvent,
+                dataTransferObj=event.dataTransfer,
+                songId=event.srcElement.dataset['id'];
             dataTransferObj.effectAllowed = 'move';
-            var songId=event.srcElement.dataset['id'];
+
             if(this.songs){
                 var song = this.songs.get(songId);
                 dataTransferObj.setData('text/plain', JSON.stringify(song.toJSON()));

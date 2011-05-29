@@ -40,16 +40,16 @@ $(function(){
             e.stopPropagation();
             e.preventDefault();
             //getting from file input or dragged content
-            var target=e.originalEvent.dataTransfer||e.originalEvent.target;
-            var files = target.files;
+            var target=e.originalEvent.dataTransfer||e.originalEvent.target,
+                files = target.files;
             if(files && files.length>0){
                this.handleFileSelect(files); // handle FileList object.
             }
         },
         handleFileSelect:function(files){
-            var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')});
-            var filesContents=[];
-            var parseFiles = _.after(audioFiles.length,this.parseFilesMetaData);
+            var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')}),
+                filesContents=[],
+                parseFiles = _.after(audioFiles.length,this.parseFilesMetaData);
             _.each(audioFiles,function(file,index){
                 fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
                     if(readError){return;}
@@ -59,9 +59,9 @@ $(function(){
             });
         },
         parseFilesMetaData:function(filesContents,audioFiles){
-            var songs=new SongsList;
-            var files=audioFiles;
-            var saveToLib = _.after(files.length,this.saveDataToLib);
+            var songs=new SongsList,
+                files=audioFiles,
+                saveToLib = _.after(files.length,this.saveDataToLib);
             _.each(filesContents,function(data,index){
                 ID3v2.parseFile(data,function(tags){
                     var initialFile = files[index];
@@ -84,10 +84,8 @@ $(function(){
                     }
                 },song.get('fileName'));
             });
-            var allArtists=songs.map(function(song){
-                return song.get('artist');
-            });
-            var artists=_.unique(allArtists);
+            var allArtists=songs.map(function(song){return song.get('artist');}),
+                artists=_.unique(allArtists);
             _.each(artists,function(artistName){
                 var artist=AppController.libraryMenu.artists.findByName(artistName);
                 if(!artist){
