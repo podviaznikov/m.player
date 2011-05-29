@@ -46,7 +46,7 @@ app.get('/auth',function(req,res)
              LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull update');
-                util.inspect(track)
+                util.log(util.inspect(track));
              });
              LastFmUpdate.on('error',function(track,error)
              {
@@ -56,12 +56,14 @@ app.get('/auth',function(req,res)
              LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull scrobble');
-                util.inspect(track)
+                util.log(util.inspect(track));
              });
              LastFmUpdate.on('error',function(track,error)
              {
                 util.log('scrobble update='+error);
              });
+             var LastFmInfo=lastfm.info('user');
+
           }
        }
     });
