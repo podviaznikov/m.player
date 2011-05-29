@@ -95,7 +95,10 @@ app.get('/artist/:artistName/image',function(req,res){
         artist: req.params.artistName,
         handlers: {
             success: function(data) {
-                util.log(util.inspect(data.artist));
+                util.log(util.inspect(data));
+                util.log('--');
+                var json = JSON.parse(data);
+                util.log(util.inspect(json.artist));
                 util.log('--');
                 util.log(util.inspect(data.artist.image));
                 util.log('--');
