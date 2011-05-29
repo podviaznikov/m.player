@@ -4,7 +4,6 @@ index.html
 js/app/controller.js
 js/app/models.js
 js/app/ui.app.js
-js/app/ui.audio.js
 js/app/ui.library.js
 js/app/ui.player.js
 js/app/ui.playlist.js

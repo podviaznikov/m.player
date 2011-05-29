@@ -85,12 +85,13 @@ $(function(){
             'click':'selectArtist',
             'dblclick':'playArtistSongs',
             'click .delete_artist':'deleteArtist',
+            'click .bio_artist':'showArtistBio'
             'click .album_link': 'selectAlbum',
             'dbclick .album_link':'playAlbumSongs'
         },
         initialize:function(){
             _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
-                    'deleteArtist','selectAlbum','playAlbumSongs');
+                    'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
@@ -129,6 +130,9 @@ $(function(){
             var album = e.currentTarget.dataset.album;
             var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
             AppController.songsView.songs.refresh(albumSongs);
+        },
+        showArtistBio:function(){
+            alert('x');
         },
         hide:function(){
             this.$(this.el).hide();
