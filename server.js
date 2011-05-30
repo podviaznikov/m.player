@@ -48,7 +48,7 @@ app.get('/auth',function(req,res){
              {
                 util.log('unsuccesfull update='+error);
              });
-             LastFmUpdate = lastfm.update('scrobble', session, { track: x,  timestamp: ((new Date()).getTime()) / 1000) - 214} );
+             LastFmUpdate = lastfm.update('scrobble', session, { track: x,  timestamp: ((new Date().getTime()) / 1000) - 214} );
              LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull scrobble');
