@@ -39,26 +39,30 @@ app.get('/auth',function(req,res){
                 }
              };
              util.log('authorised');
-             var LastFmUpdate = lastfm.update('nowplaying', session, { track: x,duration: 214 } );
-             LastFmUpdate.on('success',function(track)
+//             var LastFmUpdate = lastfm.update('nowplaying', session, { track: x,duration: 214 } );
+//             LastFmUpdate.on('success',function(track)
+//             {
+//                util.log('succesfull update');
+//                util.log(util.inspect(track));
+//             });
+//             LastFmUpdate.on('error',function(track,error)
+//             {
+//                util.log('unsuccesfull update='+error);
+//             });
+             var LastFmUpdate = lastfm.update('scrobble', session, { track: x,  timestamp: ((new Date().getTime()) / 1000) - 214},
+             handlers:
              {
-                util.log('succesfull update');
-                util.log(util.inspect(track));
+                success:function(track)
+                {
+                    util.log('track was scrobbled. '+track);
+                },
+                error:function(track,error)
+                {
+                    util.log(error);
+                    util.log('track failed to scrobble. '+track);
+                }
              });
-             LastFmUpdate.on('error',function(track,error)
-             {
-                util.log('unsuccesfull update='+error);
-             });
-             LastFmUpdate = lastfm.update('scrobble', session, { track: x,  timestamp: ((new Date().getTime()) / 1000) - 214} );
-             LastFmUpdate.on('success',function(track)
-             {
-                util.log('succesfull scrobble');
-                util.log(util.inspect(track));
-             });
-             LastFmUpdate.on('error',function(track,error)
-             {
-                util.log('scrobble update='+error);
-             });
+
           }
        }
     });
