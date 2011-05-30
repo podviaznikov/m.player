@@ -153,10 +153,10 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                 var data = JSON.parse(apiResp);
                 data = data.album;
                 if(!data){
-                    var image='css/images/no_picture.png';
-                    var albumName=album;
-                    var releaseDate='na';
-                    var songsCount='na';
+                    var image='css/images/no_picture.png',
+                        albumName=album,
+                        releaseDate='na',
+                        songsCount='na';
                     res.contentType('application/json');
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }else{
