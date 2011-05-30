@@ -39,11 +39,10 @@ app.get('/auth',function(req,res){
                 }
              };
              util.log('authorised');
-//             var LastFmUpdate = lastfm.update('nowplaying', session, { track: x,duration: 214 } );
-
+             util.log(util.inspect(session));
              var LastFmUpdate = lastfm.update('scrobble', session, {
                 track: x,
-                timestamp: 130679172//((new Date().getTime()) / 1000) - 214,
+                timestamp: ((new Date().getTime()) / 1000) - 214,
              });
             LastFmUpdate.on('success',function(track)
              {
