@@ -16,18 +16,18 @@ app.configure(function(){
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
     app.use(express.logger());
-    //router
-    app.use(app.router);
-    //public folder for static files
-    app.use(express.static(__dirname+'/public'));
     //component for decoding requests' params
     app.use(express.bodyParser());
     //session support
     app.use(express.cookieParser());
-    app.use(express.session({ secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 1440000000 }}));
+    app.use(express.session({ secret: 'super_hard_session_secret'}));
+    //router
+    app.use(app.router);
+    //public folder for static files
+    app.use(express.static(__dirname+'/public'));
 });
 app.get('/app.mf', function(req, res){
-    res.header("Content-Type", "text/cache-manifest");
+    res.header('Content-Type', 'text/cache-manifest');
     res.sendfile(__dirname + '/app.mf');
 });
 app.post('/song_played/:artist/:track/:length',function(req,res){
@@ -40,10 +40,11 @@ app.get('/auth',function(req,res){
     session.authorise(token, {
         handlers: {
             authorised: function(session) {
+                util.log('authorised');
+                util.log(util.inspect(req));
+                util.log(util.inspect(session));
                 req.session.user = session.user;
                 req.session.key = session.key;
-                util.log('authorised');
-                util.log(util.inspect(session));
                 res.redirect('home');
              }
         }
@@ -83,7 +84,6 @@ app.get('/artist/:artistName/bio',function(req,res){
                 res.send(bio);
             },
             error: function(error) {
-                //
                 res.contentType('application/json');
                 res.send(bio);
             }
