@@ -40,11 +40,12 @@ app.get('/auth',function(req,res){
              };
              util.log('authorised');
              util.log(util.inspect(session));
+             var startedTime = Math.round(((new Date().getTime()) / 1000) - 214);
              var LastFmUpdate = lastfm.update('scrobble', session, {
                 track: x,
-                timestamp: ((new Date().getTime()) / 1000) - 214,
+                timestamp: startedTime
              });
-            LastFmUpdate.on('success',function(track)
+             LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull scrobble');
                 util.log(util.inspect(track));
