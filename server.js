@@ -26,7 +26,8 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/auth',function(req,res){
-    var token = req.query.token;
+    var token = req.query.token,
+        session = lastfm.session();
     util.log('token='+token);
     session.authorise(token, {
        handlers: {
