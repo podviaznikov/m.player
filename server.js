@@ -20,9 +20,11 @@ app.configure(function(){
     app.use(app.router);
     //public folder for static files
     app.use(express.static(__dirname+'/public'));
+    //component for decoding requests' params
+    app.use(express.bodyParser());
     //session support
     app.use(express.cookieParser());
-    app.use(express.session({ secret: 'super_hard_session_secret_ever_on_github'}));
+    app.use(express.session({ secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 1440000000 }}));
 });
 app.get('/app.mf', function(req, res){
     res.header("Content-Type", "text/cache-manifest");
