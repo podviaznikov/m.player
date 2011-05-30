@@ -49,19 +49,21 @@ app.get('/auth',function(req,res){
 //             {
 //                util.log('unsuccesfull update='+error);
 //             });
-             var LastFmUpdate = lastfm.update('scrobble', session, { track: x,  timestamp: ((new Date().getTime()) / 1000) - 214},
-             handlers:
-             {
-                success:function(track)
+             var LastFmUpdate = lastfm.update('scrobble', session, {
+                track: x,
+                timestamp: ((new Date().getTime()) / 1000) - 214,
+                handlers:
                 {
-                    util.log('track was scrobbled. '+track);
-                },
-                error:function(track,error)
-                {
-                    util.log(error);
-                    util.log('track failed to scrobble. '+track);
-                }
-             });
+                    success:function(track)
+                    {
+                        util.log('track was scrobbled. '+track);
+                    },
+                    error:function(track,error)
+                    {
+                        util.log(error);
+                        util.log('track failed to scrobble. '+track);
+                    }
+                }});
 
           }
        }
