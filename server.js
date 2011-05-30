@@ -20,45 +20,31 @@ app.configure(function(){
     app.use(app.router);
     //public folder for static files
     app.use(express.static(__dirname+'/public'));
+    //session support
+    app.use(express.cookieParser());
+    app.use(express.session({ secret: 'super_hard_session_secret_ever_on_github'}));
 });
 app.get('/app.mf', function(req, res){
     res.header("Content-Type", "text/cache-manifest");
     res.sendfile(__dirname + '/app.mf');
+});
+app.post('/song_played/:artist/:track/:length',function(req,res){
+    scrobble(req.params.track,req.params.artist,req.params.length,req.session.key,req.session.user);
 });
 app.get('/auth',function(req,res){
     var token = req.query.token,
         session = lastfm.session();
     util.log('token='+token);
     session.authorise(token, {
-       handlers: {
-          authorised: function(session) {
-             var x ={
-                name:'Kiwi',
-                artist:{
-                    '#text':'Maroon 5'
-                }
-             };
-             util.log('authorised');
-             util.log(util.inspect(session));
-             var startedTime = Math.round(((new Date().getTime()) / 1000) - 214);
-             var LastFmUpdate = lastfm.update('scrobble', session, {
-                track: x,
-                timestamp: startedTime
-             });
-             LastFmUpdate.on('success',function(track)
-             {
-                util.log('succesfull scrobble');
-                util.log(util.inspect(track));
-             });
-             LastFmUpdate.on('error',function(track,error)
-             {
-                util.log(track);
-                util.log(error);
-                util.log('unsuccesfull scrobble='+error);
-             });
-
-          }
-       }
+        handlers: {
+            authorised: function(session) {
+                req.session.user = session.user;
+                req.session.key = session.key;
+                util.log('authorised');
+                util.log(util.inspect(session));
+                res.redirect('home');
+             }
+        }
     });
 });
 app.get('/artist/:artistName/image',function(req,res){
@@ -185,5 +171,31 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
         }
     });
 });
+function scrobble(trackName,artist,trackLength,key,user){
+     var track ={
+        name:trackName,
+        artist:{
+            '#text':artist
+        }
+     },
+        session = lastfm.session(user,key),
+        startedTime = Math.round(((new Date().getTime()) / 1000) - trackLength);
+        LastFmUpdate = lastfm.update('scrobble', session, {
+            track: track,
+            timestamp: startedTime
+         });
+     LastFmUpdate.on('success',function(track)
+     {
+        util.log('succesfull scrobble');
+        util.log(util.inspect(track));
+     });
+     LastFmUpdate.on('error',function(track,error)
+     {
+        util.log(track);
+        util.log(error);
+        util.log('unsuccesfull scrobble='+error);
+     });
+};
+
 app.listen(8083);
 util.log('started app on 8083');

@@ -157,12 +157,15 @@ $(function(){
         updateAudioProgress:function(duration,currentTime){
             var self = this,
                 timeInSeconds = parseInt(currentTime, 10),
+                songDuration = parseInt(duration,10),
                 rem = parseInt(duration - currentTime, 10),
                 pos = (timeInSeconds / duration) * 100,
                 mins = Math.floor(currentTime/60,10),
                 secs = timeInSeconds - mins*60,
                 timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs);
             if(rem==0){
+                var currentSong = AppController.playlistView.currentSong;
+                //lastFM.scrobble()
                 this.next();
             }
             this.timeCounter.text(timeCounter);
