@@ -85,7 +85,7 @@ $(function(){
             'click':'selectArtist',
             'dblclick':'playArtistSongs',
             'click .delete_artist':'deleteArtist',
-            'click .bio_artist':'showArtistBio'
+            'click .bio_artist':'showArtistBio',
             'click .album_link': 'selectAlbum',
             'dbclick .album_link':'playAlbumSongs'
         },

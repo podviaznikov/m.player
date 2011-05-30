@@ -26,8 +26,7 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/auth',function(req,res){
-    var token = req.query.token,
-        session = lastfm.session();
+    var token = req.query.token;
     util.log('token='+token);
     session.authorise(token, {
        handlers: {
@@ -39,7 +38,7 @@ app.get('/auth',function(req,res){
                 }
              };
              util.log('authorised');
-             var LastFmUpdate = lastfm.update('nowplaying', session, { track: x } );
+             var LastFmUpdate = lastfm.update('nowplaying', session, { track: x,duration: 214 } );
              LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull update');
@@ -49,7 +48,7 @@ app.get('/auth',function(req,res){
              {
                 util.log('unsuccesfull update='+error);
              });
-             LastFmUpdate = lastfm.update('scrobble', session, { track: x, timestamp: 12345678} );
+             LastFmUpdate = lastfm.update('scrobble', session, { track: x,  timestamp: ((new Date()).getTime()) / 1000) - 214} );
              LastFmUpdate.on('success',function(track)
              {
                 util.log('succesfull scrobble');
