@@ -43,7 +43,7 @@ app.get('/auth',function(req,res){
 
              var LastFmUpdate = lastfm.update('scrobble', session, {
                 track: x,
-                timestamp: ((new Date().getTime()) / 1000) - 214,
+                timestamp: 130679172//((new Date().getTime()) / 1000) - 214,
              });
             LastFmUpdate.on('success',function(track)
              {
