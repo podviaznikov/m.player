@@ -9,6 +9,7 @@ js/app/ui.player.js
 js/app/ui.playlist.js
 js/app/ui.songslist.js
 js/lib/libs.bundle.js
+js/lib/fs.js
 js/lib/jquery.min.js
 css/mq.css
 css/images/no_picture.png
