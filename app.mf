@@ -14,6 +14,8 @@ js/lib/jquery.min.js
 css/styles.css
 css/mq.css
 css/images/no_picture.png
+/js/api/lastfm.js
+/js/api/lastfm-offline.js
 NETWORK:
 http://userserve-ak.last.fm
 http://player.enginimation.com

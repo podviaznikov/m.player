@@ -126,8 +126,10 @@ $(function(){
         },
         keyPressed:function(event)
         {
-            var keyCode = event.keyCode,
+            var keyCode = event.keyCod,currentSong=undefined;
+            if(AppController.playlistView){
                 currentSong =  AppController.playlistView.currentSong();
+            }
             if(keyCode==40){
                 //down arrow
                 AppController.playlistView.next(false);
