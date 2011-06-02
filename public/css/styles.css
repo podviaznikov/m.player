@@ -672,3 +672,161 @@ footer.saved_playlist_toolbar
     float:right;
     margin-right:5px;
 }
+
+//media queries
+@media screen and (min-width: 1025px) and (max-width: 1280px)
+{
+    .middle_layout_panel
+    {
+        width:29%!important;
+    }
+    #music_gutter
+    {
+        width:53%;
+    }
+    #volume_gutter
+    {
+        margin-right:30px;
+    }
+}
+@media screen and (min-width: 901px) and (max-width: 1024px)
+{
+    #library_menu,#playing_list
+    {
+        width:45%;
+    }
+    #filtered_lib
+    {
+        display:none;
+    }
+    .middle_layout_panel
+    {
+        width:28%!important;
+    }
+    #music_gutter
+    {
+        width:45%;
+    }
+}
+@media screen and (min-width: 801px) and (max-width: 900px)
+{
+    #library_menu,#playing_list
+    {
+        width:45%;
+    }
+    #filtered_lib
+    {
+        display:none;
+    }
+    .middle_layout_panel
+    {
+        width:27%!important;
+    }
+    #music_gutter
+    {
+        width:40%;
+    }
+    #library_menu header input[type="search"]
+    {
+        width:90px;
+    }
+}
+@media screen and (min-width: 701px) and (max-width: 800px)
+{
+    #library_menu,#playing_list
+    {
+        width:45%;
+    }
+    #filtered_lib
+    {
+        display:none;
+    }
+    .middle_layout_panel
+    {
+        width:25%!important;
+    }
+    #music_gutter
+    {
+        width:33%;
+    }
+    #library_menu header input[type="search"]
+    {
+        width:70px;
+    }
+}
+@media screen and (min-width: 601px) and (max-width: 700px)
+{
+    section.info_panel
+    {
+        display:none;
+    }
+    #playing_list,#how_to_use
+    {
+        display:block;
+        width:100%;
+    }
+    #playing_list.hidden,#how_to_use.hidden
+    {
+        display:none;
+    }
+    #music_gutter
+    {
+        width:20%;
+    }
+    #clear_playlist
+    {
+        margin-right:30px;
+    }
+}
+@media screen and (max-width: 600px)
+{
+    section.info_panel
+    {
+        display:none;
+    }
+    #playing_list,#how_to_use
+    {
+        display:block;
+        width:100%;
+    }
+    #playing_list.hidden,#how_to_use.hidden
+    {
+        display:none;
+    }
+    #music_gutter
+    {
+        width:10%;
+    }
+    #volume_gutter
+    {
+        margin-right: 10px;
+        width:20px;
+    }
+    #sound_toggle
+    {
+        margin-left:0px;
+    }
+    #clear_playlist
+    {
+        margin-right:30px;
+    }
+}
+@media screen and (min-width: 331px) and (max-width: 400px)
+{
+    #music_gutter,#volume_gutter
+    {
+        display:none!important;
+    }
+}
+@media screen and (max-width: 330px)
+{
+    #music_gutter,#volume_gutter
+    {
+        display:none!important;
+    }
+    .control
+    {
+        margin-right:0px;
+        margin-left:0px;
+    }
+}
