@@ -137,7 +137,7 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
         album = req.params.albumTitle,
         request = lastfm.request('album.getInfo', {
         artist: artist,
-        album:  albunm,
+        album:  album,
         handlers: {
             success: function(apiResp) {
                 var data = JSON.parse(apiResp);
