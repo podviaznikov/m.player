@@ -11,6 +11,7 @@ js/app/ui.songslist.js
 js/lib/fs.js
 js/lib/libs.bundle.js
 js/lib/jquery.min.js
+css/styles.css
 css/mq.css
 css/images/no_picture.png
 NETWORK:
