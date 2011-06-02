@@ -7,7 +7,7 @@
 var lastFM={
     scrobble:function(track,artist,trackLength)
     {
-        $.post('/artist/'+artist+'/image');
+        $.post('/song_played/'+artist+'/'+track+'/'+trackLength);
     },
     getArtistImage:function(artist,callback){
         var jqxhr = $.get('/artist/'+artist+'/image',function(data){

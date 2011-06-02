@@ -1,5 +1,6 @@
 CACHE MANIFEST
 index.html
+16.png
 js/app/controller.js
 js/app/models.js
 js/app/ui.app.js
