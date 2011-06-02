@@ -163,7 +163,7 @@ $(function(){
                 mins = Math.floor(currentTime/60,10),
                 secs = timeInSeconds - mins*60,
                 timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
-                currentSong = AppController.playlistView.currentSong;
+                currentSong = AppController.playlistView.currentSong();
             if(rem==0){
                 lastFM.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
@@ -194,7 +194,6 @@ $(function(){
             }
         }
     });
-
     ui.AudioElement = Backbone.View.extend({
         id:'player_ctrl',
         tagName:'audio',
