@@ -4,11 +4,12 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player.
 "use strict";
-var apiUrl='http://ws.audioscrobbler.com/2.0/?';
-var apiKey='e3377f4b4d8c6de47c7e2c81485a65f5';
-
 var lastFM=
 {
+    scrobble:function(track,artist,trackLength)
+    {
+        //do nothing
+    },
     getArtistImage:function(artist,callback)
     {
         callback('css/images/no_picture.png');

@@ -15,7 +15,6 @@ css/styles.css
 css/mq.css
 css/images/no_picture.png
 NETWORK:
-http://ws.audioscrobbler.com
 http://userserve-ak.last.fm
 http://player.enginimation.com
 FALLBACK:
