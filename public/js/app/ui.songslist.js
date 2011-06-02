@@ -1,8 +1,3 @@
-// m.player
-// (c) 2011 Enginimation Studio (http://enginimation.com).
-// m.player may be freely distributed under the MIT license.
-// For all details and documentation:
-// https://github.com/podviaznikov/m.player
 "use strict";
 $(function(){
     ui.AlbumView = Backbone.View.extend({
