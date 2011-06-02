@@ -1,5 +1,4 @@
 "use strict";
-var global = window;
 $(function(){
     ui.PlayerCtrl = Backbone.View.extend({
         el:$('#player'),

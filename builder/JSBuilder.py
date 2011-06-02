@@ -45,7 +45,7 @@ def compile(copyright, fullName, minName, files, search=None, replace=None):
     
     # read all files
     for i in range(len(files)):
-        files[i] = read('../' + 'src/' + files[i])
+        files[i] = read('../' + 'public/' + files[i])
     
     # address the whole content
     content = multiCopyright + "\n".join(files)

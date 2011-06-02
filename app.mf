@@ -1,13 +1,7 @@
 CACHE MANIFEST
 index.html
 16.png
-js/app/controller.js
-js/app/models.js
-js/app/ui.app.js
-js/app/ui.library.js
-js/app/ui.player.js
-js/app/ui.playlist.js
-js/app/ui.songslist.js
+js/app.js
 js/lib/fs.js
 js/lib/libs.bundle.js
 js/lib/jquery.min.js
