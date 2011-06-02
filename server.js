@@ -133,9 +133,11 @@ app.get('/artist/:artistName/album/:albumTitle/poster',function(req,res){
 });
 app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
     util.log('Getting image for='+req.params.albumTitle);
-    var request = lastfm.request('album.getInfo', {
-        artist: req.params.artistName,
-        album:  req.params.albumTitle,
+    var artist = req.params.artistName,
+        album = req.params.albumTitle,
+        request = lastfm.request('album.getInfo', {
+        artist: artist,
+        album:  albun,
         handlers: {
             success: function(apiResp) {
                 var data = JSON.parse(apiResp);
@@ -148,16 +150,18 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                     res.contentType('application/json');
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }else{
-                    var image = 'css/images/no_picture.png';
+                    var image = 'css/images/no_picture.png',
+                        albumName = album,
+                        releaseDate = data.releasedate.trim().split(',')[0]||'',//getting just date without time
+                        songsCount = data.tracks.length||'';
                     if(data && data.image[2]){
                         image=data.image[2]['#text']||'css/images/no_picture.png';//medium
                     }
-                    var albumName = album;
+
                     if(data&& data.name && data.name.trim()){
                         albumName=data.name.trim()||album
                     }
-                    var releaseDate = data.releasedate.trim().split(',')[0]||'';//getting just date without time
-                    var songsCount = data.tracks.length||'';
+
                     res.contentType('application/json');
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }
