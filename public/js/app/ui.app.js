@@ -126,7 +126,8 @@ $(function(){
         },
         keyPressed:function(event)
         {
-            var keyCode = event.keyCode;
+            var keyCode = event.keyCode,
+                currentSong =  AppController.playlistView.currentSong();
             if(keyCode==40){
                 //down arrow
                 AppController.playlistView.next(false);
@@ -136,14 +137,18 @@ $(function(){
             }else if(keyCode==13){
                 //enter
                 AppController.playlistView.destroyFileURL();
-                AppController.playlistView.currentSong().view.playSong();
+                if(currentSong){
+                    currentSong.view.playSong();
+                }
             }else if(keyCode==32){
                 //space
                 AppController.playerCtrl.togglePause();
             }else if(keyCode==46){
                 //delete
                 //delete song from playlist
-                AppController.playlistView.currentSong().view.remove();
+               if(currentSong){
+                    currentSong.view.remove();
+                }
             }else if(keyCode==27){
                 //escape
                 //comeback to the normal view
