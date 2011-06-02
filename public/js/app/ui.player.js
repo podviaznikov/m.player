@@ -162,10 +162,10 @@ $(function(){
                 pos = (timeInSeconds / duration) * 100,
                 mins = Math.floor(currentTime/60,10),
                 secs = timeInSeconds - mins*60,
-                timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs);
+                timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
+                currentSong = AppController.playlistView.currentSong;
             if(rem==0){
-                var currentSong = AppController.playlistView.currentSong;
-                //lastFM.scrobble()
+                lastFM.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
             }
             this.timeCounter.text(timeCounter);
