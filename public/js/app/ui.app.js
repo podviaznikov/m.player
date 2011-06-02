@@ -103,6 +103,7 @@ $(function(){
             this.el.removeClass('fullscreen');
             this.infoPanels.addClass('hidden');
             this.helpPanels.removeClass('hidden');
+            AppController.visualizationView.hide();
         },
         hideHelp:function(){
             this.isRegularMode=true;
@@ -126,19 +127,25 @@ $(function(){
         keyPressed:function(event)
         {
             var keyCode = event.keyCode;
-            if(keyCode==40){//down arrow
+            if(keyCode==40){
+                //down arrow
                 AppController.playlistView.next(false);
-            } else if(keyCode==38){//up key
+            } else if(keyCode==38){
+                //up key
                 AppController.playlistView.previous(false);
-            }else if(keyCode==13){//enter
+            }else if(keyCode==13){
+                //enter
                 AppController.playlistView.destroyFileURL();
                 AppController.playlistView.currentSong().view.playSong();
-            }else if(keyCode==32){//space
+            }else if(keyCode==32){
+                //space
                 AppController.playerCtrl.togglePause();
-            }else if(keyCode==46){//delete
+            }else if(keyCode==46){
+                //delete
                 //delete song from playlist
                 AppController.playlistView.currentSong().view.remove();
-            }else if(keyCode==27){//escape
+            }else if(keyCode==27){
+                //escape
                 //comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
