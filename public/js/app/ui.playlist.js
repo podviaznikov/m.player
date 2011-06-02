@@ -209,9 +209,11 @@ $(function(){
             var songFileName=this.el.dataset.filename;
             fs.util.createFileURL(songFileName,this.songFileLoaded);
         },
-        songFileLoaded:function(url){
-            this.options.playlist.trigger('url:create',url);
-            AppController.playerCtrl.play(url);
+        songFileLoaded:function(er,url){
+            if(!er){
+                this.options.playlist.trigger('url:create',url);
+                AppController.playerCtrl.play(url);
+            }
         }
     });
 });
