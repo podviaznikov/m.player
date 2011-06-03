@@ -25,7 +25,7 @@ $(function(){
             this.playLists.fetch();
         },
         keyPressed:function(event){
-            var keyCode = event.keyCod;
+            var keyCode = event.keyCode;
             if(keyCode==13){
                 this.filterLibrary();
             }
