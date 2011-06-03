@@ -1,3 +1,48 @@
+.modal_dialog
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    vertical-align:middle;
+    visibility:hidden;
+    opacity:0;
+    transition: opacity 1s ease-in;
+    -webkit-transition: opacity 1s ease-in;
+}
+.modal_dialog.active
+{
+    visibility:visible;
+    opacity:1;
+    transition: opacity 1s ease-in;
+    -webkit-transition: opacity 1s ease-in;
+}
+.dialog_content
+{
+    width: 400px;
+    height: 60px;
+    margin: 15% auto;
+    background-color:white;
+    text-align:center;
+}
+#uploading_files_progress header
+{
+    padding-top: 10px;
+    margin-bottom: 5px;
+}
+progress
+{
+    width: 300px;
+    margin-right: 5px;
+}
+progress::-webkit-progress-value
+{
+    background-color: #FF6900;
+}
+
 *
 {
     margin: 0;
@@ -673,7 +718,7 @@ footer.saved_playlist_toolbar
     margin-right:5px;
 }
 
-//media queries
+
 @media screen and (min-width: 1025px) and (max-width: 1280px)
 {
     .middle_layout_panel

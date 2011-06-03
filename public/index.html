@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html manifest="app.mf">
+<!--<html manifest="app.mf">-->
+<html>
 <head>
     <title>m.player</title>
     <meta charset="utf-8">
     <meta name="author" content="Enginimation Studio(enginimation.com)">
     <meta name="description" content="Offline/online music player that works just in your browser">
     <meta name="keywords" content="player,music player,html5,offline player,lastfm,mp3">
-    <link rel='stylesheet' href='css/styles.css' />
+    <link rel="stylesheet" href="css/styles.css" >
+    <script src="js/lib/async.min.js"></script>
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/id3.reader.js"></script>
     <script src="js/lib/libs.bundle.js"></script>
@@ -16,6 +18,12 @@
     <script>$(function(){AppController.init();});</script>
 </head>
 <body>
+<aside id="file_upload_status_dialog" class="modal_dialog">
+    <section id="uploading_files_progress" class="dialog_content">
+        <header>Importing: <span>Ammy WineHouse.mp3</span></header>
+        <progress value="0" min="0" max="100"></progress><span id="file_index"></span>/<span id="total_files_amount"></span>
+    </section>
+</aside>
 <section id="how_to_use" class="info_panel help_panel hidden left_layout_panel">
     <header><h1>How to use</h1></header>
     <section>

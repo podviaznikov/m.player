@@ -143,11 +143,11 @@ var PlayList = Porridge.Model.extend({
     }
 });
 var PlayLists = Porridge.Collection.extend({model: PlayList});
-"use strict";
 var ui={};
 $(function(){
     ui.AppView = Backbone.View.extend({
         el: $('body'),
+        progress:$('#uploading_files_progress progress'),
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
         mainPanels:$('section.main_panel'),
@@ -163,8 +163,8 @@ $(function(){
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','parseFilesMetaData','saveDataToLib',
-                    'importMusicDirectory','importMusicFiles')
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed',
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile');
         },
         importMusicDirectory:function(){
             this.$('#drop_folder').click();
@@ -187,57 +187,54 @@ $(function(){
             }
         },
         handleFileSelect:function(files){
-            var audioFiles=_.select(files, function(file){return file.type.match('audio/mp3')}),
-                filesContents=[],
-                parseFiles = _.after(audioFiles.length,this.parseFilesMetaData);
-            _.each(audioFiles,function(file,index){
-                fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
-                    if(readError){return;}
-                    filesContents[index]=data;
-                    parseFiles(filesContents,audioFiles);
-                });
+            var self = this,
+                fileProcessingFunctions=[];
+                this.$('#file_upload_status_dialog').addClass('active');
+            _.each(files,function(file,index)
+            {
+                var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
+                fileProcessingFunctions.push(bindedFunct);
+            });
+            async.series(fileProcessingFunctions,
+            function(err, results){
+                self.$('#file_upload_status_dialog').removeClass('active');
             });
         },
-        parseFilesMetaData:function(filesContents,audioFiles){
-            var songs=new SongsList,
-                files=audioFiles,
-                saveToLib = _.after(files.length,this.saveDataToLib);
-            _.each(filesContents,function(data,index){
+        //some refactoring should be done
+        processOneAudioFile:function(file,index,filesAmount,callback){
+            var percent = Math.floor(((index+1)/filesAmount)*100),
+                progressElement = this.$(this.progress);
+            this.$('#file_index').html(index);
+            this.$('#total_files_amount').html(filesAmount);
+            this.$('#uploading_files_progress header span').html(file.name);
+            fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
+                if(readError){return;}
                 ID3v2.parseFile(data,function(tags){
-                    var initialFile = files[index];
                     var song = new Song();
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
-                    songs.add(song);
-                    saveToLib(songs,files);
-                });
+                    fs.write.file(initialFile,function(writeError){
+                        if(!writeError){
+                            song.save();
+                            AppController.playlistView.songs.add(song);
+                            progressElement.val(percent);
+                            callback(null);
+                        }
+                    },song.get('fileName'));
+               });
             });
         },
-        saveDataToLib:function(songs,audioFiles){
-            songs.each(function(song,index){
-                var initialFile=audioFiles[index];
-                fs.write.file(initialFile,function(writeError){
-                    if(!writeError){
-                        song.save();
-                        AppController.playlistView.songs.add(song);
-                    }
-                },song.get('fileName'));
-            });
-            var allArtists=songs.map(function(song){return song.get('artist');}),
-                artists=_.unique(allArtists);
-            _.each(artists,function(artistName){
-                var artist=AppController.libraryMenu.artists.findByName(artistName);
-                if(!artist){
-                    artist = new Artist({name:artistName});
-                    dataService.getArtistImage(artist.get('name'),function(image){
-                        artist.set({image:image});
-                        artist.save();
-                        AppController.libraryMenu.artists.add(artist);
-                    });
-                }
-            });
-        },
+//                var artist=AppController.libraryMenu.artists.findByName(artistName);
+//                if(!artist){
+//                    artist = new Artist({name:artistName});
+//                    dataService.getArtistImage(artist.get('name'),function(image){
+//                        artist.set({image:image});
+//                        artist.save();
+//                        AppController.libraryMenu.artists.add(artist);
+//                    });
+//                }
+
         showHelp:function(){
             this.isRegularMode=false;
             this.el.removeClass('fullscreen');
