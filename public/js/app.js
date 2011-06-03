@@ -338,12 +338,13 @@ $(function(){
         events:{
             'click #show_artists':'showArtists',
             'click #show_playlists':'showPlayLists',
-            'blur input':'filterLibrary'
+            'blur input':'filterLibrary',
+            'keyup input':'keyPresed'
         },
         initialize:function(){
             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary');
+            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary','keyPressed');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -352,6 +353,13 @@ $(function(){
             this.artists.fetch();
 
             this.playLists.fetch();
+        },
+        keyPressed:function(event)
+        {
+            var keyCode = event.keyCod,currentSong=undefined;
+            if(keyCode==13){
+                this.filterLibrary();
+            }
         },
         allArtistsLoaded:function(){
             var lastArtist=settings.getLastArtist();
