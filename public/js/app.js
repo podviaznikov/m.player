@@ -230,7 +230,7 @@ $(function(){
                 var artist=AppController.libraryMenu.artists.findByName(artistName);
                 if(!artist){
                     artist = new Artist({name:artistName});
-                    lastFM.getArtistImage(artist.get('name'),function(image){
+                    dataService.getArtistImage(artist.get('name'),function(image){
                         artist.set({image:image});
                         artist.save();
                         AppController.libraryMenu.artists.add(artist);
@@ -322,7 +322,7 @@ $(function(){
         },
         render:function(){
             if(this.model){
-                lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
+                dataService.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
             }
             return this;
         }
@@ -607,7 +607,7 @@ $(function(){
         },
         selectSong:function(song){
             this.selectedSong=song;
-            lastFM.getAlbumImage(this.selectedSong.get('artist'),this.selectedSong.get('album'),this.renderAlbumInfo);
+            dataService.getAlbumImage(this.selectedSong.get('artist'),this.selectedSong.get('album'),this.renderAlbumInfo);
         },
         renderAlbumInfo:function(image){
             this.infoEl.html(_.template(this.songInfoTpl,{
@@ -795,7 +795,7 @@ $(function(){
             $(this.el).append(html);
         },
         render:function(){
-            lastFM.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
+            dataService.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
             return this;
         },
         playSongs:function(){
@@ -1057,7 +1057,7 @@ $(function(){
                 timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
                 currentSong = AppController.playlistView.currentSong();
             if(rem==0){
-                lastFM.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
+                dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
             }
             this.timeCounter.text(timeCounter);
