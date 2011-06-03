@@ -6,6 +6,7 @@ js/lib/fs.js
 js/lib/libs.bundle.js
 js/lib/jquery.min.js
 js/lib/id3.reader.js
+js/lib/async.min.js
 css/styles.css
 css/images/no_picture.png
 /js/ext/data.service.js
