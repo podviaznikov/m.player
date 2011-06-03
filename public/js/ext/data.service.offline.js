@@ -4,7 +4,7 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player.
 "use strict";
-var lastFM=
+var dataService=
 {
     scrobble:function(track,artist,trackLength)
     {
@@ -24,10 +24,10 @@ var lastFM=
     },
     getAlbumInfo:function(artist,album,callback)
     {
-        var image='css/images/no_picture.png';
-        var albumName=album;
-        var releaseDate='na';
-        var songsCount='na';
+        var image='css/images/no_picture.png',
+            albumName=album,
+            releaseDate='no information',
+            songsCount='no information';
         callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
     }
 };

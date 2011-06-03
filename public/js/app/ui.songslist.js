@@ -73,7 +73,7 @@ $(function(){
             $(this.el).append(html);
         },
         render:function(){
-            lastFM.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
+            dataService.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
             return this;
         },
         playSongs:function(){

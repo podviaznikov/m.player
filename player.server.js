@@ -1,11 +1,8 @@
-// m.player
-// (c) 2011 Enginimation Studio (http://enginimation.com).
-// m.player may be freely distributed under the MIT license.
-// For all details and documentation:
-// https://github.com/podviaznikov/m.player
+/**(c) 2011 Enginimation Studio (http://enginimation.com). May be freely distributed under the MIT license.*/
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
+    RedisStore = require('connect-redis'),
     LastFmNode = require('lastfm').LastFmNode,
     lastfm = new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
@@ -20,7 +17,7 @@ app.configure(function(){
     app.use(express.bodyParser());
     //session support
     app.use(express.cookieParser());
-    app.use(express.session({ secret: 'super_hard_session_secret'}));
+    app.use(express.session({store: new RedisStore, secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 14400000000000000 }}));
     //router
     app.use(app.router);
     //public folder for static files
@@ -145,8 +142,8 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                 if(!data){
                     var image='css/images/no_picture.png',
                         albumName=album,
-                        releaseDate='na',
-                        songsCount='na';
+                        releaseDate='no information',
+                        songsCount='no information';
                     res.contentType('application/json');
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }else{
@@ -167,10 +164,10 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                 }
            },
             error: function(error) {
-                var image='css/images/no_picture.png';
-                var albumName=album;
-                var releaseDate='na';
-                var songsCount='na';
+                var image='css/images/no_picture.png',
+                    albumName=album,
+                    releaseDate='no information',
+                    songsCount='no information';
                 res.contentType('application/json');
                 res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
             }
@@ -178,16 +175,13 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
     });
 });
 function scrobble(trackName,artist,trackLength,key,user){
-     var track ={
-        name:trackName,
-        artist:{
-            '#text':artist
-        }
-     },
-        session = lastfm.session(user,key),
-        startedTime = Math.round(((new Date().getTime()) / 1000) - trackLength);
-        LastFmUpdate = lastfm.update('scrobble', session, {
-            track: track,
+     var session = lastfm.session(user,key),
+         startedTime = Math.round(((new Date().getTime()) / 1000) - trackLength),
+         LastFmUpdate = lastfm.update('scrobble', session, {
+            track: {
+                name:trackName,
+                artist:{'#text':artist}
+            },
             timestamp: startedTime
          });
      LastFmUpdate.on('success',function(track)
@@ -202,6 +196,5 @@ function scrobble(trackName,artist,trackLength,key,user){
         util.log('unsuccesfull scrobble='+error);
      });
 };
-
 app.listen(8083);
 util.log('started app on 8083');

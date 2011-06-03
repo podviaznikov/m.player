@@ -159,7 +159,7 @@ $(function(){
                 timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
                 currentSong = AppController.playlistView.currentSong();
             if(rem==0){
-                lastFM.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
+                dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
             }
             this.timeCounter.text(timeCounter);

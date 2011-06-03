@@ -85,7 +85,7 @@ $(function(){
                 var artist=AppController.libraryMenu.artists.findByName(artistName);
                 if(!artist){
                     artist = new Artist({name:artistName});
-                    lastFM.getArtistImage(artist.get('name'),function(image){
+                    dataService.getArtistImage(artist.get('name'),function(image){
                         artist.set({image:image});
                         artist.save();
                         AppController.libraryMenu.artists.add(artist);
@@ -177,7 +177,7 @@ $(function(){
         },
         render:function(){
             if(this.model){
-                lastFM.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
+                dataService.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
             }
             return this;
         }

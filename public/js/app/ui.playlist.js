@@ -100,7 +100,7 @@ $(function(){
         },
         selectSong:function(song){
             this.selectedSong=song;
-            lastFM.getAlbumImage(this.selectedSong.get('artist'),this.selectedSong.get('album'),this.renderAlbumInfo);
+            dataService.getAlbumImage(this.selectedSong.get('artist'),this.selectedSong.get('album'),this.renderAlbumInfo);
         },
         renderAlbumInfo:function(image){
             this.infoEl.html(_.template(this.songInfoTpl,{
