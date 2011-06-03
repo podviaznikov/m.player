@@ -4,6 +4,7 @@ index.html
 js/app.js
 js/lib/fs.js
 js/lib/libs.bundle.js
+js/lib/jquery.min.js
 css/styles.css
 css/images/no_picture.png
 /js/ext/data.service.js
