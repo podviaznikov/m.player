@@ -2,7 +2,7 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
-    RedisStore = require('connect-redis'),
+    RedisStore = require('connect-redis')(express),
     LastFmNode = require('lastfm').LastFmNode,
     lastfm = new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
