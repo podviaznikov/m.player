@@ -339,7 +339,7 @@ $(function(){
             'click #show_artists':'showArtists',
             'click #show_playlists':'showPlayLists',
             'blur input':'filterLibrary',
-            'keyup input':'keyPresed'
+            'keyup input':'keyPressed'
         },
         initialize:function(){
             this.artists=new ArtistsList;//should be first in this method!
@@ -354,9 +354,8 @@ $(function(){
 
             this.playLists.fetch();
         },
-        keyPressed:function(event)
-        {
-            var keyCode = event.keyCod,currentSong=undefined;
+        keyPressed:function(event){
+            var keyCode = event.keyCod;
             if(keyCode==13){
                 this.filterLibrary();
             }
