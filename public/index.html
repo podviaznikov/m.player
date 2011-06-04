@@ -8,7 +8,6 @@
     <meta name="keywords" content="player,music player,html5,offline player,lastfm,mp3">
     <link rel="stylesheet" href="css/styles.css" >
     <script src="js/lib/async.min.js"></script>
-    <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/id3.reader.js"></script>
     <script src="js/lib/libs.bundle.js"></script>
     <script src="js/lib/fs.js"></script>
@@ -54,7 +53,6 @@
         <span><a href="http://documentcloud.github.com/underscore/">underscore.js</a> - utility library for JavaScript.</span>
         <span><a href="http://documentcloud.github.com/backbone/">backbone.js</a> - tiny MVC framework that helped to organize code.</span>
         <span><a href="http://jquery.com/">jQuery</a> - most famous JavaScript library for dealing with DOM.</span>
-        <span><a href="http://jqueryui.com/">jQuery UI</a> - set of UI widgets.</span>
         <span><a href="https://github.com/podviaznikov/fs.js">fs.js</a> - simple wrapper for HTML 5 File Api.</span>
         <span><a href="https://github.com/antimatter15/js-id3v2">id3</a> - ID3v2 reader for JavaScript.</span>
         <span><a href="http://last.fm">last.fm</a> - great music service.</span>
@@ -97,8 +95,8 @@
     <span id="play_toggle" class="control paused" title="Play"></span>
     <span id="next_song" class="control" title="Next"></span>
     <span id="sound_toggle" class="control on" title="Mute"></span>
-    <span id="volume_gutter" title="Volume"><span id="volume_handle" class="control ui-slider-handle"></span></span>
-    <span id="music_gutter" title="Seek"><span id="music_handle" class="control ui-slider-handle"></span></span>
+    <meter id ="volume_slider" value="0.5" min="0" max="1"></meter>
+    <progress id="music_slider" min="0" value="0"></progress>
     <label id="time_counter">0:00</label>
     <span id="help" class="control off" title="Help"></span>
     <span id="expand" class="control on" title="Full screen mode"></span>

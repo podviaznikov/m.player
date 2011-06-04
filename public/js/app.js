@@ -908,13 +908,11 @@ $(function(){
         soundToggle:$('#sound_toggle'),
         shuffleToggle:$('#shuffle_toggle'),
         repeatToggle:$('#repeat_toggle'),
-        handleMusicProgress:$('#music_gutter #music_handle'),
-        handleVolume:$('#volume_gutter #volume_handle'),
         playerModeToggle:$('#expand'),
         helpModeToggle:$('#help'),
         loadedMusicSlider:false,
-        manualSeekMusicSlider:false,
-        volumeGutter:$('#volume_gutter'),
+        volumeSlider:$('#volume_slider'),
+        musicSlider:$('#music_slider'),
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounter:$('#time_counter'),
@@ -933,21 +931,16 @@ $(function(){
             'click #expand.on':'turnOnFullScreen',
             'click #expand.off':'turnOffFullScreen',
             'click #help.on':'turnOffHelpMode',
-            'click #help.off':'turnOnHelpMode'
+            'click #help.off':'turnOnHelpMode',
+            'click #volume_slider':'changedVolume',
+            'click #music_slider':'changedMusicProgress'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
-                    'turnOnHelpMode','turnOffHelpMode');
+                    'turnOnHelpMode','turnOffHelpMode','changedMusicProgress');
             this.audioEL = new ui.AudioElement({player:this});
-            this.volumeGutter.slider({
-                value:settings.getVolume(),
-                step:0.01,
-                range:'min',
-                max:1,
-                animate:true,
-                stop:this.changedVolume
-            });
+            this.volumeSlider.attr('value',settings.getVolume());
         },
         turnOnHelpMode:function(){
             this.helpModeToggle.removeClass('off');
@@ -971,9 +964,24 @@ $(function(){
             this.playerModeToggle.attr('title','Full screen mode');
             AppController.appView.hideFullScreen();
         },
-        changedVolume:function(e,ui){
-            this.audioEL.setVolume(ui.value);
-            settings.saveVolume(ui.value);
+        changedMusicProgress:function(e){
+            if(this.loadedMusicSlider){
+                var newX=e.offsetX,
+                    width=this.musicSlider.width(),
+                    max=parseFloat(this.musicSlider.attr('max'));
+                console.log(newX,width,max);
+                var newProgressValue = (newX/width*max);
+                this.musicSlider.attr('value',newProgressValue);
+                this.audioEL.setTime(newProgressValue);
+            }
+        },
+        changedVolume:function(e){
+            var newX=e.offsetX,
+                width=this.volumeSlider.width(),
+                percent = newX/width;
+            this.audioEL.setVolume(percent);
+            this.volumeSlider.attr('value',percent);
+            settings.saveVolume(percent);
         },
         soundOn:function(){
             this.soundToggle.attr('title','Mute');
@@ -1051,8 +1059,7 @@ $(function(){
             AppController.playlistView.next();
         },
         updateAudioProgress:function(duration,currentTime){
-            var self = this,
-                timeInSeconds = parseInt(currentTime, 10),
+            var timeInSeconds = parseInt(currentTime, 10),
                 songDuration = parseInt(duration,10),
                 rem = parseInt(duration - currentTime, 10),
                 pos = (timeInSeconds / duration) * 100,
@@ -1061,32 +1068,17 @@ $(function(){
                 timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
                 currentSong = AppController.playlistView.currentSong();
             if(rem==0){
+                this.loadedMusicSlider=false;
                 dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
+
             }
             this.timeCounter.text(timeCounter);
-            if (!this.manualSeekMusicSlider){
-                var posPer=pos + '%';
-                this.handleMusicProgress.css('left',posPer);
-                this.$('#music_gutter .ui-slider-range').width(posPer);
-            }
+            this.musicSlider.attr('value',currentTime);
+
             if (!this.loadedMusicSlider){
                 this.loadedMusicSlider = true;
-
-                $('#music_gutter').slider({
-                    value:0,
-                    step: 0.01,
-                    range: "min",
-                    max: duration,
-                    animate: true,
-                    start:function(){
-                        self.manualSeekMusicSlider = true;
-                    },
-                    stop:function(e,ui){
-                        self.manualSeekMusicSlider = false;
-                        self.audioEL.setTime(ui.value);
-                    }
-                });
+                this.musicSlider.attr('max',duration);
             }
         }
     });
