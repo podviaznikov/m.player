@@ -74,22 +74,22 @@ $(function(){
                             song.save();
                             AppController.playlistView.songs.add(song);
                             progressElement.val(percent);
+                            var artistName = song.get('artist'),
+                                artist=AppController.libraryMenu.artists.findByName(artistName);
+                            if(!artist){
+                                artist = new Artist({name:artistName});
+                                dataService.getArtistImage(artist.get('name'),function(image){
+                                    artist.set({image:image});
+                                    artist.save();
+                                    AppController.libraryMenu.artists.add(artist);
+                                });
+                            }
                             callback(null);
                         }
                     },song.get('fileName'));
                });
             });
         },
-//                var artist=AppController.libraryMenu.artists.findByName(artistName);
-//                if(!artist){
-//                    artist = new Artist({name:artistName});
-//                    dataService.getArtistImage(artist.get('name'),function(image){
-//                        artist.set({image:image});
-//                        artist.save();
-//                        AppController.libraryMenu.artists.add(artist);
-//                    });
-//                }
-
         showHelp:function(){
             this.isRegularMode=false;
             this.el.removeClass('fullscreen');
