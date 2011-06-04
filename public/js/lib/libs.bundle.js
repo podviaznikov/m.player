@@ -78,6 +78,22 @@ UUID._hexAligner=UUID._getIntAligner(16);
 // (c) 2011 Enginimation Studio (http://enginimation.com).
 // backbone-indexdb.js may be freely distributed under the MIT license.
 "use strict",Porridge.Model=Backbone.Model.extend({initialize:function(){this.get("id")||(this.id=UUID.generate(),this.set({id:this.id}))},save:function(){var a=this.constructor.definition.name;Porridge.save(a,this.toJSON(),this.id)},destroy:function(){var a=this.constructor.definition.name,b=this.constructor.definition.key||"id",c=this,d=function(){c.trigger("destroy",c,c.collection)};Porridge.remove(a,this.get(b),d)}},{definition:{}}),Porridge.Collection=Backbone.Collection.extend({fetch:function(a){a||(a={});var b=this,c=this.model.definition.name,d=function(a){b.add(new b.model({attributes:a}))};Porridge.all(c,d,function(){b.trigger("retrieved")},a.error)},fetchByKey:function(a,b){var c=this,d=this.model.definition.name,e=function(a){c.add(new c.model({attributes:a}))};Porridge.allByKey(d,a,b,e,function(){c.trigger("retrieved")})}})
+var global=this,fs;global.requestFileSystem=global.requestFileSystem||global.webkitRequestFileSystem;global.BlobBuilder=global.BlobBuilder||global.WebKitBlobBuilder;global.resolveLocalFileSystemURL=global.resolveLocalFileSystemURL||global.webkitResolveLocalFileSystemURL;global.URL=global.URL||global.webkitURL;
+fs=Object.create({},{version:{value:"0.9"},log:{value:!1,writable:!0},maxSize:{value:10695475200,writable:!0},FILE_EXPECTED:{value:50},BROWSER_NOT_SUPPORTED:{value:51},getNativeFS:{value:function(a,b){if(global.requestFileSystem){var c=global.PERSISTENT,b=b||{};if(b.tmp)c=global.TEMPORARY;global.requestFileSystem(c,this.maxSize,function(b){a(void 0,b)},function(b){a(b)})}else a(fs.BROWSER_NOT_SUPPORTED)}},createBlob:{value:function(a,b){var c=new global.BlobBuilder;c.append(a);return c.getBlob(b)}},
+base64StringToBlob:{value:function(a,b){for(var c=global.atob(a),d=c.length,e=new global.Int8Array(d),f=0;f<d;f++)e[f]=c.charCodeAt(f);return this.createBlob(e.buffer,b)}}});Object.defineProperty(global.File.prototype,"shortName",{value:function(){return this.name.substring(0,this.name.lastIndexOf("."))}});Object.defineProperty(global.File.prototype,"extension",{value:function(){return this.name.substring(this.name.lastIndexOf("."))}});
+Object.defineProperty(global.File.prototype,"sizeInKB",{value:function(){return(this.size/1014).toFixed(1)}});Object.defineProperty(global.File.prototype,"sizeInMB",{value:function(){return(this.size/1038336).toFixed(1)}});Object.defineProperty(global.File.prototype,"sizeInGB",{value:function(){return(this.size/1063256064).toFixed(1)}});Object.defineProperty(global.FileError.prototype,"message",{value:function(){return this.code}});
+fs.io=Object.create({},{getFile:{value:function(a,b,c){a.getFile(b,{create:!0},function(b){c(void 0,b)},function(b){c(b)})}},getFileFromRoot:{value:function(a,b,c){fs.getNativeFS(function(c,e){c?b(c):fs.io.getFile(e.root,a,b)},c)}},readDirectory:{value:function(a,b){fs.util.getDirectory(a,function(a,d){a?b(a):fs.util.readEntriesFromDirectory(d,b)},{})}},readRootDirectory:{value:function(a){fs.getNativeFS(function(b,c){b?a(b):fs.util.readEntriesFromDirectory(c.root,a)},{})}},getDirectory:{value:function(a,
+b,c){c(void 0,a.getDirectory(b,{create:!0}))}},getDirectoryFromRoot:{value:function(a,b,c){fs.getNativeFS(function(c,e){c?b(c):fs.util.getDirectory(e.root,a,b)},c)}}});
+fs.util=Object.create({},{getReaderUsingFileName:{value:function(a,b,c,d){fs.io.getFileFromRoot(a,function(a,d){d.file(function(a){fs.util.getReader(a,b,c)},function(a){b(a)})},d)}},getReader:{value:function(a,b,c){var d=new global.FileReader;d.onloadend=function(){b(void 0,this.result,a)};d[c](a)}},readEntriesFromDirectory:{value:function(a,b){a.createReader().readEntries(function(a){b(void 0,a)},function(a){b(a)})}},readAsArrayBuffer:{value:function(a,b,c){this.getReaderUsingFileName(a,b,"readAsArrayBuffer",
+c)}},readFileAsArrayBuffer:{value:function(a,b){this.getReader(a,b,"readAsArrayBuffer")}},readAsBinaryString:{value:function(a,b,c){this.getReaderUsingFileName(a,b,"readAsBinaryString",c)}},readFileAsBinaryString:{value:function(a,b){this.getReader(a,b,"readAsBinaryString")}},readAsDataUrl:{value:function(a,b,c){this.getReaderUsingFileName(a,b,"readAsDataURL",c)}},readAsText:{value:function(a,b,c){this.getReaderUsingFileName(a,b,"readAsText",c)}},remove:{value:function(a,b){fs.io.getFileFromRoot(a,
+function(a,d){d.remove(function(){b(void 0)},function(a){b(a)})})}},writeBase64StrToFile:{value:function(a,b,c,d,e){b=fs.base64StringToBlob(b,c);this.writeBlobToFile(a,b,d,e)}},writeBlobToFile:{value:function(a,b,c,d){fs.io.getFileFromRoot(a,function(a,d){a?c(a):d.createWriter(function(a){a.onwriteend=function(){console.log("writing to file finished.");c(void 0)};a.onerror=function(){console.log("Error writing to file:"+this.error);c(this.error)};a.write(b)},function(a){c(a)})},d)}},writeTextToFile:{value:function(a,
+b,c,d){b=fs.createBlob(b,"text/plain");fs.util.writeBlobToFile(a,b,c,d)}},writeArrayBufferToFile:{value:function(a,b,c,d,e){b=fs.createBlob(c,b);fs.util.writeBlobToFile(a,b,d,e)}},writeFileToFile:{value:function(a,b,c){fs.io.getFileFromRoot(c.filename||a.name,function(c,e){c?b(c):e.createWriter(function(c){c.onwriteend=function(){console.log("writing to file finished.");b(void 0)};c.onerror=function(){console.log("Error writing to file:"+this.error);b(this.error)};c.write(a)},function(a){b(a)})},
+c)}},createFileURL:{value:function(a,b){fs.io.getFileFromRoot(a,function(a,d){a?b(a):d.file(function(a){a=global.URL.createObjectURL(a);b(void 0,a)})})}},destroyFileURL:{value:function(a){global.URL.revokeObjectURL(a)}}});
+fs.read=Object.create({},{asDataUrl:{value:function(a,b){fs.util.readAsDataUrl(a,b,{})}},tmpFileAsDataUrl:{value:function(a,b){fs.util.readAsDataUrl(a,b,{tmp:!0})}},asText:{value:function(a,b){fs.util.readAsText(a,b,{})}},tmpFileAsText:{value:function(a,b){fs.util.readAsText(a,b,{tmp:!0})}},asBinaryString:{value:function(a,b){fs.util.readAsBinaryString(a,b,{})}},tmpFileAsBinaryString:{value:function(a,b){fs.util.readAsBinaryString(a,b,{tmp:!0})}},asArrayBuffer:{value:function(a,b){fs.util.readAsArrayBuffer(a,
+b,{})}},tmpFileAsArrayBuffer:{value:function(a,b){fs.util.readAsArrayBuffer(a,b,{tmp:!0})}},fileAsText:{value:function(a,b){fs.util.getReader(a,b,"readAsText")}},fileAsDataUrl:{value:function(a,b){fs.util.getReader(a,b,"readAsDataURL")}},fileAsArrayBuffer:{value:function(a,b){fs.util.readFileAsArrayBuffer(a,b)}},fileAsBinaryString:{value:function(a,b){fs.util.readFileAsBinaryString(a,b)}}});
+fs.write=Object.create({},{file:{value:function(a,b,c){fs.util.writeFileToFile(a,b,{filename:c})}},fileToTmpFile:{value:function(a,b,c){fs.util.writeFileToFile(a,b,{tmp:!0,filename:c})}},blob:{value:function(a,b,c){fs.util.writeBlobToFile(a,b,c,{})}},blobToTmpFile:{value:function(a,b,c){fs.util.writeBlobToFile(a,b,c,{tmp:!0})}},text:{value:function(a,b,c){fs.util.writeTextToFile(a,b,c,{})}},textToTmpFile:{value:function(a,b,c){fs.util.writeTextToFile(a,b,c,{tmp:!0})}},base64Str:{value:function(a,
+b,c,d){fs.util.writeBase64StrToFile(a,b,c,d,{})}},base64StrToTmpFile:{value:function(a,b,c,d){fs.util.writeBase64StrToFile(a,b,c,d,{tmp:!0})}}});
+
 ID3v2 =
 {
 	parseStream: function(stream, onComplete)
@@ -85,44 +101,13 @@ ID3v2 =
 
 	var TAGS =
     {
-    "AENC": "Audio encryption",
-    "APIC": "Attached picture",
-    "COMM": "Comments",
-    "COMR": "Commercial frame",
-    "ENCR": "Encryption method registration",
-    "EQUA": "Equalization",
-    "ETCO": "Event timing codes",
-    "GEOB": "General encapsulated object",
-    "GRID": "Group identification registration",
-    "IPLS": "Involved people list",
-    "LINK": "Linked information",
-    "MCDI": "Music CD identifier",
-    "MLLT": "MPEG location lookup table",
-    "OWNE": "Ownership frame",
-    "PRIV": "Private frame",
-    "PCNT": "Play counter",
-    "POPM": "Popularimeter",
-    "POSS": "Position synchronisation frame",
-    "RBUF": "Recommended buffer size",
-    "RVAD": "Relative volume adjustment",
-    "RVRB": "Reverb",
-    "SYLT": "Synchronized lyric/text",
-    "SYTC": "Synchronized tempo codes",
     "TALB": "album",
-    "TBPM": "BPM",
-    "TCOM": "Composer",
     "TCON": "genre",
-    "TCOP": "Copyright message",
     "TDAT": "date",
-    "TDLY": "Playlist delay",
-    "TENC": "Encoded by",
     "TEXT": "Lyricist",
     "TFLT": "File type",
     "TIME": "time",
-    "TIT1": "Content group description",
     "TIT2": "title",
-    "TIT3": "Subtitle",
-    "TKEY": "Initial key",
     "TLAN": "Language(s)",
     "TLEN": "length",
     "TMED": "Media type",
@@ -134,31 +119,11 @@ ID3v2 =
     "TOWN": "File owner",
     "TPE1": "artist",
     "TPE2": "Band",
-    "TPE3": "Conductor",
-    "TPE4": "Interpreted, remixed, or otherwise modified by",
     "TPOS": "Part of a set",
-    "TPUB": "Publisher",
     "TRCK": "track",
-    "TRDA": "Recording dates",
-    "TRSN": "Internet radio station name",
-    "TRSO": "Internet radio station owner",
     "TSIZ": "size",
-    "TSRC": "ISRC (international standard recording code)",
-    "TSSE": "Software/Hardware and settings used for encoding",
     "TYER": "year",
-    "TXXX": "User defined text information frame",
-    "UFID": "Unique file identifier",
-    "USER": "Terms of use",
-    "USLT": "Unsychronized lyric/text transcription",
-    "WCOM": "Commercial information",
-    "WCOP": "Copyright/Legal information",
-    "WOAF": "Official audio file webpage",
-    "WOAR": "Official artist/performer webpage",
-    "WOAS": "Official audio source webpage",
-    "WORS": "Official internet radio station homepage",
-    "WPAY": "Payment",
-    "WPUB": "Publishers official webpage",
-    "WXXX": "User defined URL link frame"
+    "UFID": "Unique file identifier"
   };
 
 	var TAG_MAPPING_2_2_to_2_3 = {
@@ -501,9 +466,6 @@ ID3v2 =
 	read(3, function(header){
 		if(header == "ID3"){
 			read(2, function(s, version){
-				tag.version = "ID3v2."+version[0]+'.'+version[1];
-				tag.revision = version[0];
-				console.log('version',tag.version);
 				read(1, function(s, flags){
 					//todo: parse flags
 					flags = pad(flags[0]);
@@ -556,3 +518,4 @@ parseFile: function(binData, onComplete)
 	return [ID3v2.parseStream(read, onComplete)];
 }
 }
+

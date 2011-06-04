@@ -5,44 +5,13 @@ ID3v2 =
 
 	var TAGS =
     {
-    "AENC": "Audio encryption",
-    "APIC": "Attached picture",
-    "COMM": "Comments",
-    "COMR": "Commercial frame",
-    "ENCR": "Encryption method registration",
-    "EQUA": "Equalization",
-    "ETCO": "Event timing codes",
-    "GEOB": "General encapsulated object",
-    "GRID": "Group identification registration",
-    "IPLS": "Involved people list",
-    "LINK": "Linked information",
-    "MCDI": "Music CD identifier",
-    "MLLT": "MPEG location lookup table",
-    "OWNE": "Ownership frame",
-    "PRIV": "Private frame",
-    "PCNT": "Play counter",
-    "POPM": "Popularimeter",
-    "POSS": "Position synchronisation frame",
-    "RBUF": "Recommended buffer size",
-    "RVAD": "Relative volume adjustment",
-    "RVRB": "Reverb",
-    "SYLT": "Synchronized lyric/text",
-    "SYTC": "Synchronized tempo codes",
     "TALB": "album",
-    "TBPM": "BPM",
-    "TCOM": "Composer",
     "TCON": "genre",
-    "TCOP": "Copyright message",
     "TDAT": "date",
-    "TDLY": "Playlist delay",
-    "TENC": "Encoded by",
     "TEXT": "Lyricist",
     "TFLT": "File type",
     "TIME": "time",
-    "TIT1": "Content group description",
     "TIT2": "title",
-    "TIT3": "Subtitle",
-    "TKEY": "Initial key",
     "TLAN": "Language(s)",
     "TLEN": "length",
     "TMED": "Media type",
@@ -54,31 +23,11 @@ ID3v2 =
     "TOWN": "File owner",
     "TPE1": "artist",
     "TPE2": "Band",
-    "TPE3": "Conductor",
-    "TPE4": "Interpreted, remixed, or otherwise modified by",
     "TPOS": "Part of a set",
-    "TPUB": "Publisher",
     "TRCK": "track",
-    "TRDA": "Recording dates",
-    "TRSN": "Internet radio station name",
-    "TRSO": "Internet radio station owner",
     "TSIZ": "size",
-    "TSRC": "ISRC (international standard recording code)",
-    "TSSE": "Software/Hardware and settings used for encoding",
     "TYER": "year",
-    "TXXX": "User defined text information frame",
-    "UFID": "Unique file identifier",
-    "USER": "Terms of use",
-    "USLT": "Unsychronized lyric/text transcription",
-    "WCOM": "Commercial information",
-    "WCOP": "Copyright/Legal information",
-    "WOAF": "Official audio file webpage",
-    "WOAR": "Official artist/performer webpage",
-    "WOAS": "Official audio source webpage",
-    "WORS": "Official internet radio station homepage",
-    "WPAY": "Payment",
-    "WPUB": "Publishers official webpage",
-    "WXXX": "User defined URL link frame"
+    "UFID": "Unique file identifier"
   };
   
 	var TAG_MAPPING_2_2_to_2_3 = {
@@ -421,9 +370,6 @@ ID3v2 =
 	read(3, function(header){
 		if(header == "ID3"){
 			read(2, function(s, version){
-				tag.version = "ID3v2."+version[0]+'.'+version[1];
-				tag.revision = version[0];
-				console.log('version',tag.version);
 				read(1, function(s, flags){
 					//todo: parse flags
 					flags = pad(flags[0]);

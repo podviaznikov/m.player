@@ -78,7 +78,7 @@ $(function(){
                 width=this.volumeSlider.width(),
                 percent = newX/width;
             //minor hack for possibility to make 100% loud
-            if(percent>0.98)
+            if(percent>0.95)
             {
                 percent=1;
             }

@@ -243,7 +243,6 @@ $(function(){
         showHelp:function(){
             this.isRegularMode=false;
             this.el.removeClass('fullscreen');
-            this.infoPanels.addClass('hidden');
             this.helpPanels.removeClass('hidden');
             AppController.visualizationView.hide();
         },
@@ -268,9 +267,10 @@ $(function(){
         },
         keyPressed:function(event)
         {
-            var keyCode = event.keyCod,currentSong=undefined;
+            var keyCode=event.keyCode,
+                currentSong=undefined;
             if(AppController.playlistView){
-                currentSong =  AppController.playlistView.currentSong();
+                currentSong= AppController.playlistView.currentSong();
             }
             if(keyCode==40){
                 //down arrow
@@ -288,14 +288,12 @@ $(function(){
                 //space
                 AppController.playerCtrl.togglePause();
             }else if(keyCode==46){
-                //delete
-                //delete song from playlist
+                //delete-delete song from playlist
                if(currentSong){
                     currentSong.view.remove();
                 }
             }else if(keyCode==27){
-                //escape
-                //comeback to the normal view
+                //escape-comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
             }
@@ -994,7 +992,7 @@ $(function(){
                 width=this.volumeSlider.width(),
                 percent = newX/width;
             //minor hack for possibility to make 100% loud
-            if(percent>0.98)
+            if(percent>0.95)
             {
                 percent=1;
             }
