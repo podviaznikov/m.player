@@ -113,7 +113,10 @@ $(function(){
             this.model.destroy();
         },
         onDeleteSong:function(){
-            this.model.albumView.remove();
+            var view = this.model.albumView||this.model.view;
+            if(view){
+                view.remove();
+            }
             fs.util.remove(this.model.get('fileName'));
         },
         playSongs:function(){

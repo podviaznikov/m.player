@@ -1,3 +1,15 @@
+div.main_screen
+{
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+}
+div.main_screen section.info_panel
+{
+    -webkit-box-flex: 1;
+    width:33%;
+    margin-right: 10px;
+    margin-left: 10px;
+}
 ::-webkit-meter-optimum-value
 {
     background:none;
@@ -227,10 +239,6 @@ footer#player
     margin-right:5px;
     vertical-align:middle;
     display: inline-block;
-}
-.info_panel
-{
-    display:inline-block;
 }
 article.lib-item-data
 {
@@ -654,24 +662,6 @@ footer.saved_playlist_toolbar
 {
     display:none;
 }
-.left_layout_panel
-{
-    width:32%;
-    padding-left:10px;
-    padding-right:20px;
-}
-.middle_layout_panel
-{
-    width:32%;
-    padding-left:20px;
-    padding-right:20px;
-}
-.right_layout_panel
-{
-    width:28%;
-    padding-left:20px;
-    padding-right:10px;
-}
 #drop_files,#drop_folder
 {
     visibility:hidden;
@@ -687,10 +677,6 @@ footer.saved_playlist_toolbar
 
 @media screen and (min-width: 1025px) and (max-width: 1280px)
 {
-    .middle_layout_panel
-    {
-        width:29%!important;
-    }
     #music_slider
     {
         width:53%;
@@ -702,17 +688,9 @@ footer.saved_playlist_toolbar
 }
 @media screen and (min-width: 901px) and (max-width: 1024px)
 {
-    #library_menu,#playing_list
-    {
-        width:45%;
-    }
     #filtered_lib
     {
         display:none;
-    }
-    .middle_layout_panel
-    {
-        width:28%!important;
     }
     #music_slider
     {
@@ -721,17 +699,9 @@ footer.saved_playlist_toolbar
 }
 @media screen and (min-width: 801px) and (max-width: 900px)
 {
-    #library_menu,#playing_list
-    {
-        width:45%;
-    }
     #filtered_lib
     {
         display:none;
-    }
-    .middle_layout_panel
-    {
-        width:27%!important;
     }
     #music_slider
     {
@@ -744,17 +714,9 @@ footer.saved_playlist_toolbar
 }
 @media screen and (min-width: 701px) and (max-width: 800px)
 {
-    #library_menu,#playing_list
-    {
-        width:45%;
-    }
     #filtered_lib
     {
         display:none;
-    }
-    .middle_layout_panel
-    {
-        width:25%!important;
     }
     #music_slider
     {
