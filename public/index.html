@@ -75,11 +75,11 @@
     <section id="song_info_view"></section>
     <section id="playlist_toolbar">
         <input id="new_play_list" value="Unsaved list" maxlength="18">
+        <input type="file" id="drop_files" accept="audio/*" multiple>
+        <input type="file" id="drop_folder" accept="audio/*" multiple webkitdirectory>
         <span id="clear_playlist" class="command_link" title="Clear playlist">Clear</span>
         <span id="import_songs_directory" class="command_link" title="Import music directory">Import directory</span>
         <span id="import_songs_files" class="command_link" title="Import music files">Import files</span>
-        <input type="file" id="drop_files" accept="audio/*" multiple>
-        <input type="file" id="drop_folder" accept="audio/*" multiple webkitdirectory>
     </section>
     <section id="playing_songs" class="scrollable_panel">
         <label>Drop mp3 files here</label>

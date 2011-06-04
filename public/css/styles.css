@@ -675,6 +675,8 @@ footer.saved_playlist_toolbar
 #drop_files,#drop_folder
 {
     visibility:hidden;
+    height:0px;
+    width:0px;
 }
 #import_songs_directory,#import_songs_files
 {
