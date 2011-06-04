@@ -68,7 +68,7 @@ $(function(){
                     width=this.musicSlider.width(),
                     max=parseFloat(this.musicSlider.attr('max'));
                 console.log(newX,width,max);
-                var newProgressValue = (newX/width*max);
+                var newProgressValue=(newX/width*max);
                 this.musicSlider.attr('value',newProgressValue);
                 this.audioEL.setTime(newProgressValue);
             }
@@ -77,6 +77,11 @@ $(function(){
             var newX=e.offsetX,
                 width=this.volumeSlider.width(),
                 percent = newX/width;
+            //minor hack for possibility to make 100% loud
+            if(percent>0.98)
+            {
+                percent=1;
+            }
             this.audioEL.setVolume(percent);
             this.volumeSlider.attr('value',percent);
             settings.saveVolume(percent);

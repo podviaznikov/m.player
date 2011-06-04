@@ -39,7 +39,7 @@ $(function(){
             return this;
         },
         addSong:function(song,key){
-            var song=new Song(song),
+            var song = new Song(song),
                 view = new ui.SongView({
                     model:song,
                     key:key,
@@ -125,12 +125,9 @@ $(function(){
             }else{
                 AppController.playlistView.removePlayListModel();
             }
-            settings.saveLastAlbum(this.model.get('album'));
-            settings.saveLastArtist(this.model.get('artist'));
-            settings.savePlayList(songs);
         }
     });
-
+    //2nd column view
     ui.SongsView = Backbone.View.extend({
         el:$('#filtered_lib'),
         filteredLibContent:$('#filtered_lib_content'),
@@ -146,10 +143,11 @@ $(function(){
             this.songs=songs;
             if(albums){
                 for(var i=0;i<albums.length;i++){
-                    var album=albums[i],
-                        albumSongs=songs.filter(function(song){return song.get('album')===album;}),
+                    var album = albums[i],
+                        albumSongs = songs.filter(function(song){return song.get('album')===album;}),
                         albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
-                    this.mapping[album]=albumSongs;
+                    //what is this? key of the array should be always number
+                    this.mapping[album] = albumSongs;
                     this.filteredLibContent.append(albumView.render().el);
                 }
             }

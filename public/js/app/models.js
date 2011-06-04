@@ -16,7 +16,11 @@ var Song = Porridge.Model.extend({
 });
 var SongsList = Porridge.Collection.extend({
     model:Song,
-    comparator:function(song){return song.get('track');}
+    comparator:function(song){return song.get('track');},
+    forAlbum:function(album)
+    {
+        return this.filter(function(song){return song.get('album')===album;});
+    }
 });
 var Artist = Porridge.Model.extend({
     initialize:function(){
@@ -43,9 +47,10 @@ var Artist = Porridge.Model.extend({
 });
 var ArtistsList = Porridge.Collection.extend({
     model:Artist,
-    findByName:function(artistName){
-        return this.find(function(artist){ return artist.get('name') == artistName; });
-    }
+    forName:function(artistName){
+        return this.find(function(artist){ return artist.get('name') === artistName; });
+    },
+    comparator:function(song){return song.get('name');}
 });
 
 var PlayList = Porridge.Model.extend({

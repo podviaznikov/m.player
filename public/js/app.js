@@ -126,7 +126,8 @@ var ArtistsList = Porridge.Collection.extend({
     model:Artist,
     findByName:function(artistName){
         return this.find(function(artist){ return artist.get('name') == artistName; });
-    }
+    },
+    comparator:function(song){return song.get('name');}
 });
 
 var PlayList = Porridge.Model.extend({
@@ -341,7 +342,8 @@ $(function(){
         initialize:function(){
             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary','keyPressed');
+            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists',
+                'allArtistsLoaded','filterLibrary','keyPressed');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -501,7 +503,7 @@ $(function(){
         },
         playPlayList:function(){
            this.selectPlayList();
-            AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
+           AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         },
         deletePlaylist:function(){
             this.model.destroy();

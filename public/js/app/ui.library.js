@@ -33,7 +33,7 @@ $(function(){
         allArtistsLoaded:function(){
             var lastArtist=settings.getLastArtist();
             if(lastArtist){
-                var lastPlayedArtist = this.artists.findByName(lastArtist);
+                var lastPlayedArtist = this.artists.forName(lastArtist);
                 if(lastPlayedArtist && lastPlayedArtist.view){
                     lastPlayedArtist.view.selectArtist();
                 }
@@ -119,8 +119,8 @@ $(function(){
             AppController.playlistView.setSongsAndPlay(this.model.songs.models);
         },
         playAlbumSongs:function(e){
-            var album = e.currentTarget.dataset.album;
-            var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
+            var album=e.currentTarget.dataset.album,
+                albumSongs=this.model.songs.forAlbum(album);
             AppController.songsView.songs.refresh(albumSongs);
             AppController.playlistView.setSongsAndPlay(albumSongs);
         },
@@ -129,8 +129,8 @@ $(function(){
             this.$(this.el).remove();
         },
         selectAlbum:function(e){
-            var album = e.currentTarget.dataset.album;
-            var albumSongs=this.model.songs.filter(function(song){return song.get('album')==album;});
+            var album=e.currentTarget.dataset.album,
+                albumSongs=this.model.songs.forAlbum(album);
             AppController.songsView.songs.refresh(albumSongs);
         },
         showArtistBio:function(){

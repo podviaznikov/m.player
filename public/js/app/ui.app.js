@@ -75,7 +75,7 @@ $(function(){
                             AppController.playlistView.songs.add(song);
                             progressElement.val(percent);
                             var artistName = song.get('artist'),
-                                artist=AppController.libraryMenu.artists.findByName(artistName);
+                                artist=AppController.libraryMenu.artists.forName(artistName);
                             if(!artist){
                                 artist = new Artist({name:artistName});
                                 dataService.getArtistImage(artist.get('name'),function(image){

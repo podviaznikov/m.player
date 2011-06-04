@@ -39,10 +39,17 @@ $(function(){
         },
         setSongsAndPlay:function(songs){
             this.songs.refresh(songs);
+            //getting first song
             var firstSong=this.songs.first();
             if(firstSong){
+                //playing first song from list
                 firstSong.view.playSong();
+                //saving settings
+                settings.saveLastAlbum(firstSong.get('album'));
+                settings.saveLastArtist(firstSong.get('artist'));
             }
+            //saving settings
+            settings.savePlayList(songs);
         },
         setPlayListModel:function(playList){
             this.playList = playList;
@@ -73,8 +80,8 @@ $(function(){
         addOne:function(song){
             if(song.get('fileName')){
                 this.dropFileLabel.remove();
-                var view = new ui.SongMiniView({model:song,playlist:this});
-                song.view = view;
+                var view=new ui.SongMiniView({model:song,playlist:this});
+                song.view=view;
                 this.songsEl.append(view.render().el);
             }
         },
@@ -129,14 +136,15 @@ $(function(){
         currentSong:function(){return this.songs.at(this.currentSongIndex());},
         currentSongIndex:function(){return this.songs.indexOf(this.selectedSong);},
         next:function(playSongFlag){
-            var playSong=!playSongFlag;
-            var nextSongId = -1;
+            var playSong=!playSongFlag,
+                nextSongId=-1;
             if(playSong && settings.isShuffle()){
                 nextSongId=this.randomSong();
             }else{
                 var indexOfSelectedSong=this.currentSongIndex();
                 if(indexOfSelectedSong==this.songs.length-1){
-                    indexOfSelectedSong=-1;//to have first one
+                    //to have first one
+                    indexOfSelectedSong=-1;
                     if(!settings.isRepeat()){
                         playSong=false;
                     }
@@ -147,10 +155,11 @@ $(function(){
             this.playSongModel(nextSong,playSong);
         },
         previous:function(playSongFlag){
-            var playSong=!playSongFlag;
-            var indexOfSelectedSong=this.currentSongIndex();
+            var playSong=!playSongFlag.
+                indexOfSelectedSong=this.currentSongIndex();
             if(indexOfSelectedSong==0){
-                indexOfSelectedSong=this.songs.length;//to have last one
+                //to have last one
+                indexOfSelectedSong=this.songs.length;
             }
             var previousSong=this.songs.at(indexOfSelectedSong-1);
             this.playSongModel(previousSong,playSong);
@@ -179,7 +188,7 @@ $(function(){
         },
         render:function(){
             this.el.draggable=true;
-            this.el.dataset.filename=this.model.get('fileName');
+            //todo(anton) do we really need this in markup?
             this.el.dataset.songname=this.model.get('title');
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
@@ -201,8 +210,7 @@ $(function(){
         playSong:function(){
             settings.saveLastSong(this.model.toJSON());
             this.selectSong();
-            var songFileName=this.el.dataset.filename;
-            fs.util.createFileURL(songFileName,this.songFileLoaded);
+            fs.util.createFileURL(this.model.get('fileName'),this.songFileLoaded);
         },
         songFileLoaded:function(er,url){
             if(!er){
