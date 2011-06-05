@@ -14,7 +14,7 @@ $(function(){
         },
         addSong:function(song,key){
             var view = new ui.SongView({model:song,key:key,songs:this.model.songs});
-            song.view = view;
+            song.albumView = view;
             $(this.el).append(view.render().el);
         }
     });
@@ -113,7 +113,7 @@ $(function(){
             this.model.destroy();
         },
         onDeleteSong:function(){
-            var view = this.model.albumView||this.model.view;
+            var view = this.model.albumView;
             if(view){
                 view.remove();
             }

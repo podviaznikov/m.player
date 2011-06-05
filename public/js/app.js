@@ -140,14 +140,14 @@ var Artist = Porridge.Model.extend({
             this.id=UUID.generate();
             this.set({id:this.id});
         }
-        this.songs = new SongsList;
+        this.songs=new SongsList;
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.songs.fetchByKey('artists',this.get('name'));
     },
     setParameterFromSongs:function(){
-        var albums = _.uniq(this.songs.pluck('album'));
-        var genres = _.uniq(this.songs.pluck('genre'));
-        var songsCount = this.songs.length;
+        var albums=_.uniq(this.songs.pluck('album')),
+            genres=_.uniq(this.songs.pluck('genre')),
+            songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
     }
 },{
@@ -253,6 +253,15 @@ $(function(){
                 if(readError){return;}
                 ID3v2.parseFile(data,function(tags){
                     var song = new Song();
+                    //fix track number
+                    if(tags.track)
+                    {
+                        var slashIndex=tags.track.indexOf('/')
+                        if(slashIndex>0)
+                        {
+                            tags.track=tags.track.substring(0,slashIndex);
+                        }
+                    }
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
@@ -445,8 +454,8 @@ $(function(){
             this.playListsContent.show();
         },
         addArtist:function(artist){
-            //do not show view if artist has no name or songs
-            if(artist.get('name') && artist.get('songsCount')>0){
+            //do not show view if artist has no name
+            if(artist.get('name')){
                 var view = new ui.ArtistMenuView({model:artist});
                 this.artistsContent.append(view.render().el);
             }

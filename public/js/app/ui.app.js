@@ -73,6 +73,13 @@ $(function(){
                 if(readError){return;}
                 ID3v2.parseFile(data,function(tags){
                     var song = new Song();
+                    //fix track number
+                    if(tags.track){
+                        var slashIndex=tags.track.indexOf('/');
+                        if(slashIndex>0){
+                            tags.track=tags.track.substring(0,slashIndex);
+                        }
+                    }
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
