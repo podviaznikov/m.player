@@ -342,7 +342,7 @@ article.lib-item-data label:after
 {
     display:inline-block;
 }
-#playing_visualization
+#playing_visualization,#artist_bio
 {
     display:none;
     margin: auto;

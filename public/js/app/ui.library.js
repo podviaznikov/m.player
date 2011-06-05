@@ -135,7 +135,7 @@ $(function(){
             AppController.songsView.songs.refresh(albumSongs);
         },
         showArtistBio:function(){
-            alert('x');
+            AppController.appView.showArtistBio(this.model);
         },
         hide:function(){
             this.$(this.el).hide();

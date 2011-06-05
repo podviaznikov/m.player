@@ -2,13 +2,15 @@
 var global=window;
 var AppController={
 	init:function(){
-        var newHeight = $(window).height()-105;
+        var newHeight=$(window).height()-105;
         $('.scrollable_panel').height(newHeight);
 
-		this.appView = new ui.AppView;
+		this.appView=new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;
-		this.visualizationView = new ui.VisualizationView;
+		this.visualizationView=new ui.VisualizationView;
         this.visualizationView.el.height(newHeight);
+        this.artistBioView=new ui.ArtistBioView;
+        this.artistBioView.el.height(newHeight);
         var config={
             dbName:'mdb',
             dbDescription:'m.player database',

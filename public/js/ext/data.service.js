@@ -42,7 +42,7 @@ var dataService ={
     },
     getArtistBio:function(artist,callback)
     {
-        var jqxhr = $.get('/artist/'+artist+'/bio',function(data){
+        var jqxhr = $.getJSON('/artist/'+artist+'/bio',function(data){
             callback(data);
         })
         .error(function() {

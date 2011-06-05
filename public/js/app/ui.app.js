@@ -18,8 +18,14 @@ $(function(){
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed',
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
                     'importMusicDirectory','importMusicFiles','processOneAudioFile');
+        },
+        showArtistBio:function(artist)
+        {
+            this.mainPanels.addClass('hidden');
+            AppController.artistBioView.setArtistModel(artist);
+            AppController.artistBioView.show();
         },
         importMusicDirectory:function(){
             this.$('#drop_folder').click();
@@ -45,13 +51,11 @@ $(function(){
             var self = this,
                 fileProcessingFunctions=[];
                 this.$('#file_upload_status_dialog').addClass('active');
-            _.each(files,function(file,index)
-            {
+            _.each(files,function(file,index){
                 var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
                 fileProcessingFunctions.push(bindedFunct);
             });
-            async.series(fileProcessingFunctions,
-            function(err, results){
+            async.series(fileProcessingFunctions,function(err, results){
                 self.$('#file_upload_status_dialog').removeClass('active');
             });
         },
@@ -175,6 +179,36 @@ $(function(){
                 dataService.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
             }
             return this;
+        }
+    });
+
+    ui.ArtistBioView = Backbone.View.extend({
+        el: $('#artist_bio'),
+         initialize:function(){
+            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio');
+        },
+        setArtistModel:function(artist)
+        {
+            this.model=artist;
+        },
+        show:function(){
+            this.el.show();
+            this.render();
+        },
+        hide:function(){
+            this.el.hide();
+        },
+        render:function(){
+
+           if(this.model){
+                dataService.getArtistBio(this.model.get('artist'),this.renderArtistBio);
+           }
+           return this;
+        },
+        renderArtistBio:function(data)
+        {
+            var html = unescape(data.published);
+            $(this.el).html(html);
         }
     });
 });

@@ -28,7 +28,9 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.post('/song_played/:artist/:track/:length',function(req,res){
-    scrobble(req.params.track,req.params.artist,req.params.length,req.session.key,req.session.user);
+    if(req.session && req.session.key && req.session.user){
+        scrobble(req.params.track,req.params.artist,req.params.length,req.session.key,req.session.user);
+    }
 });
 app.get('/auth',function(req,res){
     var token = req.query.token,
