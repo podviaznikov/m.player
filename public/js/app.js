@@ -7,7 +7,7 @@ var AppController={
         $('.scrollable_panel').height(newHeight);
         //fixing height for songs panel
         $('#playing_songs').height('initial');
-        $('#playing_songs').css('max-height',newHeight-134);
+        $('#playing_songs').css('max-height',newHeight-154);
 		this.appView=new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;
 		this.visualizationView=new ui.VisualizationView;
@@ -461,8 +461,8 @@ $(function(){
             this.playListsContent.show();
         },
         addArtist:function(artist){
-            //do not show view if artist has no name
-            if(artist.get('name')){
+            //do not show view if artist has no name or songs
+            if(artist.get('name')&& artist.get('songsCount')>0){
                 var view = new ui.ArtistMenuView({model:artist});
                 this.artistsContent.append(view.render().el);
             }

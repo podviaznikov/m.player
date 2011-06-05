@@ -6,7 +6,7 @@ var AppController={
         $('.scrollable_panel').height(newHeight);
         //fixing height for songs panel
         $('#playing_songs').height('initial');
-        $('#playing_songs').css('max-height',newHeight-134);
+        $('#playing_songs').css('max-height',newHeight-154);
 		this.appView=new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;
 		this.visualizationView=new ui.VisualizationView;
