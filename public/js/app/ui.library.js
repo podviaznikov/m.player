@@ -48,8 +48,8 @@ $(function(){
             this.playListsContent.show();
         },
         addArtist:function(artist){
-            //do not show view if artist has no name or songs
-            if(artist.get('name')&& artist.get('songsCount')>0){
+            //do not show view if artist has no name
+            if(artist.get('name')){//&& artist.get('songsCount')>0){
                 var view = new ui.ArtistMenuView({model:artist});
                 this.artistsContent.append(view.render().el);
             }

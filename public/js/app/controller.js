@@ -2,11 +2,12 @@
 var global=window;
 var AppController={
 	init:function(){
-        var newHeight=$(window).height()-105;
+        var newHeight=$(window).height()-105,
+            playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
         //fixing height for songs panel
-        $('#playing_songs').height('initial');
-        $('#playing_songs').css('max-height',newHeight-154);
+        playingSongPanel.height('initial');
+        playingSongPanel.css('max-height',newHeight-184);
 		this.appView=new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;
 		this.visualizationView=new ui.VisualizationView;
