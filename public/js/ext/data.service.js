@@ -5,6 +5,10 @@
 // https://github.com/podviaznikov/m.player.
 "use strict";
 var dataService ={
+    getSession:function(callback)
+    {
+        $.getJSON('/session',callback);
+    },
     scrobble:function(track,artist,trackLength)
     {
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength);

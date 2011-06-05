@@ -27,6 +27,16 @@ app.get('/app.mf', function(req, res){
     res.header('Content-Type', 'text/cache-manifest');
     res.sendfile(__dirname + '/app.mf');
 });
+app.get('/session',function(req,res){
+    res.contentType('application/json');
+    var session=req.session||{},
+        user=req.session.user||'',
+        key=req.session.key||'';
+    res.send({
+        user:user,
+        key:key
+    });
+});
 app.post('/song_played/:artist/:track/:length',function(req,res){
     if(req.session && req.session.key && req.session.user){
         scrobble(req.params.track,req.params.artist,req.params.length,req.session.key,req.session.user);

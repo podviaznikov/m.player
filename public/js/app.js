@@ -22,6 +22,12 @@ var AppController={
             AppController.playlistView = new ui.PlayListView;
             AppController.libraryMenu = new ui.LibraryMenu;
             AppController.songsView = new ui.SongsView;
+            dataService.getSession(function(data){
+                console.log(data);
+                settings.saveUser(data.user);
+                settings.saveSessionKey(data.key);
+                console.log(settings.isLogined());
+            });
         });
 
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
@@ -77,6 +83,21 @@ var settings={
     },
     getLastAlbum:function(){
         return global.localStorage.getItem('lastAlbum');
+    },
+    saveUser:function(user){
+        global.localStorage.setItem('user',user);
+    },
+    getUser:function(){
+        return global.localStorage.getItem('user')||'';
+    },
+    saveSessionKey:function(sessionKey){
+        global.localStorage.setItem('sessionKey',user);
+    },
+    getSessionKey:function(){
+        return global.localStorage.getItem('sessionKey')||'';
+    },
+    isLogined:function(){
+        return this.getUser()!=''&& this.getSessionKey()!='';
     }
 };
 

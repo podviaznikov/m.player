@@ -6,6 +6,10 @@
 "use strict";
 var dataService=
 {
+    getSession:function(callback)
+    {
+        callback({user:'',key:''});
+    },
     scrobble:function(track,artist,trackLength)
     {
         //do nothing
