@@ -201,7 +201,7 @@ $(function(){
         render:function(){
 
            if(this.model){
-                dataService.getArtistBio(this.model.get('artist'),this.renderArtistBio);
+                dataService.getArtistBio(this.model.get('name'),this.renderArtistBio);
            }
            return this;
         },
