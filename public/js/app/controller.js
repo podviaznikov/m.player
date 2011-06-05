@@ -90,7 +90,7 @@ var settings={
         return global.localStorage.getItem('user')||'';
     },
     saveSessionKey:function(sessionKey){
-        global.localStorage.setItem('sessionKey',user);
+        global.localStorage.setItem('sessionKey',sessionKey);
     },
     getSessionKey:function(){
         return global.localStorage.getItem('sessionKey')||'';

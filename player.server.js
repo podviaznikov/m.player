@@ -2,7 +2,7 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
-    RedisStore = require('connect-redis'),
+    //RedisStore = require('connect-redis'),
     LastFmNode = require('lastfm').LastFmNode,
     lastfm = new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
@@ -17,7 +17,7 @@ app.configure(function(){
     app.use(express.bodyParser());
     //session support
     app.use(express.cookieParser());
-    app.use(express.session({store: new RedisStore(),secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 14400000000000000 }}));
+    app.use(express.session({secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 14400000000000000 }}));
     //router
     app.use(app.router);
     //public folder for static files
@@ -32,6 +32,7 @@ app.get('/session',function(req,res){
     var session=req.session||{},
         user=req.session.user||'',
         key=req.session.key||'';
+    util.log(util.inspect(session));
     res.send({
         user:user,
         key:key
