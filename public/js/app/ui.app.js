@@ -6,6 +6,7 @@ $(function(){
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
         mainPanels:$('section.main_panel'),
+        lastfmLoginBtn:$('#lastfm_login'),
         isRegularMode:true,
         events:{
             'keyup':'keyPressed',
@@ -19,10 +20,12 @@ $(function(){
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile');
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn');
         },
-        showArtistBio:function(artist)
-        {
+        showLastfmLoginBtn:function(){
+            this.lastfmLoginBtn.show();
+        },
+        showArtistBio:function(artist){
             this.mainPanels.addClass('hidden');
             AppController.artistBioView.setArtistModel(artist);
             AppController.artistBioView.show();

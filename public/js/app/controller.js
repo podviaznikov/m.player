@@ -26,6 +26,10 @@ var AppController={
                 settings.saveUser(data.user);
                 settings.saveSessionKey(data.key);
                 console.log(settings.isLogined());
+                if(!settings.isLogined())
+                {
+                    AppController.appView.showLastfmLoginBtn();
+                }
             });
         });
 

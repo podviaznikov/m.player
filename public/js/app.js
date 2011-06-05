@@ -27,6 +27,10 @@ var AppController={
                 settings.saveUser(data.user);
                 settings.saveSessionKey(data.key);
                 console.log(settings.isLogined());
+                if(!settings.isLogined())
+                {
+                    AppController.appView.showLastfmLoginBtn();
+                }
             });
         });
 
@@ -91,7 +95,7 @@ var settings={
         return global.localStorage.getItem('user')||'';
     },
     saveSessionKey:function(sessionKey){
-        global.localStorage.setItem('sessionKey',user);
+        global.localStorage.setItem('sessionKey',sessionKey);
     },
     getSessionKey:function(){
         return global.localStorage.getItem('sessionKey')||'';
@@ -179,6 +183,7 @@ $(function(){
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
         mainPanels:$('section.main_panel'),
+        lastfmLoginBtn:$('#lastfm_login'),
         isRegularMode:true,
         events:{
             'keyup':'keyPressed',
@@ -192,10 +197,12 @@ $(function(){
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile');
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn');
         },
-        showArtistBio:function(artist)
-        {
+        showLastfmLoginBtn:function(){
+            this.lastfmLoginBtn.show();
+        },
+        showArtistBio:function(artist){
             this.mainPanels.addClass('hidden');
             AppController.artistBioView.setArtistModel(artist);
             AppController.artistBioView.show();

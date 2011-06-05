@@ -1,5 +1,6 @@
 #lastfm_login
 {
+    display:none;
     position: fixed;
     bottom: 32px;
     right: 25px;
