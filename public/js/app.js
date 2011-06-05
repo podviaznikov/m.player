@@ -5,7 +5,9 @@ var AppController={
 	init:function(){
         var newHeight=$(window).height()-105;
         $('.scrollable_panel').height(newHeight);
-
+        //fixing height for songs panel
+        $('#playing_songs').height('initial');
+        $('#playing_songs').css('max-height',newHeight-134);
 		this.appView=new ui.AppView;
 		this.playerCtrl=new ui.PlayerCtrl;
 		this.visualizationView=new ui.VisualizationView;
@@ -127,7 +129,14 @@ var Song = Porridge.Model.extend({
 });
 var SongsList = Porridge.Collection.extend({
     model:Song,
-    comparator:function(song){return song.get('track');},
+    comparator:function(song){
+        var track = song.get('track');
+        if(track && track!='')
+        {
+            return parseInt(track);
+        }
+        return song.get('name');
+    },
     forAlbum:function(album)
     {
         return this.filter(function(song){return song.get('album')===album;});
@@ -254,11 +263,9 @@ $(function(){
                 ID3v2.parseFile(data,function(tags){
                     var song = new Song();
                     //fix track number
-                    if(tags.track)
-                    {
-                        var slashIndex=tags.track.indexOf('/')
-                        if(slashIndex>0)
-                        {
+                    if(tags.track){
+                        var slashIndex=tags.track.indexOf('/');
+                        if(slashIndex>0){
                             tags.track=tags.track.substring(0,slashIndex);
                         }
                     }
@@ -828,7 +835,7 @@ $(function(){
         },
         addSong:function(song,key){
             var view = new ui.SongView({model:song,key:key,songs:this.model.songs});
-            song.view = view;
+            song.albumView = view;
             $(this.el).append(view.render().el);
         }
     });
@@ -927,7 +934,7 @@ $(function(){
             this.model.destroy();
         },
         onDeleteSong:function(){
-            var view = this.model.albumView||this.model.view;
+            var view = this.model.albumView;
             if(view){
                 view.remove();
             }

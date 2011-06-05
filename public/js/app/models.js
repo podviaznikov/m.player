@@ -16,7 +16,14 @@ var Song = Porridge.Model.extend({
 });
 var SongsList = Porridge.Collection.extend({
     model:Song,
-    comparator:function(song){return song.get('track');},
+    comparator:function(song){
+        var track = song.get('track');
+        if(track && track!='')
+        {
+            return parseInt(track);
+        }
+        return song.get('name');
+    },
     forAlbum:function(album)
     {
         return this.filter(function(song){return song.get('album')===album;});
