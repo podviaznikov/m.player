@@ -29,5 +29,9 @@ var dataService=
             releaseDate='no information',
             songsCount='no information';
         callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
+    },
+    getArtistBio:function(artist,callback)
+    {
+        callback({});
     }
 };

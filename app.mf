@@ -6,6 +6,7 @@ js/lib/libs.bundle.js
 js/lib/async.min.js
 css/styles.css
 css/images/no_picture.png
+css/images/lastfm_square.jpg
 /js/ext/data.service.js
 /js/ext/data.service.offline.js
 NETWORK:

@@ -39,5 +39,14 @@ var dataService ={
 
             callback({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
         });
+    },
+    getArtistBio:function(artist,callback)
+    {
+        var jqxhr = $.get('/artist/'+artist+'/bio',function(data){
+            callback(data);
+        })
+        .error(function() {
+            callback({});
+        });
     }
 };
