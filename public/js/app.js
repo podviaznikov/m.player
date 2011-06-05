@@ -144,6 +144,9 @@ var SongsList = Porridge.Collection.extend({
     }
 });
 var Artist = Porridge.Model.extend({
+    defaults:{
+        isDeleted:false
+    },
     initialize:function(){
         _.bindAll(this,'setParameterFromSongs');
         if(!this.get('id')){
@@ -159,6 +162,10 @@ var Artist = Porridge.Model.extend({
             genres=_.uniq(this.songs.pluck('genre')),
             songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
+        if(songsCount===0)
+        {
+            this.set({isDeleted:true});
+        }
     }
 },{
     definition:{
@@ -463,7 +470,7 @@ $(function(){
         },
         addArtist:function(artist){
             //do not show view if artist has no name
-            if(artist.get('name')){//&& artist.get('songsCount')>0){
+            if(artist.get('name') && !artist.get('isDeleted')){//&& artist.get('songsCount')>0){
                 var view = new ui.ArtistMenuView({model:artist});
                 this.artistsContent.append(view.render().el);
             }
@@ -540,7 +547,9 @@ $(function(){
             AppController.playlistView.setSongsAndPlay(albumSongs);
         },
         deleteArtist:function(){
-            this.model.destroy();
+            //setting deleted flag
+            this.model.set({isDeleted:true});
+            this.model.save();
             this.$(this.el).remove();
         },
         selectAlbum:function(e){

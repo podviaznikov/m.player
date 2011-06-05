@@ -30,6 +30,9 @@ var SongsList = Porridge.Collection.extend({
     }
 });
 var Artist = Porridge.Model.extend({
+    defaults:{
+        isDeleted:false
+    },
     initialize:function(){
         _.bindAll(this,'setParameterFromSongs');
         if(!this.get('id')){
@@ -45,6 +48,10 @@ var Artist = Porridge.Model.extend({
             genres=_.uniq(this.songs.pluck('genre')),
             songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
+        if(songsCount===0)
+        {
+            this.set({isDeleted:true});
+        }
     }
 },{
     definition:{

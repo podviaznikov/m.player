@@ -1,7 +1,7 @@
 {
   "name": "m.player",
-  "description": "Offline Music Player",
-  "version": "1.0",
+  "description": "Offline Music Player with Last.fm integration",
+  "version": "2.0",
   "app": {
     "urls": [
       "*://player.enginimation.com/"
