@@ -359,7 +359,7 @@ $(function(){
         },
         renderArtistBio:function(data)
         {
-            var html = unescape(data.published);
+            var html = unescape(data.summary);
             $(this.el).html(html);
         }
     });
