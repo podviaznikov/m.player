@@ -22,16 +22,19 @@ var AppController={
             AppController.playlistView = new ui.PlayListView;
             AppController.libraryMenu = new ui.LibraryMenu;
             AppController.songsView = new ui.SongsView;
-            dataService.getSession(function(data){
-                console.log(data);
-                settings.saveUser(data.user);
-                settings.saveSessionKey(data.key);
-                console.log(settings.isLogined());
-                if(!settings.isLogined())
-                {
-                    AppController.appView.showLastfmLoginBtn();
-                }
-            });
+            //getting session info if user not logined
+            if(!settings.isLogined()){
+                dataService.getSession(function(data){
+                    console.log(data);
+                    settings.saveUser(data.user);
+                    settings.saveSessionKey(data.key);
+                    console.log(settings.isLogined());
+                    if(!settings.isLogined())
+                    {
+                        AppController.appView.showLastfmLoginBtn();
+                    }
+                });
+            }
         });
 
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
