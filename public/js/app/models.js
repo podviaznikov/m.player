@@ -29,14 +29,14 @@ var Artist = Porridge.Model.extend({
             this.id=UUID.generate();
             this.set({id:this.id});
         }
-        this.songs = new SongsList;
+        this.songs=new SongsList;
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.songs.fetchByKey('artists',this.get('name'));
     },
     setParameterFromSongs:function(){
-        var albums = _.uniq(this.songs.pluck('album'));
-        var genres = _.uniq(this.songs.pluck('genre'));
-        var songsCount = this.songs.length;
+        var albums=_.uniq(this.songs.pluck('album')),
+            genres=_.uniq(this.songs.pluck('genre')),
+            songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
     }
 },{

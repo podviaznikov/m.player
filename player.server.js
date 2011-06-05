@@ -2,7 +2,6 @@
 var util = require('util'),
     express = require('express'),
     connect = require('connect'),
-    //RedisStore = require('connect-redis'),
     LastFmNode = require('lastfm').LastFmNode,
     lastfm = new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
@@ -15,9 +14,6 @@ app.configure(function(){
     app.use(express.logger());
     //component for decoding requests' params
     app.use(express.bodyParser());
-    //session support
-    app.use(express.cookieParser());
-    app.use(express.session({secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 14400000000000000 }}));
     //router
     app.use(app.router);
     //public folder for static files
@@ -41,7 +37,7 @@ app.get('/session',function(req,res){
 app.post('/song_played/:artist/:track/:length',function(req,res){
     var user=req.query.user,
         key=req.query.key;
-    util.log('SCROBBLING');
+    util.log('scrobbling');
     util.log(user);
     util.log(key);
     if(user && key){
