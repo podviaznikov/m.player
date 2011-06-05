@@ -39,8 +39,13 @@ app.get('/session',function(req,res){
     });
 });
 app.post('/song_played/:artist/:track/:length',function(req,res){
-    if(req.session && req.session.key && req.session.user){
-        scrobble(req.params.track,req.params.artist,req.params.length,req.session.key,req.session.user);
+    var user=req.query.user,
+        key=req.query.key;
+    util.log('SCROBBLING');
+    util.log(user);
+    util.log(key);
+    if(user && key){
+        scrobble(req.params.track,req.params.artist,req.params.length,key,user);
     }
 });
 app.get('/auth',function(req,res){
