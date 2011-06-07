@@ -1145,6 +1145,7 @@ $(function(){
             settings.saveRepeat(false);
         },
         play:function(url){
+            this.loadedMusicSlider=false;
             this.playToggle.attr('title','Pause');
             this.playToggle.addClass('playing');
             this.playToggle.removeClass('paused');
@@ -1167,6 +1168,7 @@ $(function(){
             this.playToggle.addClass('paused');
             this.playToggle.removeClass('playing');
             this.audioEL.stop();
+            this.loadedMusicSlider=false;
         },
         previous:function(){
             AppController.playlistView.previous();
