@@ -97,6 +97,8 @@ $(function(){
                                     artist.save();
                                     AppController.libraryMenu.artists.add(artist);
                                 });
+                            }else{
+                                artist.change();
                             }
                             callback(null);
                         }

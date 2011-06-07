@@ -294,6 +294,8 @@ $(function(){
                                     artist.save();
                                     AppController.libraryMenu.artists.add(artist);
                                 });
+                            }else{
+                                artist.change();
                             }
                             callback(null);
                         }
@@ -725,6 +727,9 @@ $(function(){
                 album:this.selectedSong.get('album'),
                 year:this.selectedSong.get('year')
             }));
+            //fixing max width for song info to prevent problems with big song names
+            var playingListPanelWidth=$('#playing_list').width();
+       		$('#song_info').css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
@@ -763,7 +768,7 @@ $(function(){
             this.playSongModel(nextSong,playSong);
         },
         previous:function(playSongFlag){
-            var playSong=!playSongFlag.
+            var playSong=!playSongFlag,
                 indexOfSelectedSong=this.currentSongIndex();
             if(indexOfSelectedSong==0){
                 //to have last one

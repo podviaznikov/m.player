@@ -71,6 +71,10 @@ div.main_screen section.info_panel
     padding-top: 10px;
     margin-bottom: 5px;
 }
+#uploading_files_progress progress::-webkit-progress-bar
+{
+    background-color: #939393;
+}
 progress
 {
     width: 300px;
@@ -386,6 +390,9 @@ article.lib-item-data label:after
         text-transform: uppercase;
         margin-bottom:20px;
         font-weight:bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     #song_info .data_info_row
     {
