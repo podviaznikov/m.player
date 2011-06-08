@@ -14,6 +14,9 @@ app.configure(function(){
     app.use(express.logger());
     //component for decoding requests' params
     app.use(express.bodyParser());
+    //session support
+    app.use(express.cookieParser());
+    app.use(express.session({secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 14400000000000000 }}));
     //router
     app.use(app.router);
     //public folder for static files
