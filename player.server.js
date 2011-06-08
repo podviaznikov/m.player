@@ -25,14 +25,18 @@ app.get('/app.mf', function(req, res){
 });
 app.get('/session',function(req,res){
     res.contentType('application/json');
-    var session=req.session||{},
-        user=req.session.user||'',
-        key=req.session.key||'';
-    util.log(util.inspect(session));
-    res.send({
-        user:user,
-        key:key
-    });
+    var session=req.session;
+    if(!session||!req.session.user||!req.session.key){
+        res.send({user:'',key:''});
+    }else{
+        var user=req.session.user||'',
+            key=req.session.key||'';
+        util.log(util.inspect(session));
+        res.send({
+            user:user,
+            key:key
+        });
+    }
 });
 app.post('/song_played/:artist/:track/:length',function(req,res){
     var user=req.query.user,
