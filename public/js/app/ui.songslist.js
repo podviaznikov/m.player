@@ -145,9 +145,9 @@ $(function(){
             this.songs=songs;
             if(albums){
                 for(var i=0;i<albums.length;i++){
-                    var album = albums[i],
-                        albumSongs = songs.filter(function(song){return song.get('album')===album;}),
-                        albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
+                    var album=albums[i],
+                        albumSongs=songs.filter(function(song){return song.get('album')===album;}),
+                        albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
                     this.mapping[album] = albumSongs;
                     this.filteredLibContent.append(albumView.render().el);
@@ -163,13 +163,13 @@ $(function(){
             var event=e.originalEvent,
                 dataTransferObj=event.dataTransfer,
                 songId=event.srcElement.dataset['id'];
-            dataTransferObj.effectAllowed = 'move';
+            dataTransferObj.effectAllowed='move';
 
             if(this.songs){
-                var song = this.songs.get(songId);
-                dataTransferObj.setData('text/plain', JSON.stringify(song.toJSON()));
+                var song=this.songs.get(songId),
+                    dataTransfer=DataTransfer.create('song',song);
+                dataTransferObj.setData('text/plain',dataTransfer.toString());
             }
         }
     });
-
 });

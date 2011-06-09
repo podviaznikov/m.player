@@ -14,7 +14,8 @@ $(function(){
         initialize:function(){
             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary','keyPressed');
+            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded',
+                'filterLibrary','keyPressed');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -89,11 +90,12 @@ $(function(){
             'click .delete_artist':'deleteArtist',
             'click .bio_artist':'showArtistBio',
             'click .album_link': 'selectAlbum',
-            'dbclick .album_link':'playAlbumSongs'
+            'dbclick .album_link':'playAlbumSongs',
+            'dragstart':'handleDragStart'
         },
         initialize:function(){
             _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
-                    'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio');
+                    'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio','handleDragStart');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
@@ -106,8 +108,19 @@ $(function(){
                 genres:this.model.get('genres'),
                 songsCount:this.model.get('songsCount')
             });
+            this.el.draggable=true;
+            this.el.dataset.artist=this.model.get('name');
             $(this.el).html(html);
             return this;
+        },
+        //handle drag start event
+        handleDragStart:function(e){
+            var event=e.originalEvent,
+                dataTransferObj=event.dataTransfer,
+                artist=event.srcElement.dataset['artist'],
+                dataTransfer=DataTransfer.create('artist',artist);
+            dataTransferObj.effectAllowed='move';
+            dataTransferObj.setData('text/plain',dataTransfer.toString());
         },
         selectArtist:function(){
             $('.lib-item-data').removeClass('selected-lib-item');

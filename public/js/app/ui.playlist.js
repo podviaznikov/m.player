@@ -4,13 +4,14 @@ $(function(){
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),
         songsEl:$('#playing_list #playing_songs'),
+        songInfoEl:$('#song_info'),
         dropFileLabel:$('#playing_list #playing_songs label'),
         statEL:$('#playing_list footer'),
         songInfoTpl: $('#song_info_tpl').html(),
         playlistStatTpl: $('#playlist_stat_tpl').html(),
         newPlayListName:$('#new_play_list'),
         events:{
-            'drop':'dropFiles',
+            'drop':'handleDrop',
             'blur #new_play_list':'savePlayList',
             'click #clear_playlist':'clearPlaylist'
         },
@@ -91,15 +92,27 @@ $(function(){
                 this.songs.each(this.addOne);
             }
         },
-        dropFiles:function(e){
+        handleDrop:function(e){
             e.stopPropagation();
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
             if(dataTransfer&&dataTransfer.getData('text/plain')){
-                var transfer=JSON.parse(dataTransfer.getData('text/plain'));
+                var transfer=DataTransfer.fromString(dataTransfer.getData('text/plain'));
                 if(transfer){
-                    var song=new Song(transfer);
-                    this.songs.add(song);
+                    if('artist'===transfer.type){
+                        //we have artist name here. Get all his songs and add to list
+                        var artist=AppController.libraryMenu.artists.forName(transfer.value);
+                        if(artist){
+                            var songsFromPlayList=this.songs;
+                            artist.songs.each(function(song){
+                                songsFromPlayList.add(song);
+                            });
+                        }
+                    }else if('song'===transfer.type){
+                        //we have song here. Add it to playlist
+                        var song=new Song(transfer.value);
+                        this.songs.add(song);
+                    }
                 }
             }else{
                 AppController.appView.dropFiles(e);
@@ -119,7 +132,7 @@ $(function(){
             }));
             //fixing max width for song info to prevent problems with big song names
             var playingListPanelWidth=$('#playing_list').width();
-       		$('#song_info').css('max-width',playingListPanelWidth-115);
+       		this.songInfoEl.css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;

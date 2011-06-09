@@ -81,6 +81,12 @@ $(function(){
                             tags.track=tags.track.substring(0,slashIndex);
                         }
                     }
+                    if(tags.track){
+                        //don't save that 0 in the track number
+                        if('0'===tags.track.charAt(0)){
+                            tags.track=tags.track.substring(1);
+                        }
+                    }
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);

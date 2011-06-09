@@ -113,6 +113,20 @@ var settings={
 
 
 "use strict";
+var DataTransfer={
+    create:function(type,value){
+        return Object.create(this,{type:{value:type},value:{value:value}});
+    },
+    toString:function(){
+        return JSON.stringify({
+            type:this.type,
+            value:this.value
+        });
+    },
+    fromString:function(source){
+        return JSON.parse(source);
+    }
+};
 var Song = Porridge.Model.extend({
     defaults:{
         album:'No information',
@@ -293,6 +307,12 @@ $(function(){
                             tags.track=tags.track.substring(0,slashIndex);
                         }
                     }
+                    if(tags.track){
+                        //don't save that 0 in the track number
+                        if('0'===tags.track.charAt(0)){
+                            tags.track=tags.track.substring(1);
+                        }
+                    }
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
@@ -456,7 +476,8 @@ $(function(){
         initialize:function(){
             this.artists=new ArtistsList;//should be first in this method!
             this.playLists=new PlayLists;//should be first in this method!
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded','filterLibrary','keyPressed');
+            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded',
+                'filterLibrary','keyPressed');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -531,11 +552,12 @@ $(function(){
             'click .delete_artist':'deleteArtist',
             'click .bio_artist':'showArtistBio',
             'click .album_link': 'selectAlbum',
-            'dbclick .album_link':'playAlbumSongs'
+            'dbclick .album_link':'playAlbumSongs',
+            'dragstart':'handleDragStart'
         },
         initialize:function(){
             _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
-                    'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio');
+                    'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio','handleDragStart');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
@@ -548,8 +570,19 @@ $(function(){
                 genres:this.model.get('genres'),
                 songsCount:this.model.get('songsCount')
             });
+            this.el.draggable=true;
+            this.el.dataset.artist=this.model.get('name');
             $(this.el).html(html);
             return this;
+        },
+        //handle drag start event
+        handleDragStart:function(e){
+            var event=e.originalEvent,
+                dataTransferObj=event.dataTransfer,
+                artist=event.srcElement.dataset['artist'],
+                dataTransfer=DataTransfer.create('artist',artist);
+            dataTransferObj.effectAllowed='move';
+            dataTransferObj.setData('text/plain',dataTransfer.toString());
         },
         selectArtist:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
@@ -632,13 +665,14 @@ $(function(){
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),
         songsEl:$('#playing_list #playing_songs'),
+        songInfoEl:$('#song_info'),
         dropFileLabel:$('#playing_list #playing_songs label'),
         statEL:$('#playing_list footer'),
         songInfoTpl: $('#song_info_tpl').html(),
         playlistStatTpl: $('#playlist_stat_tpl').html(),
         newPlayListName:$('#new_play_list'),
         events:{
-            'drop':'dropFiles',
+            'drop':'handleDrop',
             'blur #new_play_list':'savePlayList',
             'click #clear_playlist':'clearPlaylist'
         },
@@ -719,15 +753,27 @@ $(function(){
                 this.songs.each(this.addOne);
             }
         },
-        dropFiles:function(e){
+        handleDrop:function(e){
             e.stopPropagation();
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
             if(dataTransfer&&dataTransfer.getData('text/plain')){
-                var transfer=JSON.parse(dataTransfer.getData('text/plain'));
+                var transfer=DataTransfer.fromString(dataTransfer.getData('text/plain'));
                 if(transfer){
-                    var song=new Song(transfer);
-                    this.songs.add(song);
+                    if('artist'===transfer.type){
+                        //we have artist name here. Get all his songs and add to list
+                        var artist=AppController.libraryMenu.artists.forName(transfer.value);
+                        if(artist){
+                            var songsFromPlayList=this.songs;
+                            artist.songs.each(function(song){
+                                songsFromPlayList.add(song);
+                            });
+                        }
+                    }else if('song'===transfer.type){
+                        //we have song here. Add it to playlist
+                        var song=new Song(transfer.value);
+                        this.songs.add(song);
+                    }
                 }
             }else{
                 AppController.appView.dropFiles(e);
@@ -747,7 +793,7 @@ $(function(){
             }));
             //fixing max width for song info to prevent problems with big song names
             var playingListPanelWidth=$('#playing_list').width();
-       		$('#song_info').css('max-width',playingListPanelWidth-115);
+       		this.songInfoEl.css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
@@ -999,9 +1045,9 @@ $(function(){
             this.songs=songs;
             if(albums){
                 for(var i=0;i<albums.length;i++){
-                    var album = albums[i],
-                        albumSongs = songs.filter(function(song){return song.get('album')===album;}),
-                        albumView = new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
+                    var album=albums[i],
+                        albumSongs=songs.filter(function(song){return song.get('album')===album;}),
+                        albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
                     this.mapping[album] = albumSongs;
                     this.filteredLibContent.append(albumView.render().el);
@@ -1017,15 +1063,15 @@ $(function(){
             var event=e.originalEvent,
                 dataTransferObj=event.dataTransfer,
                 songId=event.srcElement.dataset['id'];
-            dataTransferObj.effectAllowed = 'move';
+            dataTransferObj.effectAllowed='move';
 
             if(this.songs){
-                var song = this.songs.get(songId);
-                dataTransferObj.setData('text/plain', JSON.stringify(song.toJSON()));
+                var song=this.songs.get(songId),
+                    dataTransfer=DataTransfer.create('song',song);
+                dataTransferObj.setData('text/plain',dataTransfer.toString());
             }
         }
     });
-
 });
 
 "use strict";

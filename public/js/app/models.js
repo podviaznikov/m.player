@@ -1,4 +1,18 @@
 "use strict";
+var DataTransfer={
+    create:function(type,value){
+        return Object.create(this,{type:{value:type},value:{value:value}});
+    },
+    toString:function(){
+        return JSON.stringify({
+            type:this.type,
+            value:this.value
+        });
+    },
+    fromString:function(source){
+        return JSON.parse(source);
+    }
+};
 var Song = Porridge.Model.extend({
     defaults:{
         album:'No information',
