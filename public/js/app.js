@@ -1067,7 +1067,10 @@ $(function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress');
-            this.audioEL = new ui.AudioElement({player:this});
+            this.audioEL=new ui.AudioElement({player:this});
+            //setting volume to audio element
+            this.audioEL.setVolume(settings.getVolume());
+            //setting volume to UI control
             this.volumeSlider.attr('value',settings.getVolume());
         },
         turnOnHelpMode:function(){

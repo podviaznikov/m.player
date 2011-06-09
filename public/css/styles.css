@@ -1,3 +1,22 @@
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #939393;
+    opacity:0.8;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: #939393;
+	opacity:0.4;
+}
 #lastfm_login
 {
     display:none;
@@ -145,6 +164,10 @@ div.artist_albums
 {
     display:table;
 }
+#playing_songs .song-data
+{
+    margin-right:5px;
+}
 .song-data:nth-child(2n+1)
 {
     background-color: #f0f0f0;
@@ -264,6 +287,7 @@ article.lib-item-data
 {
     border-bottom: 1px solid #939393;
     padding: 15px 0px 15px 0px;
+    margin-right:5px;
 }
 article.lib-item-data .command_link
 {
@@ -425,6 +449,7 @@ span.info_image img
 {
     border-bottom: 1px solid #939393;
     padding: 15px 0px 15px 0px;
+    margin-right:5px;
 }
 .lib_item_full_info_panel:first-child
 {
