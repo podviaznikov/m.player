@@ -130,11 +130,12 @@ var Song = Porridge.Model.extend({
 });
 var SongsList = Porridge.Collection.extend({
     model:Song,
+    //sort by track number or name if track number is not presented
     comparator:function(song){
         var track = song.get('track');
-        if(track && track!='')
-        {
-            return parseInt(track);
+        if(track && track!=''){
+            //should always pass 10. In other case '08'(as example) may be parsed incorrectly
+            return parseInt(track,10);
         }
         return song.get('name');
     },
@@ -706,9 +707,9 @@ $(function(){
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
             if(dataTransfer&&dataTransfer.getData('text/plain')){
-                var songJSON=JSON.parse(dataTransfer.getData('text/plain'));
-                if(songJSON){
-                    var song = new Song(songJSON);
+                var transfer=JSON.parse(dataTransfer.getData('text/plain'));
+                if(transfer){
+                    var song=new Song(transfer);
                     this.songs.add(song);
                 }
             }else{
@@ -1177,25 +1178,24 @@ $(function(){
             AppController.playlistView.next();
         },
         updateAudioProgress:function(duration,currentTime){
-            var timeInSeconds = parseInt(currentTime, 10),
-                songDuration = parseInt(duration,10),
-                rem = parseInt(duration - currentTime, 10),
-                pos = (timeInSeconds / duration) * 100,
-                mins = Math.floor(currentTime/60,10),
-                secs = timeInSeconds - mins*60,
-                timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
-                currentSong = AppController.playlistView.currentSong();
-            if(rem==0){
+            var timeInSeconds=parseInt(currentTime, 10),
+                songDuration=parseInt(duration,10),
+                rem=parseInt(duration - currentTime, 10),
+                pos=(timeInSeconds / duration) * 100,
+                mins=Math.floor(currentTime/60,10),
+                secs=timeInSeconds - mins*60,
+                timeCounter= mins + ':' + (secs > 9 ? secs : '0' + secs),
+                currentSong=AppController.playlistView.currentSong();
+            if(rem==0 && currentSong){
                 this.loadedMusicSlider=false;
                 dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
-
             }
             this.timeCounter.text(timeCounter);
             this.musicSlider.attr('value',currentTime);
 
             if (!this.loadedMusicSlider){
-                this.loadedMusicSlider = true;
+                this.loadedMusicSlider=true;
                 this.musicSlider.attr('max',duration);
             }
         }

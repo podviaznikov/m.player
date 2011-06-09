@@ -164,25 +164,24 @@ $(function(){
             AppController.playlistView.next();
         },
         updateAudioProgress:function(duration,currentTime){
-            var timeInSeconds = parseInt(currentTime, 10),
-                songDuration = parseInt(duration,10),
-                rem = parseInt(duration - currentTime, 10),
-                pos = (timeInSeconds / duration) * 100,
-                mins = Math.floor(currentTime/60,10),
-                secs = timeInSeconds - mins*60,
-                timeCounter = mins + ':' + (secs > 9 ? secs : '0' + secs),
-                currentSong = AppController.playlistView.currentSong();
-            if(rem==0){
+            var timeInSeconds=parseInt(currentTime, 10),
+                songDuration=parseInt(duration,10),
+                rem=parseInt(duration - currentTime, 10),
+                pos=(timeInSeconds / duration) * 100,
+                mins=Math.floor(currentTime/60,10),
+                secs=timeInSeconds - mins*60,
+                timeCounter= mins + ':' + (secs > 9 ? secs : '0' + secs),
+                currentSong=AppController.playlistView.currentSong();
+            if(rem==0 && currentSong){
                 this.loadedMusicSlider=false;
                 dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
-
             }
             this.timeCounter.text(timeCounter);
             this.musicSlider.attr('value',currentTime);
 
             if (!this.loadedMusicSlider){
-                this.loadedMusicSlider = true;
+                this.loadedMusicSlider=true;
                 this.musicSlider.attr('max',duration);
             }
         }

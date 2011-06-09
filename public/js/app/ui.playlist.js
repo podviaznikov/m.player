@@ -96,9 +96,9 @@ $(function(){
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
             if(dataTransfer&&dataTransfer.getData('text/plain')){
-                var songJSON=JSON.parse(dataTransfer.getData('text/plain'));
-                if(songJSON){
-                    var song = new Song(songJSON);
+                var transfer=JSON.parse(dataTransfer.getData('text/plain'));
+                if(transfer){
+                    var song=new Song(transfer);
                     this.songs.add(song);
                 }
             }else{

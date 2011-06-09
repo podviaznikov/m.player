@@ -16,11 +16,12 @@ var Song = Porridge.Model.extend({
 });
 var SongsList = Porridge.Collection.extend({
     model:Song,
+    //sort by track number or name if track number is not presented
     comparator:function(song){
         var track = song.get('track');
-        if(track && track!='')
-        {
-            return parseInt(track);
+        if(track && track!=''){
+            //should always pass 10. In other case '08'(as example) may be parsed incorrectly
+            return parseInt(track,10);
         }
         return song.get('name');
     },

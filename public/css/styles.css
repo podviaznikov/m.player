@@ -813,6 +813,10 @@ footer.saved_playlist_toolbar
     {
         display:none!important;
     }
+    #new_play_list
+    {
+        display:none;
+    }
 }
 @media screen and (max-width: 330px)
 {
@@ -824,5 +828,9 @@ footer.saved_playlist_toolbar
     {
         margin-right:0px;
         margin-left:0px;
+    }
+    #playlist_toolbar
+    {
+        display:none;
     }
 }
