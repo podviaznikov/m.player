@@ -793,7 +793,7 @@ $(function(){
             }));
             //fixing max width for song info to prevent problems with big song names
             var playingListPanelWidth=$('#playing_list').width();
-       		this.songInfoEl.css('max-width',playingListPanelWidth-115);
+       		this.$(this.songInfoEl).css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
