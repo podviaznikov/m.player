@@ -4,7 +4,6 @@ $(function(){
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),
         songsEl:$('#playing_list #playing_songs'),
-        songInfoEl:$('#song_info'),
         dropFileLabel:$('#playing_list #playing_songs label'),
         statEL:$('#playing_list footer'),
         songInfoTpl: $('#song_info_tpl').html(),
@@ -131,8 +130,8 @@ $(function(){
                 year:this.selectedSong.get('year')
             }));
             //fixing max width for song info to prevent problems with big song names
-            var playingListPanelWidth=$('#playing_list').width();
-       		this.$(this.songInfoEl).css('max-width',playingListPanelWidth-115);
+            var playingListPanelWidth=this.el.width();
+       		this.$('#song_info').css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
