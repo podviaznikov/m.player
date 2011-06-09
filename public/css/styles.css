@@ -711,10 +711,6 @@ footer.saved_playlist_toolbar
 }
 @media screen and (min-width: 901px) and (max-width: 1024px)
 {
-    #filtered_lib
-    {
-        display:none;
-    }
     #music_slider
     {
         width:45%;

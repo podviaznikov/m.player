@@ -21,7 +21,6 @@ $(function(){
             this.playLists.bind('refresh',this.addPlayLists);
 
             this.artists.fetch();
-
             this.playLists.fetch();
         },
         keyPressed:function(event){

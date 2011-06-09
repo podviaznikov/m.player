@@ -110,18 +110,17 @@ $(function(){
         },
         deleteSong:function(){
             this.model.bind('destroy',this.onDeleteSong)
-            this.model.destroy();
+            this.model.remove();
         },
         onDeleteSong:function(){
             var view = this.model.albumView;
             if(view){
                 view.remove();
             }
-            fs.util.remove(this.model.get('fileName'));
         },
         playSongs:function(){
-            this.selectSong();
             var songs=this.options.songs;
+            this.selectSong();
             AppController.playlistView.setSongsAndPlay(songs);
             if(this.options.playList){
                 AppController.playlistView.setPlayListModel(this.options.playList);

@@ -51,21 +51,22 @@ $(function(){
             }
         },
         handleFileSelect:function(files){
-            var self = this,
-                fileProcessingFunctions=[];
-                this.$('#file_upload_status_dialog').addClass('active');
+            var self=this,
+                fileProcessingFunctions=[],
+                fileUploadStatusDialog=this.$('#file_upload_status_dialog');
+                fileUploadStatusDialog.addClass('active');
             _.each(files,function(file,index){
                 var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
                 fileProcessingFunctions.push(bindedFunct);
             });
             async.series(fileProcessingFunctions,function(err, results){
-                self.$('#file_upload_status_dialog').removeClass('active');
+                fileUploadStatusDialog.removeClass('active');
             });
         },
         //some refactoring should be done
         processOneAudioFile:function(file,index,filesAmount,callback){
-            var percent = Math.floor(((index+1)/filesAmount)*100),
-                progressElement = this.$(this.progress);
+            var percent=Math.floor(((index+1)/filesAmount)*100),
+                progressElement=this.$(this.progress);
             this.$('#file_index').html(index);
             this.$('#total_files_amount').html(filesAmount);
             this.$('#uploading_files_progress header span').html(file.name);
@@ -88,7 +89,7 @@ $(function(){
                             song.save();
                             AppController.playlistView.songs.add(song);
                             progressElement.val(percent);
-                            var artistName = song.get('artist'),
+                            var artistName=song.get('artist'),
                                 artist=AppController.libraryMenu.artists.forName(artistName);
                             if(!artist){
                                 artist = new Artist({name:artistName});
@@ -98,6 +99,9 @@ $(function(){
                                     AppController.libraryMenu.artists.add(artist);
                                 });
                             }else{
+                                //if artist was deleted: mark it as undeleted
+                                artist.set({isDeleted:false});
+                                artist.save();
                                 artist.change();
                             }
                             callback(null);

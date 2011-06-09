@@ -120,6 +120,12 @@ var Song = Porridge.Model.extend({
         artist:'No information',
         year:'',
         genre:''
+    },
+    remove:function(){
+        //destroy model
+        this.destroy();
+        //remove file from filesystem
+        fs.util.remove(this.get('fileName'));
     }
 },{
     definition:{
@@ -139,9 +145,13 @@ var SongsList = Porridge.Collection.extend({
         }
         return song.get('name');
     },
-    forAlbum:function(album)
-    {
+    forAlbum:function(album){
         return this.filter(function(song){return song.get('album')===album;});
+    },
+    remove:function(){
+        this.each(function(song){
+            song.remove();
+        });
     }
 });
 var Artist = Porridge.Model.extend({
@@ -163,10 +173,14 @@ var Artist = Porridge.Model.extend({
             genres=_.uniq(this.songs.pluck('genre')),
             songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
-        if(songsCount===0)
-        {
+        if(songsCount===0){
             this.set({isDeleted:true});
         }
+    },
+    remove:function(){
+        this.set({isDeleted:true});
+        this.songs.remove();
+        this.model.save();
     }
 },{
     definition:{
@@ -249,21 +263,22 @@ $(function(){
             }
         },
         handleFileSelect:function(files){
-            var self = this,
-                fileProcessingFunctions=[];
-                this.$('#file_upload_status_dialog').addClass('active');
+            var self=this,
+                fileProcessingFunctions=[],
+                fileUploadStatusDialog=this.$('#file_upload_status_dialog');
+                fileUploadStatusDialog.addClass('active');
             _.each(files,function(file,index){
                 var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
                 fileProcessingFunctions.push(bindedFunct);
             });
             async.series(fileProcessingFunctions,function(err, results){
-                self.$('#file_upload_status_dialog').removeClass('active');
+                fileUploadStatusDialog.removeClass('active');
             });
         },
         //some refactoring should be done
         processOneAudioFile:function(file,index,filesAmount,callback){
-            var percent = Math.floor(((index+1)/filesAmount)*100),
-                progressElement = this.$(this.progress);
+            var percent=Math.floor(((index+1)/filesAmount)*100),
+                progressElement=this.$(this.progress);
             this.$('#file_index').html(index);
             this.$('#total_files_amount').html(filesAmount);
             this.$('#uploading_files_progress header span').html(file.name);
@@ -286,7 +301,7 @@ $(function(){
                             song.save();
                             AppController.playlistView.songs.add(song);
                             progressElement.val(percent);
-                            var artistName = song.get('artist'),
+                            var artistName=song.get('artist'),
                                 artist=AppController.libraryMenu.artists.forName(artistName);
                             if(!artist){
                                 artist = new Artist({name:artistName});
@@ -296,6 +311,9 @@ $(function(){
                                     AppController.libraryMenu.artists.add(artist);
                                 });
                             }else{
+                                //if artist was deleted: mark it as undeleted
+                                artist.set({isDeleted:false});
+                                artist.save();
                                 artist.change();
                             }
                             callback(null);
@@ -445,7 +463,6 @@ $(function(){
             this.playLists.bind('refresh',this.addPlayLists);
 
             this.artists.fetch();
-
             this.playLists.fetch();
         },
         keyPressed:function(event){
@@ -947,18 +964,17 @@ $(function(){
         },
         deleteSong:function(){
             this.model.bind('destroy',this.onDeleteSong)
-            this.model.destroy();
+            this.model.remove();
         },
         onDeleteSong:function(){
             var view = this.model.albumView;
             if(view){
                 view.remove();
             }
-            fs.util.remove(this.model.get('fileName'));
         },
         playSongs:function(){
-            this.selectSong();
             var songs=this.options.songs;
+            this.selectSong();
             AppController.playlistView.setSongsAndPlay(songs);
             if(this.options.playList){
                 AppController.playlistView.setPlayListModel(this.options.playList);

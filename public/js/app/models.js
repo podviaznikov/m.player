@@ -6,6 +6,12 @@ var Song = Porridge.Model.extend({
         artist:'No information',
         year:'',
         genre:''
+    },
+    remove:function(){
+        //destroy model
+        this.destroy();
+        //remove file from filesystem
+        fs.util.remove(this.get('fileName'));
     }
 },{
     definition:{
@@ -25,9 +31,13 @@ var SongsList = Porridge.Collection.extend({
         }
         return song.get('name');
     },
-    forAlbum:function(album)
-    {
+    forAlbum:function(album){
         return this.filter(function(song){return song.get('album')===album;});
+    },
+    remove:function(){
+        this.each(function(song){
+            song.remove();
+        });
     }
 });
 var Artist = Porridge.Model.extend({
@@ -49,10 +59,14 @@ var Artist = Porridge.Model.extend({
             genres=_.uniq(this.songs.pluck('genre')),
             songsCount = this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
-        if(songsCount===0)
-        {
+        if(songsCount===0){
             this.set({isDeleted:true});
         }
+    },
+    remove:function(){
+        this.set({isDeleted:true});
+        this.songs.remove();
+        this.model.save();
     }
 },{
     definition:{
