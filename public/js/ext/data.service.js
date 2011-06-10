@@ -55,6 +55,28 @@ var dataService={
     }
 };
 var fbService={
+    init:function(){
+        FB.init({
+            appId  : '222066051151670',
+            status : true, // check login status
+            cookie : true, // enable cookies to allow the server to access the session
+            xfbml  : false  // don't parse XFBML
+        });
+    },
+    login:function(){
+        FB.login(function(response){
+            if(response.session){
+                alert('Success');
+            }else{
+                alert('Canceled');
+            }
+        }
+    },
+    logout:function(){
+        FB.logout(function(response){
+            console.log('user was logout-ed')
+        });
+    },
     //change status of teh logined user to new one
     setStatus:function(status){
         FB.getLoginStatus(function(response){

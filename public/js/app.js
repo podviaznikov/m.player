@@ -275,12 +275,16 @@ $(function(){
             'change #drop_files':'dropFiles',
             'change #drop_folder':'dropFiles',
             'click #import_songs_directory':'importMusicDirectory',
-            'click #import_songs_files':'importMusicFiles'
+            'click #import_songs_files':'importMusicFiles',
+            'click #fb_login':'fbLogin'
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn');
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn','fbLogin');
+        },
+        fbLogin:{
+            fbService.login();
         },
         showLastfmLoginBtn:function(){
             this.lastfmLoginBtn.show();
