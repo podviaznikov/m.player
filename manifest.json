@@ -3,6 +3,10 @@
   "description": "Offline Music Player",
   "version": "1.0",
   "app": {
+      "urls": [
+        "*://player.enginimation.com/",
+        "*://connect.facebook.net/"
+      ],
     "launch": {
        "local_path": "public/index.html"
     }

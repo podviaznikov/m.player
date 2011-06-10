@@ -4,7 +4,8 @@
   "version": "2.0",
   "app": {
     "urls": [
-      "*://player.enginimation.com/"
+      "*://player.enginimation.com/",
+      "*://connect.facebook.net/"
     ],
     "launch": {
       "web_url": "http://player.enginimation.com/"

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head><title>X</title></head>
+<body>
+<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script>
+  FB.init({
+    appId  : '222066051151670',
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+    FB.Event.subscribe('auth.login', function(response) {
+   login();
+});
+FB.Event.subscribe('auth.logout', function(response) {
+   logout();
+});
+FB.getLoginStatus(function(response) {
+   if (response.session) {
+      greet();
+   }
+});
+    function login(){
+   FB.api('/me', function(response) {
+      alert('You have successfully logged in, '+response.name+"!");
+   });
+}
+function logout(){
+   alert('You have successfully logged out!');
+}
+function greet(){
+   FB.api('/me', function(response) {
+      alert('Welcome, '+response.name+"!");
+   });
+}
+</script>
+<fb:login-button autologoutlink='true'  perms='email,user_birthday,status_update,publish_stream'></fb:login-button>
+
+</body>
+</html>
