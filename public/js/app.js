@@ -314,13 +314,11 @@ $(function(){
                 metadataParser.parse(initialFile.name,data,function(tags){
                     var song=new Song();
                     //fix track number
-                    if(tags.track){
+                    if(tags.track && _.isString(tags.track)){
                         var slashIndex=tags.track.indexOf('/');
                         if(slashIndex>0){
                             tags.track=tags.track.substring(0,slashIndex);
                         }
-                    }
-                    if(tags.track){
                         //don't save that 0 in the track number
                         if('0'===tags.track.charAt(0)){
                             tags.track=tags.track.substring(1);
@@ -540,16 +538,21 @@ $(function(){
         filterLibrary:function(){
             var filterValue=this.searchField.val();
             if(!filterValue || filterValue==''){
-                this.artists.each(function(artist)
-                {
-                    artist.view.show();
+                this.artists.each(function(artist){
+                    if(artist.view){
+                        artist.view.show();
+                    }
                 });
             }else{
                 this.artists.each(function(artist){
                     if(artist.get('name').indexOf(filterValue) == -1){
-                        artist.view.hide();
+                        if(artist.view){
+                            artist.view.hide();
+                        }
                     }else{
-                        artist.view.show();
+                        if(artist.view){
+                            artist.view.show();
+                        }
                     }
                 });
             }

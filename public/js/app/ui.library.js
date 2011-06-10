@@ -64,16 +64,21 @@ $(function(){
         filterLibrary:function(){
             var filterValue=this.searchField.val();
             if(!filterValue || filterValue==''){
-                this.artists.each(function(artist)
-                {
-                    artist.view.show();
+                this.artists.each(function(artist){
+                    if(artist.view){
+                        artist.view.show();
+                    }
                 });
             }else{
                 this.artists.each(function(artist){
                     if(artist.get('name').indexOf(filterValue) == -1){
-                        artist.view.hide();
+                        if(artist.view){
+                            artist.view.hide();
+                        }
                     }else{
-                        artist.view.show();
+                        if(artist.view){
+                            artist.view.show();
+                        }
                     }
                 });
             }
