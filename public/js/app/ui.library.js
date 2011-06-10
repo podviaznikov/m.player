@@ -179,13 +179,7 @@ $(function(){
             this.model.view=this;
         },
         render:function(){
-            var firstSong=this.model.get('songs').at(0);
-            if(firstSong){
-                dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),this.renderPlayListInfo);
-            }
-            else{
-                this.renderPlayListInfo('css/images/no_picture.png');
-            }
+            this.model.findImage(this.renderPlayListInfo);
             $(this.el).html(html);
             return this;
         },

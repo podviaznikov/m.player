@@ -20,33 +20,36 @@ $(function(){
     });
 
     ui.PlayListFullView = Backbone.View.extend({
-        className: 'lib_item_full_info_panel',
-        tagName: 'article',
+        className:'lib_item_full_info_panel',
+        tagName:'article',
         tpl:$('#detailed_playlist_info_tpl').html(),
         events:{
             'click':'playSongs'
         },
         initialize: function(){
-            _.bindAll(this, 'addSong','render','playSongs');
+            _.bindAll(this, 'addSong','render','renderPlayListInfo','playSongs');
         },
         render:function(){
-            var html = _.template(this.tpl,{
-                image:'css/images/no_picture.png',
-                name:this.model.get('name')
-            });
-            $(this.el).append(html);
+            this.model.findImage();
             _.each(this.model.get('songs'),this.addSong);
             return this;
         },
+        renderPlayListInfo:function(image){
+            var html=_.template(this.tpl,{
+              image:image,
+              name:this.model.get('name')
+            });
+            $(this.el).append(html);
+        },
         addSong:function(song,key){
-            var song = new Song(song),
-                view = new ui.SongView({
+            var song=new Song(song),
+                view=new ui.SongView({
                     model:song,
                     key:key,
                     songs:this.model.get('songs'),
                     playList:this.model
                 });
-            song.albumView = view;
+            song.albumView=view;
             $(this.el).append(view.render().el);
         },
         playSongs:function(){

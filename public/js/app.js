@@ -193,7 +193,7 @@ var Artist = Porridge.Model.extend({
         }
         this.songs=new SongsList;
         this.songs.bind('retrieved',this.setParameterFromSongs);
-        this.bind('change',this.refresh);
+        //this.bind('change',this.refresh);
     },
     refresh:function(){
         this.songs.fetchByKey('artists',this.get('name'));
@@ -227,6 +227,20 @@ var ArtistsList = Porridge.Collection.extend({
 });
 
 var PlayList = Porridge.Model.extend({
+    defaults:{
+        songs:[]
+    },
+    findImage:function(callback){
+        var songs=this.get('songs')||[];
+        if(_.isArray(songs) && songs.length>0){
+            var firstSong=songs[0];
+            dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),function(image){
+                callback(image);
+            });
+        }else{
+            callback('css/images/no_picture.png');
+        }
+    }
 //    getGenres:function()
 //    {
 //        var songs=this.get('songs');
@@ -656,13 +670,7 @@ $(function(){
             this.model.view=this;
         },
         render:function(){
-            var firstSong=this.model.get('songs').at(0);
-            if(firstSong){
-                dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),this.renderPlayListInfo);
-            }
-            else{
-                this.renderPlayListInfo('css/images/no_picture.png');
-            }
+            this.model.findImage(this.renderPlayListInfo);
             $(this.el).html(html);
             return this;
         },
@@ -949,33 +957,36 @@ $(function(){
     });
 
     ui.PlayListFullView = Backbone.View.extend({
-        className: 'lib_item_full_info_panel',
-        tagName: 'article',
+        className:'lib_item_full_info_panel',
+        tagName:'article',
         tpl:$('#detailed_playlist_info_tpl').html(),
         events:{
             'click':'playSongs'
         },
         initialize: function(){
-            _.bindAll(this, 'addSong','render','playSongs');
+            _.bindAll(this, 'addSong','render','renderPlayListInfo','playSongs');
         },
         render:function(){
-            var html = _.template(this.tpl,{
-                image:'css/images/no_picture.png',
-                name:this.model.get('name')
-            });
-            $(this.el).append(html);
+            this.model.findImage();
             _.each(this.model.get('songs'),this.addSong);
             return this;
         },
+        renderPlayListInfo:function(image){
+            var html=_.template(this.tpl,{
+              image:image,
+              name:this.model.get('name')
+            });
+            $(this.el).append(html);
+        },
         addSong:function(song,key){
-            var song = new Song(song),
-                view = new ui.SongView({
+            var song=new Song(song),
+                view=new ui.SongView({
                     model:song,
                     key:key,
                     songs:this.model.get('songs'),
                     playList:this.model
                 });
-            song.albumView = view;
+            song.albumView=view;
             $(this.el).append(view.render().el);
         },
         playSongs:function(){
