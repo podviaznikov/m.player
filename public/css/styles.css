@@ -367,7 +367,7 @@ article.lib-item-data label:after
 {
     content:'';
 }
-.artist_genres
+.genres_box
 {
     display:inline-block;
 }

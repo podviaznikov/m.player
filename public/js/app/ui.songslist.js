@@ -116,7 +116,7 @@ $(function(){
             this.model.remove();
         },
         onDeleteSong:function(){
-            var view = this.model.albumView;
+            var view=this.model.albumView;
             if(view){
                 view.remove();
             }

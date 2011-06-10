@@ -118,10 +118,10 @@ var PlayList = Porridge.Model.extend({
             callback('css/images/no_picture.png');
         }
     },
-    getGenres:function(){
+    findGenres:function(){
         var songs=this.findSongs(),
             genres=songs.map(function(song){ return song.get('genre'); });
-        return _.uniq(genres);
+        return _.uniq(genres)||[];
     }
 },{
     definition:{

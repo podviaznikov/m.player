@@ -120,7 +120,7 @@
     <section class="lib-item-info">
         <h1><%= name %></h1>
         <div class="artist_albums"><% _.each(albums, function(album) { %> <a class="album_link" data-album="<%= album %>"><%= album %></a> <% }); %></div>
-        <div class="artist_genres"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
+        <div class="genres_box"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
         <footer>
             <span class="bio_artist command_link" title="Show artist's bio"></span>
@@ -132,6 +132,7 @@
     <span class="info_image"><img src="<%= image %>"></span>
     <section class="lib-item-info">
         <h1><%= name %></h1>
+        <div class="genres_box"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
         <footer class="saved_playlist_toolbar">
             <span class="delete_playlist command_link" title="Delete this playlist">Delete</span>

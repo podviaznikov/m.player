@@ -245,10 +245,10 @@ var PlayList = Porridge.Model.extend({
             callback('css/images/no_picture.png');
         }
     },
-    getGenres:function(){
+    findGenres:function(){
         var songs=this.findSongs(),
             genres=songs.map(function(song){ return song.get('genre'); });
-        return _.uniq(genres);
+        return _.uniq(genres)||[];
     }
 },{
     definition:{
@@ -674,13 +674,13 @@ $(function(){
         },
         render:function(){
             this.model.findImage(this.renderPlayListInfo);
-            $(this.el).html(html);
             return this;
         },
         renderPlayListInfo:function(image){
             var html = _.template(this.tpl,{
                 image:image,
                 name:this.model.get('name'),
+                genres:this.model.findGenres();
                 songsCount:this.model.get('songs').length
             });
             $(this.el).html(html);
@@ -1056,7 +1056,7 @@ $(function(){
             this.model.remove();
         },
         onDeleteSong:function(){
-            var view = this.model.albumView;
+            var view=this.model.albumView;
             if(view){
                 view.remove();
             }
