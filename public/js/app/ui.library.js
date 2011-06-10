@@ -196,7 +196,7 @@ $(function(){
                 songsCount:this.model.get('songs').length
             });
             $(this.el).html(html);
-        };
+        },
         selectPlayList:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');

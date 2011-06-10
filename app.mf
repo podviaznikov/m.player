@@ -1,6 +1,6 @@
 CACHE MANIFEST
-index.html
 16.png
+index.html
 js/app.js
 js/lib/libs.bundle.js
 js/lib/async.min.js
