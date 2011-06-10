@@ -187,7 +187,7 @@ $(function(){
                 image:image,
                 name:this.model.get('name'),
                 genres:this.model.findGenres(),
-                songsCount:this.model.get('songs').length()
+                songsCount:this.model.get('songs').length
             });
             $(this.el).html(html);
         },
