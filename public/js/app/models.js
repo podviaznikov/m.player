@@ -103,23 +103,26 @@ var PlayList = Porridge.Model.extend({
     defaults:{
         songs:[]
     },
+    findSongs:function(){
+        var songsArray=this.get('songs')||[];
+        return new SongsList(songsArray);
+    },
     findImage:function(callback){
-        var songs=this.get('songs')||[];
-        if(_.isArray(songs) && songs.length>0){
-            var firstSong=songs[0];
+        var songs=this.findSongs();
+        if(songs.length>0){
+            var firstSong=songs.first();
             dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),function(image){
                 callback(image);
             });
         }else{
             callback('css/images/no_picture.png');
         }
+    },
+    getGenres:function(){
+        var songs=this.findSongs(),
+            genres=songs.map(function(song){ return song.get('genre'); });
+        return _.uniq(genres);
     }
-//    getGenres:function()
-//    {
-//        var songs=this.get('songs');
-//        var genres=_.map(songs, function(song){ return song.genre; });
-//        return _.uniq(genres);
-//    }
 },{
     definition:{
         name:'playlist',
