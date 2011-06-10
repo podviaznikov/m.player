@@ -271,7 +271,7 @@ $(function(){
             e.preventDefault();
             //getting from file input or dragged content
             var target=e.originalEvent.dataTransfer||e.originalEvent.target,
-                files = target.files;
+                files=target.files;
             if(files && files.length>0){
                this.handleFileSelect(files); // handle FileList object.
             }
@@ -289,7 +289,7 @@ $(function(){
                 fileUploadStatusDialog.removeClass('active');
             });
         },
-        //some refactoring should be done
+        //todo(anton) some refactoring should be done. get dom elements from here
         processOneAudioFile:function(file,index,filesAmount,callback){
             var percent=Math.floor(((index+1)/filesAmount)*100),
                 progressElement=this.$(this.progress);
@@ -329,14 +329,15 @@ $(function(){
                                     artist.set({image:image});
                                     artist.save();
                                     AppController.libraryMenu.artists.add(artist);
+                                    callback(null);
                                 });
                             }else{
                                 //if artist was deleted: mark it as undeleted
                                 artist.set({isDeleted:false});
                                 artist.save();
                                 artist.change();
+                                callback(null);
                             }
-                            callback(null);
                         }
                     },song.get('fileName'));
                });

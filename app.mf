@@ -1,10 +1,10 @@
 CACHE MANIFEST
 index.html
-16.png
 js/app.js
 js/lib/libs.bundle.js
 js/lib/async.min.js
 css/styles.css
+16.png
 css/images/no_picture.png
 css/images/lastfm_square.jpg
 /js/ext/data.service.js
