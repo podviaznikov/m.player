@@ -4,7 +4,7 @@
 // For all details and documentation:
 // https://github.com/podviaznikov/m.player.
 "use strict";
-var dataService ={
+var dataService={
     getSession:function(callback)
     {
         $.getJSON('/session',callback);
@@ -51,6 +51,34 @@ var dataService ={
         })
         .error(function() {
             callback({});
+        });
+    }
+};
+var fbService={
+    //change status of teh logined user to new one
+    setStatus:function(status){
+        FB.getLoginStatus(function(response){
+            if(response.session){
+                FB.api({
+                    method:'status.set',
+                    status:status},
+                    function(response){
+                        if(response == 0){
+                            console.log('Your facebook status was not updated.');
+                        }else{
+                            console.log('Your facebook status was updated');
+                        }
+                    }
+                );
+            }else{
+                console.log('user not logined');
+            }
+        });
+    },
+    //get name of the logined user
+    getName:function(callback){
+        FB.api('/me',function(response){
+          callback(response.name);
         });
     }
 };
