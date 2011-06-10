@@ -66,6 +66,7 @@ var Artist = Porridge.Model.extend({
         }
         this.songs=new SongsList;
         this.songs.bind('retrieved',this.setParameterFromSongs);
+        this.refresh();
         //this.bind('change',this.refresh);
     },
     refresh:function(){
@@ -74,7 +75,7 @@ var Artist = Porridge.Model.extend({
     setParameterFromSongs:function(){
         var albums=_.uniq(this.songs.pluck('album')),
             genres=_.uniq(this.songs.pluck('genre')),
-            songsCount = this.songs.length;
+            songsCount=this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
         if(songsCount===0){
             this.set({isDeleted:true});

@@ -193,6 +193,7 @@ var Artist = Porridge.Model.extend({
         }
         this.songs=new SongsList;
         this.songs.bind('retrieved',this.setParameterFromSongs);
+        this.refresh();
         //this.bind('change',this.refresh);
     },
     refresh:function(){
@@ -201,7 +202,7 @@ var Artist = Porridge.Model.extend({
     setParameterFromSongs:function(){
         var albums=_.uniq(this.songs.pluck('album')),
             genres=_.uniq(this.songs.pluck('genre')),
-            songsCount = this.songs.length;
+            songsCount=this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
         if(songsCount===0){
             this.set({isDeleted:true});
@@ -589,7 +590,7 @@ $(function(){
             'click .delete_artist':'deleteArtist',
             'click .bio_artist':'showArtistBio',
             'click .album_link': 'selectAlbum',
-            'dbclick .album_link':'playAlbumSongs',
+            'dblclick .album_link':'playAlbumSongs',
             'dragstart':'handleDragStart'
         },
         initialize:function(){
