@@ -5,7 +5,7 @@ copyright = '(c) 2011 Enginimation Studio (http://enginimation.com). May be free
 max_js = 'public/js/app.js'
 min_js = 'public/js/app.min.js'
 
-# file list (from the root/src folder)
+# file list (from the root/public folder)
 files = [
     "/js/app/controller.js",
     "/js/app/models.js",

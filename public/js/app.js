@@ -110,7 +110,20 @@ var settings={
         return this.getUser()!=''&& this.getSessionKey()!='';
     }
 };
+var metadataParser={
+    parse:function(name,binaryData,callback){
+        var startDate=new Date().getTime();
 
+        ID3.loadTags(name, function(){
+            var endDate = new Date().getTime();
+            console.log("Time: " + ((endDate-startDate)/1000)+"s");
+            var tags = ID3.getAllTags(name);
+            callback(tags);
+    },
+    {tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics", "picture"],
+     dataReader: FileAPIReader(binaryData)});
+  }
+};
 
 "use strict";
 var DataTransfer={
@@ -298,8 +311,8 @@ $(function(){
             this.$('#uploading_files_progress header span').html(file.name);
             fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
                 if(readError){return;}
-                ID3v2.parseFile(data,function(tags){
-                    var song = new Song();
+                metadataParser.parse(initialFile.name,data,function(tags){
+                    var song=new Song();
                     //fix track number
                     if(tags.track){
                         var slashIndex=tags.track.indexOf('/');

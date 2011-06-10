@@ -109,4 +109,17 @@ var settings={
         return this.getUser()!=''&& this.getSessionKey()!='';
     }
 };
+var metadataParser={
+    parse:function(name,binaryData,callback){
+        var startDate=new Date().getTime();
 
+        ID3.loadTags(name, function(){
+            var endDate = new Date().getTime();
+            console.log("Time: " + ((endDate-startDate)/1000)+"s");
+            var tags = ID3.getAllTags(name);
+            callback(tags);
+    },
+    {tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics", "picture"],
+     dataReader: FileAPIReader(binaryData)});
+  }
+};

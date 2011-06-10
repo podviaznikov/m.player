@@ -72,8 +72,8 @@ $(function(){
             this.$('#uploading_files_progress header span').html(file.name);
             fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
                 if(readError){return;}
-                ID3v2.parseFile(data,function(tags){
-                    var song = new Song();
+                metadataParser.parse(initialFile.name,data,function(tags){
+                    var song=new Song();
                     //fix track number
                     if(tags.track){
                         var slashIndex=tags.track.indexOf('/');
