@@ -283,7 +283,7 @@ $(function(){
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
                     'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn','fbLogin');
         },
-        fbLogin:{
+        fbLogin:function(){
             fbService.login();
         },
         showLastfmLoginBtn:function(){
