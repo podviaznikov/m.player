@@ -1,9 +1,9 @@
 # m.player - offline/online browser music player
-m.player build on top of the HTML5 technologies and wonderful javascript libraries. Currently you can find it only in Chrome Web Store (https://chrome.google.com/webstore/detail/lhjjnnhpfomdbcgnmkejhacbcdppljic) and http://player.enginimation.com.
+m.player build on top of the HTML5 technologies and wonderful javascript libraries. Currently you can find it in Chrome Web Store (https://chrome.google.com/webstore/detail/lhjjnnhpfomdbcgnmkejhacbcdppljic) and http://player.enginimation.com.
 
 
 ## Feedback
-There are a lot of features I would like to see in this player. You can help to make project better contributing your code or just sending your feedback. If you miss some functionality you are welcome to write me on anton.podviaznikov@enginimation.info. 
+There are a lot of features I would like to see in this player. You can help to make project better contributing your code or just sending your feedback. If you miss some functionality you are welcome to write me on anton.podviaznikov@enginimation.com.
 
 List of issues/features can be found here (https://github.com/podviaznikov/m.player/issues). However I personally plan to implement much more useful functions.
 
