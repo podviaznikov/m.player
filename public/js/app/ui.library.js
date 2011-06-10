@@ -71,7 +71,7 @@ $(function(){
                 });
             }else{
                 this.artists.each(function(artist){
-                    if(artist.get('name').indexOf(filterValue) == -1){
+                    if(artist.get('name').toUpperCase().indexOf(filterValue.toUpperCase()) === -1){
                         if(artist.view){
                             artist.view.hide();
                         }
@@ -174,19 +174,29 @@ $(function(){
             'click .delete_playlist':'deletePlaylist'
         },
         initialize:function(){
-            _.bindAll(this, 'render','selectPlayList','playPlayList','deletePlaylist');
+            _.bindAll(this, 'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
         render:function(){
+            var firstSong=this.model.get('songs').at(0);
+            if(firstSong){
+                dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),this.renderPlayListInfo);
+            }
+            else{
+                this.renderPlayListInfo('css/images/no_picture.png');
+            }
+            $(this.el).html(html);
+            return this;
+        },
+        renderPlayListInfo:function(image){
             var html = _.template(this.tpl,{
-                image:'css/images/no_picture.png',
+                image:image,
                 name:this.model.get('name'),
                 songsCount:this.model.get('songs').length
             });
             $(this.el).html(html);
-            return this;
-        },
+        };
         selectPlayList:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');

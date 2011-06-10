@@ -59,13 +59,16 @@ var Artist = Porridge.Model.extend({
         isDeleted:false
     },
     initialize:function(){
-        _.bindAll(this,'setParameterFromSongs');
+        _.bindAll(this,'setParameterFromSongs','refresh','remove');
         if(!this.get('id')){
             this.id=UUID.generate();
             this.set({id:this.id});
         }
         this.songs=new SongsList;
         this.songs.bind('retrieved',this.setParameterFromSongs);
+        this.bind('change',this.refresh);
+    },
+    refresh:function(){
         this.songs.fetchByKey('artists',this.get('name'));
     },
     setParameterFromSongs:function(){
