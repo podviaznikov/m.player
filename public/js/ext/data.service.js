@@ -70,7 +70,7 @@ var fbService={
             }else{
                 alert('Canceled');
             }
-        }
+        });
     },
     logout:function(){
         FB.logout(function(response){
