@@ -1,6 +1,6 @@
 CACHE MANIFEST
-16.png
 index.html
+16.png
 js/app.js
 js/lib/libs.bundle.js
 js/lib/async.min.js
@@ -9,6 +9,7 @@ css/images/no_picture.png
 css/images/lastfm_square.jpg
 /js/ext/data.service.js
 /js/ext/data.service.offline.js
+http://connect.facebook.net/en_US/all.js
 NETWORK:
 http://userserve-ak.last.fm
 http://player.enginimation.com

@@ -38,7 +38,7 @@ var AppController={
                 });
             }
         });
-
+        fbService.init();
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
         //$(document.body).bind("online", this.checkNetworkStatus);
         //$(document.body).bind("offline", this.checkNetworkStatus);
