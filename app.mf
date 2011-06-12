@@ -3,8 +3,8 @@ index.html
 16.png
 js/app.js
 js/lib/libs.bundle.js
-js/lib/async.min.js
 js/lib/jschardet.js
+js/lib/async.min.js
 css/styles.css
 css/images/no_picture.png
 css/images/lastfm_square.jpg

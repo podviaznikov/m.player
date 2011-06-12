@@ -39,7 +39,7 @@ var AppController={
                 });
             }
         });
-        fbService.init();
+        //fbService.init();
         //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
         //$(document.body).bind("online", this.checkNetworkStatus);
         //$(document.body).bind("offline", this.checkNetworkStatus);
@@ -373,7 +373,7 @@ $(function(){
                                 artist.set({isDeleted:false});
                                 var songsCount=artist.get('songsCount')||0;
                                 artist.set({songsCount:songsCount+1});
-                                artist.songs.add(songs);
+                                artist.songs.add(song);
                                 artist.save();
                                 artist.change();
                                 callback(null);

@@ -113,7 +113,7 @@ $(function(){
                                 artist.set({isDeleted:false});
                                 var songsCount=artist.get('songsCount')||0;
                                 artist.set({songsCount:songsCount+1});
-                                artist.songs.add(songs);
+                                artist.songs.add(song);
                                 artist.save();
                                 artist.change();
                                 callback(null);
