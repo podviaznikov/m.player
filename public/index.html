@@ -8,6 +8,7 @@
     <meta name="keywords" content="player,music player,html5,offline player,lastfm,mp3,media player"/>
     <link rel="stylesheet" href="css/styles.css"/>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
+    <script src="js/lib/jschardet.js"></script>
     <script src="js/lib/async.min.js"></script>
     <script src="js/lib/libs.bundle.js"></script>
     <script src="js/ext/data.service.js"></script>
@@ -16,7 +17,8 @@
 </head>
 <body>
 <a id="lastfm_login" href="http://www.last.fm/api/auth/?api_key=e3377f4b4d8c6de47c7e2c81485a65f5" title="Login to Last.fm"><img src="css/images/lastfm_square.jpg"></a>
-<a id="fb_login" title="Login to FaceBook">FaceBook</a>
+<!--<div id="fb-root"></div>
+<a id="fb_login" title="Login to FaceBook">FaceBook</a>-->
 <aside id="file_upload_status_dialog" class="modal_dialog">
     <section id="uploading_files_progress" class="dialog_content">
         <header>Importing: <span></span></header>

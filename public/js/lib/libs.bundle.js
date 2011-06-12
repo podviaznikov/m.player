@@ -94,33 +94,1321 @@ b,{})}},tmpFileAsArrayBuffer:{value:function(a,b){fs.util.readAsArrayBuffer(a,b,
 fs.write=Object.create({},{file:{value:function(a,b,c){fs.util.writeFileToFile(a,b,{filename:c})}},fileToTmpFile:{value:function(a,b,c){fs.util.writeFileToFile(a,b,{tmp:!0,filename:c})}},blob:{value:function(a,b,c){fs.util.writeBlobToFile(a,b,c,{})}},blobToTmpFile:{value:function(a,b,c){fs.util.writeBlobToFile(a,b,c,{tmp:!0})}},text:{value:function(a,b,c){fs.util.writeTextToFile(a,b,c,{})}},textToTmpFile:{value:function(a,b,c){fs.util.writeTextToFile(a,b,c,{tmp:!0})}},base64Str:{value:function(a,
 b,c,d){fs.util.writeBase64StrToFile(a,b,c,d,{})}},base64StrToTmpFile:{value:function(a,b,c,d){fs.util.writeBase64StrToFile(a,b,c,d,{tmp:!0})}}});
 //id3 reader
-function x(e){var f=e,b=0;this.M=function(){return f};if(typeof e=="string")b=f.length,this.a=function(a){return f.charCodeAt(a+0)&255};else if(typeof e=="unknown")b=IEBinary_getLength(f),this.a=function(a){return IEBinary_getByteAt(f,a+0)};this.l=function(a,c){for(var d=Array(c),b=0;b<c;b++)d[b]=this.a(a+b);return d};this.m=function(){return b};this.d=function(a,c){return(this.a(a)&1<<c)!=0};this.N=function(a){a=this.a(a);return a>127?a-256:a};this.r=function(a,c){var d=c?(this.a(a)<<8)+this.a(a+
-1):(this.a(a+1)<<8)+this.a(a);d<0&&(d+=65536);return d};this.P=function(a,c){var d=this.r(a,c);return d>32767?d-65536:d};this.h=function(a,c){var d=this.a(a),b=this.a(a+1),g=this.a(a+2),h=this.a(a+3),d=c?(((d<<8)+b<<8)+g<<8)+h:(((h<<8)+g<<8)+b<<8)+d;d<0&&(d+=4294967296);return d};this.O=function(a,c){var d=this.h(a,c);return d>2147483647?d-4294967296:d};this.q=function(a){var c=this.a(a),d=this.a(a+1),a=this.a(a+2),c=((c<<8)+d<<8)+a;c<0&&(c+=16777216);return c};this.c=function(a,c){for(var d=[],b=
-a,g=0;b<a+c;b++,g++)d[g]=String.fromCharCode(this.a(b));return d.join("")};this.e=function(a,c,d){a=this.l(a,c);switch(d.toLowerCase()){case "utf-16":case "utf-16le":case "utf-16be":var c=d,b,g=0,h=1,d=0;b=Math.min(b||a.length,a.length);a[0]==254&&a[1]==255?(c=!0,g=2):a[0]==255&&a[1]==254&&(c=!1,g=2);c&&(h=0,d=1);for(var c=[],i=0;g<b;i++){var f=a[g+h],e=(f<<8)+a[g+d];g+=2;if(e==0)break;else f<216||f>=224?c[i]=String.fromCharCode(e):(f=(a[g+h]<<8)+a[g+d],g+=2,c[i]=String.fromCharCode(e,f))}a=new String(c.join(""));
-a.f=g;break;case "utf-8":b=0;g=Math.min(g||a.length,a.length);a[0]==239&&a[1]==187&&a[2]==191&&(b=3);h=[];for(d=0;b<g;d++)if(c=a[b++],c==0)break;else c<128?h[d]=String.fromCharCode(c):c>=194&&c<224?(i=a[b++],h[d]=String.fromCharCode(((c&31)<<6)+(i&63))):c>=224&&c<240?(i=a[b++],e=a[b++],h[d]=String.fromCharCode(((c&255)<<12)+((i&63)<<6)+(e&63))):c>=240&&c<245&&(i=a[b++],e=a[b++],f=a[b++],c=((c&7)<<18)+((i&63)<<12)+((e&63)<<6)+(f&63)-65536,h[d]=String.fromCharCode((c>>10)+55296,(c&1023)+56320));a=new String(h.join(""));
-a.f=b;break;default:g=[];h=h||a.length;for(b=0;b<h;){d=a[b++];if(d==0)break;g[b-1]=String.fromCharCode(d)}a=new String(g.join(""));a.f=b}return a};this.K=function(a){return String.fromCharCode(this.a(a))};this.V=function(){return window.btoa(f)};this.J=function(a){f=window.atob(a)};this.g=function(a,c){c()}}(function(e){e.FileAPIReader=function(f){return function(b,a){a(new x(f))}}})(this);
-(function(e){e.j={i:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",w:function(f){for(var b="",a,c,d,e,g,h,i=0;i<f.length;)a=f[i++],c=f[i++],d=f[i++],e=a>>2,a=(a&3)<<4|c>>4,g=(c&15)<<2|d>>6,h=d&63,isNaN(c)?g=h=64:isNaN(d)&&(h=64),b=b+Base64.i.charAt(e)+Base64.i.charAt(a)+Base64.i.charAt(g)+Base64.i.charAt(h);return b}};e.Base64=e.j;e.j.encodeBytes=e.j.w})(this);
-(function(e){var f=e.s={},b={};f.B=function(a,c,d){d=d||{};(0,d.dataReader)(a,function(f){f.g(0,function(){var g=f.c(4,7)=="ftypM4A"?ID4:f.c(0,3)=="ID3"?ID3v2:ID3v1;g.n(f,function(){var h=d.tags,i=g.o(f,h),h=b[a]||{},e;for(e in i)i.hasOwnProperty(e)&&(h[e]=i[e]);b[a]=h;c&&c()})})})};f.z=function(a){if(!b[a])return null;var c={},d;for(d in b[a])b[a].hasOwnProperty(d)&&(c[d]=b[a][d]);return c};f.A=function(a,c){if(!b[a])return null;return b[a][c]};e.ID3=e.s;f.loadTags=f.B;f.getAllTags=f.z;f.getTag=
-f.A})(this);
-(function(e){var f=e.t={},b=["Blues","Classic Rock","Country","Dance","Disco","Funk","Grunge","Hip-Hop","Jazz","Metal","New Age","Oldies","Other","Pop","R&B","Rap","Reggae","Rock","Techno","Industrial","Alternative","Ska","Death Metal","Pranks","Soundtrack","Euro-Techno","Ambient","Trip-Hop","Vocal","Jazz+Funk","Fusion","Trance","Classical","Instrumental","Acid","House","Game","Sound Clip","Gospel","Noise","AlternRock","Bass","Soul","Punk","Space","Meditative","Instrumental Pop","Instrumental Rock","Ethnic",
-"Gothic","Darkwave","Techno-Industrial","Electronic","Pop-Folk","Eurodance","Dream","Southern Rock","Comedy","Cult","Gangsta","Top 40","Christian Rap","Pop/Funk","Jungle","Native American","Cabaret","New Wave","Psychadelic","Rave","Showtunes","Trailer","Lo-Fi","Tribal","Acid Punk","Acid Jazz","Polka","Retro","Musical","Rock & Roll","Hard Rock","Folk","Folk-Rock","National Folk","Swing","Fast Fusion","Bebob","Latin","Revival","Celtic","Bluegrass","Avantgarde","Gothic Rock","Progressive Rock","Psychedelic Rock",
-"Symphonic Rock","Slow Rock","Big Band","Chorus","Easy Listening","Acoustic","Humour","Speech","Chanson","Opera","Chamber Music","Sonata","Symphony","Booty Bass","Primus","Porn Groove","Satire","Slow Jam","Club","Tango","Samba","Folklore","Ballad","Power Ballad","Rhythmic Soul","Freestyle","Duet","Punk Rock","Drum Solo","Acapella","Euro-House","Dance Hall"];f.n=function(a,c){a.g(0,c)};f.o=function(a){var c=a.m()-128;if(a.c(c,3)=="TAG"){var d=a.c(c+3,30).replace(/\0/g,""),f=a.c(c+33,30).replace(/\0/g,
-""),g=a.c(c+63,30).replace(/\0/g,""),h=a.c(c+93,4).replace(/\0/g,"");if(a.a(c+97+28)==0)var e=a.c(c+97,28).replace(/\0/g,""),o=a.a(c+97+29);else e="",o=0;a=a.a(c+97+30);return{version:"1.1",title:d,artist:f,album:g,year:h,comment:e,track:o,genre:a<255?b[a]:""}}else return{}};e.ID3v1=e.t})(this);
-(function(e){function f(a,c){var b=c.a(a),h=c.a(a+1),f=c.a(a+2);return c.a(a+3)&127|(f&127)<<7|(h&127)<<14|(b&127)<<21}var b=e.D={};b.b={};b.frames={BUF:"Recommended buffer size",CNT:"Play counter",COM:"Comments",CRA:"Audio encryption",CRM:"Encrypted meta frame",ETC:"Event timing codes",EQU:"Equalization",GEO:"General encapsulated object",IPL:"Involved people list",LNK:"Linked information",MCI:"Music CD Identifier",MLL:"MPEG location lookup table",PIC:"Attached picture",POP:"Popularimeter",REV:"Reverb",
-RVA:"Relative volume adjustment",SLT:"Synchronized lyric/text",STC:"Synced tempo codes",TAL:"Album/Movie/Show title",TBP:"BPM (Beats Per Minute)",TCM:"Composer",TCO:"Content type",TCR:"Copyright message",TDA:"Date",TDY:"Playlist delay",TEN:"Encoded by",TFT:"File type",TIM:"Time",TKE:"Initial key",TLA:"Language(s)",TLE:"Length",TMT:"Media type",TOA:"Original artist(s)/performer(s)",TOF:"Original filename",TOL:"Original Lyricist(s)/text writer(s)",TOR:"Original release year",TOT:"Original album/Movie/Show title",
-TP1:"Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group",TP2:"Band/Orchestra/Accompaniment",TP3:"Conductor/Performer refinement",TP4:"Interpreted, remixed, or otherwise modified by",TPA:"Part of a set",TPB:"Publisher",TRC:"ISRC (International Standard Recording Code)",TRD:"Recording dates",TRK:"Track number/Position in set",TSI:"Size",TSS:"Software/hardware and settings used for encoding",TT1:"Content group description",TT2:"Title/Songname/Content description",TT3:"Subtitle/Description refinement",
-TXT:"Lyricist/text writer",TXX:"User defined text information frame",TYE:"Year",UFI:"Unique file identifier",ULT:"Unsychronized lyric/text transcription",WAF:"Official audio file webpage",WAR:"Official artist/performer webpage",WAS:"Official audio source webpage",WCM:"Commercial information",WCP:"Copyright/Legal information",WPB:"Publishers official webpage",WXX:"User defined URL link frame",AENC:"Audio encryption",APIC:"Attached picture",COMM:"Comments",COMR:"Commercial frame",ENCR:"Encryption method registration",
-EQUA:"Equalization",ETCO:"Event timing codes",GEOB:"General encapsulated object",GRID:"Group identification registration",IPLS:"Involved people list",LINK:"Linked information",MCDI:"Music CD identifier",MLLT:"MPEG location lookup table",OWNE:"Ownership frame",PRIV:"Private frame",PCNT:"Play counter",POPM:"Popularimeter",POSS:"Position synchronisation frame",RBUF:"Recommended buffer size",RVAD:"Relative volume adjustment",RVRB:"Reverb",SYLT:"Synchronized lyric/text",SYTC:"Synchronized tempo codes",
-TALB:"Album/Movie/Show title",TBPM:"BPM (beats per minute)",TCOM:"Composer",TCON:"Content type",TCOP:"Copyright message",TDAT:"Date",TDLY:"Playlist delay",TENC:"Encoded by",TEXT:"Lyricist/Text writer",TFLT:"File type",TIME:"Time",TIT1:"Content group description",TIT2:"Title/songname/content description",TIT3:"Subtitle/Description refinement",TKEY:"Initial key",TLAN:"Language(s)",TLEN:"Length",TMED:"Media type",TOAL:"Original album/movie/show title",TOFN:"Original filename",TOLY:"Original lyricist(s)/text writer(s)",
-TOPE:"Original artist(s)/performer(s)",TORY:"Original release year",TOWN:"File owner/licensee",TPE1:"Lead performer(s)/Soloist(s)",TPE2:"Band/orchestra/accompaniment",TPE3:"Conductor/performer refinement",TPE4:"Interpreted, remixed, or otherwise modified by",TPOS:"Part of a set",TPUB:"Publisher",TRCK:"Track number/Position in set",TRDA:"Recording dates",TRSN:"Internet radio station name",TRSO:"Internet radio station owner",TSIZ:"Size",TSRC:"ISRC (international standard recording code)",TSSE:"Software/Hardware and settings used for encoding",
-TYER:"Year",TXXX:"User defined text information frame",UFID:"Unique file identifier",USER:"Terms of use",USLT:"Unsychronized lyric/text transcription",WCOM:"Commercial information",WCOP:"Copyright/Legal information",WOAF:"Official audio file webpage",WOAR:"Official artist/performer webpage",WOAS:"Official audio source webpage",WORS:"Official internet radio station homepage",WPAY:"Payment",WPUB:"Publishers official webpage",WXXX:"User defined URL link frame"};var a={title:["TIT2","TT2"],artist:["TPE1",
-"TP1"],album:["TALB","TAL"],year:["TYER","TYE"],comment:["COMM","COM"],track:["TRCK","TRK"],genre:["TCON","TCO"],picture:["APIC","PIC"],lyrics:["USLT","ULT"]},c=["title","artist","album","track"];b.n=function(a,c){a.g([0,f(6,a)],c)};b.o=function(d,e){var g=0,h=d.a(g+3);if(h>4)return{version:">2.4"};var i=d.a(g+4),o=d.d(g+5,7),l=d.d(g+5,6),q=d.d(g+5,5),r=f(g+6,d);g+=10;if(l){var n=d.h(g,!0);g+=n+4}var h={version:"2."+h+"."+i,major:h,revision:i,flags:{unsynchronisation:o,extended_header:l,experimental_indicator:q},
-size:r},j;if(o)j={};else{r-=10;for(var o=d,i=e,l={},q=h.major,n=[],m=0,k;k=(i||c)[m];m++)n=n.concat(a[k]||[k]);for(i=n;g<r;){n=null;m=o;k=g;var u=null;switch(q){case 2:j=m.c(k,3);var p=m.q(k+3),t=6;break;case 3:j=m.c(k,4);p=m.h(k+4,!0);t=10;break;case 4:j=m.c(k,4),p=f(k+4,m),t=10}if(j=="")break;g+=t+p;if(!(i.indexOf(j)<0)&&(q>2&&(u={message:{U:m.d(k+8,6),I:m.d(k+8,5),S:m.d(k+8,4)},k:{Q:m.d(k+8+1,7),F:m.d(k+8+1,3),H:m.d(k+8+1,2),C:m.d(k+8+1,1),v:m.d(k+8+1,0)}}),k+=t,u&&u.k.v&&(f(k,m),k+=4,p-=4),!u||
-!u.k.C))j in b.b?n=b.b[j]:j[0]=="T"&&(n=b.b["T*"]),n=n?n(k,p,m,u):void 0,n={id:j,size:p,description:j in b.frames?b.frames[j]:"Unknown",data:n},j in l?(l[j].id&&(l[j]=[l[j]]),l[j].push(n)):l[j]=n}j=l}for(var v in a)if(a.hasOwnProperty(v)){a:{p=a[v];typeof p=="string"&&(p=[p]);t=0;for(g=void 0;g=p[t];t++)if(g in j){d=j[g].data;break a}d=void 0}d&&(h[v]=d)}for(var w in j)j.hasOwnProperty(w)&&(h[w]=j[w]);return h};e.ID3v2=b})(this);
-(function(){function e(b){var a;switch(b){case 0:a="iso-8859-1";break;case 1:a="utf-16";break;case 2:a="utf-16be";break;case 3:a="utf-8"}return a}var f=["32x32 pixels 'file icon' (PNG only)","Other file icon","Cover (front)","Cover (back)","Leaflet page","Media (e.g. lable side of CD)","Lead artist/lead performer/soloist","Artist/performer","Conductor","Band/Orchestra","Composer","Lyricist/text writer","Recording Location","During recording","During performance","Movie/video screen capture","A bright coloured fish",
-"Illustration","Band/artist logotype","Publisher/Studio logotype"];ID3v2.b.APIC=function(b,a,c,d,s){var s=s||"3",d=b,g=e(c.a(b));switch(s){case "2":var h=c.c(b+1,3);b+=4;break;case "3":case "4":h=c.e(b+1,a-(b-d),g),b+=1+h.f}s=c.a(b,1);s=f[s];g=c.e(b+1,a-(b-d),g);b+=1+g.f;return{format:h.toString(),type:s,description:g.toString(),data:c.l(b,d+a-b)}};ID3v2.b.COMM=function(b,a,c){var d=b,f=e(c.a(b)),g=c.c(b+1,3),h=c.e(b+4,a-4,f);b+=4+h.f;b=c.e(b,d+a-b,f);return{language:g,T:h.toString(),text:b.toString()}};
-ID3v2.b.COM=ID3v2.b.COMM;ID3v2.b.PIC=function(b,a,c,d){return ID3v2.b.APIC(b,a,c,d,"2")};ID3v2.b.PCNT=function(b,a,c){return c.L(b)};ID3v2.b.CNT=ID3v2.b.PCNT;ID3v2.b["T*"]=function(b,a,c){var d=e(c.a(b));return c.e(b+1,a-1,d).toString()};ID3v2.b.TCON=function(){return ID3v2.b["T*"].apply(this,arguments).replace(/^\(\d+\)/,"")};ID3v2.b.TCO=ID3v2.b.TCON;ID3v2.b.USLT=function(b,a,c){var d=b,f=e(c.a(b)),g=c.c(b+1,3),h=c.e(b+4,a-4,f);b+=4+h.f;b=c.e(b,d+a-b,f);return{language:g,G:h.toString(),R:b.toString()}};
-ID3v2.b.ULT=ID3v2.b.USLT})();
-(function(e){function f(a,b,e,g){var h=a.h(b,!0);if(h==0)g();else{var i=a.c(b+4,4);["moov","udta","meta","ilst"].indexOf(i)>-1?(i=="meta"&&(b+=4),a.g(0,function(){f(a,b+8,h-8,g)})):a.g(0,function(){f(a,b+h,e,g)})}}function b(c,d,f,g,h){for(var h=h===void 0?"":h+"  ",e=f;e<f+g;){var o=d.h(e,!0);if(o==0)break;var l=d.c(e+4,4);if(["moov","udta","meta","ilst"].indexOf(l)>-1){l=="meta"&&(e+=4);b(c,d,e+8,o-8,h);break}if(a.p[l]){var q=d.q(e+16+1),r=a.p[l],q=a.types[q];if(l=="trkn")c[r[0]]=d.a(e+16+11),c.count=
-d.a(e+16+13);else{var l=e+16+4+4,n=o-16-4-4;switch(q){case "text":c[r[0]]=d.e(l,n,"UTF-8");break;case "uint8":c[r[0]]=d.r(l);break;case "jpeg":case "png":c[r[0]]={k:"image/"+q,data:d.l(l,n)}}}}e+=o}}var a=e.u={};a.types={"0":"uint8","1":"text","13":"jpeg","14":"png","21":"uint8"};a.p={"\u00a9alb":["album"],"\u00a9art":["artist"],"\u00a9ART":["artist"],aART:["artist"],"\u00a9day":["year"],"\u00a9nam":["title"],"\u00a9gen":["genre"],trkn:["track"],"\u00a9wrt":["composer"],"\u00a9too":["encoder"],cprt:["copyright"],
-covr:["picture"],"\u00a9grp":["grouping"],keyw:["keyword"],"\u00a9lyr":["lyrics"],"\u00a9gen":["genre"]};a.n=function(a,b){a.g(0,function(){f(a,0,a.m(),b)})};a.o=function(a){var d={};b(d,a,0,a.m());return d};e.ID4=e.u})(this);
+/***/
+/**
+ * Copyright (c) 2010, António Afonso <antonio.afonso gmail.com>. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are
+ * permitted provided that the following conditions are met:
+ *
+ *    1. Redistributions of source code must retain the above copyright notice, this list of
+ *       conditions and the following disclaimer.
+ *
+ *    2. Redistributions in binary form must reproduce the above copyright notice, this list
+ *       of conditions and the following disclaimer in the documentation and/or other materials
+ *       provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY António Afonso ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+var StringUtils = {
+    readUTF16String: function(bytes, bigEndian, maxBytes) {
+        var ix = 0;
+        var offset1 = 1, offset2 = 0;
+        maxBytes = Math.min(maxBytes||bytes.length, bytes.length);
+
+        if( bytes[0] == 0xFE && bytes[1] == 0xFF ) {
+            bigEndian = true;
+            ix = 2;
+        } else if( bytes[0] == 0xFF && bytes[1] == 0xFE ) {
+            bigEndian = false;
+            ix = 2;
+        }
+        if( bigEndian ) {
+            offset1 = 0;
+            offset2 = 1;
+        }
+
+        var arr = [];
+        for( var j = 0; ix < maxBytes; j++ ) {
+            var byte1 = bytes[ix+offset1];
+            var byte2 = bytes[ix+offset2];
+            var word1 = (byte1<<8)+byte2;
+            ix += 2;
+            if( word1 == 0x0000 ) {
+                break;
+            } else if( byte1 < 0xD8 || byte1 >= 0xE0 ) {
+                arr[j] = String.fromCharCode(word1);
+            } else {
+                var byte3 = bytes[ix+offset1];
+                var byte4 = bytes[ix+offset2];
+                var word2 = (byte3<<8)+byte4;
+                ix += 2;
+                arr[j] = String.fromCharCode(word1, word2);
+            }
+        }
+        var string = new String(arr.join(""));
+        string.bytesReadCount = ix;
+        return string;
+    },
+    readUTF8String: function(bytes, maxBytes) {
+        var ix = 0;
+        maxBytes = Math.min(maxBytes||bytes.length, bytes.length);
+
+        if( bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF ) {
+            ix = 3;
+        }
+
+        var arr = [];
+        for( var j = 0; ix < maxBytes; j++ ) {
+            var byte1 = bytes[ix++];
+            if( byte1 == 0x00 ) {
+                break;
+            } else if( byte1 < 0x80 ) {
+                arr[j] = String.fromCharCode(byte1);
+            } else if( byte1 >= 0xC2 && byte1 < 0xE0 ) {
+                var byte2 = bytes[ix++];
+                arr[j] = String.fromCharCode(((byte1&0x1F)<<6) + (byte2&0x3F));
+            } else if( byte1 >= 0xE0 && byte1 < 0xF0 ) {
+                var byte2 = bytes[ix++];
+                var byte3 = bytes[ix++];
+                arr[j] = String.fromCharCode(((byte1&0xFF)<<12) + ((byte2&0x3F)<<6) + (byte3&0x3F));
+            } else if( byte1 >= 0xF0 && byte1 < 0xF5) {
+                var byte2 = bytes[ix++];
+                var byte3 = bytes[ix++];
+                var byte4 = bytes[ix++];
+                var codepoint = ((byte1&0x07)<<18) + ((byte2&0x3F)<<12)+ ((byte3&0x3F)<<6) + (byte4&0x3F) - 0x10000;
+                arr[j] = String.fromCharCode(
+                    (codepoint>>10) + 0xD800,
+                    (codepoint&0x3FF) + 0xDC00
+                );
+            }
+        }
+        var string = new String(arr.join(""));
+        string.bytesReadCount = ix;
+        return string;
+    },
+    readNullTerminatedString: function(bytes, maxBytes) {
+        var arr = [];
+        maxBytes = maxBytes || bytes.length;
+        for ( var i = 0; i < maxBytes; ) {
+            var byte1 = bytes[i++];
+            if( byte1 == 0x00 ) break;
+		    arr[i-1] = String.fromCharCode(byte1);
+	    }
+        var string = new String(arr.join(""));
+        string.bytesReadCount = i;
+        return string;
+    },
+
+   readWin1251String: function(str) {
+       var charmap   = unescape(
+          "%u0402%u0403%u201A%u0453%u201E%u2026%u2020%u2021%u20AC%u2030%u0409%u2039%u040A%u040C%u040B%u040F"+
+          "%u0452%u2018%u2019%u201C%u201D%u2022%u2013%u2014%u0000%u2122%u0459%u203A%u045A%u045C%u045B%u045F"+
+          "%u00A0%u040E%u045E%u0408%u00A4%u0490%u00A6%u00A7%u0401%u00A9%u0404%u00AB%u00AC%u00AD%u00AE%u0407"+
+          "%u00B0%u00B1%u0406%u0456%u0491%u00B5%u00B6%u00B7%u0451%u2116%u0454%u00BB%u0458%u0405%u0455%u0457");
+       var code2char = function(code) {
+                   if(code >= 0xC0 && code <= 0xFF) return String.fromCharCode(code - 0xC0 + 0x0410)
+                   if(code >= 0x80 && code <= 0xBF) return charmap.charAt(code - 0x80)
+                   return String.fromCharCode(code)
+                };
+       var res = "";
+       for(var i = 0; i < str.length; i++) res = res + code2char(str.charCodeAt(i))
+       console.log('Win1251 result:',res);
+       return res;
+    }
+};
+/**
+ * Buffered Binary Ajax 0.2.1
+ * Copyright (c) 2010 António Afonso, antonio.afonso gmail, http://www.aadsm.net/
+ * MIT License [http://www.opensource.org/licenses/mit-license.php]
+ *
+ * Adapted from Binary Ajax 0.1.5
+ */
+
+/**
+ * @class Reads a remote file without having to download it all.
+ *
+ * Creates a new BufferedBinaryFile that will download chunks of the file pointed by the URL given only on a per need basis.
+ *
+ * @param {string} strUrl The URL with the location of the file to be read.
+ * @param {number} iLength The size of the file.
+ * @param {number} [blockSize=2048] The size of the chunk that will be downloaded when data is read.
+ * @param {number} [blockRadius=0] The number of chunks, immediately after and before the chunk needed, that will also be downloaded.
+ *
+ * @constructor
+ * @augments BinaryFile
+ */
+function BufferedBinaryFile(strUrl, iLength, blockSize, blockRadius) {
+    var undefined;
+    var downloadedBytesCount = 0;
+    var binaryFile = new BinaryFile("", 0, iLength);
+    var blocks = [];
+
+    blockSize = blockSize || 1024*2;
+    blockRadius = (typeof blockRadius === "undefined") ? 0 : blockRadius;
+    blockTotal = ~~((iLength-1)/blockSize) + 1;
+
+    function getBlockRangeForByteRange(range) {
+        var blockStart = ~~(range[0]/blockSize) - blockRadius;
+        var blockEnd = ~~(range[1]/blockSize)+1 + blockRadius;
+
+        if( blockStart < 0 ) blockStart = 0;
+        if( blockEnd >= blockTotal ) blockEnd = blockTotal-1;
+
+        return [blockStart, blockEnd];
+    }
+
+    // TODO: wondering if a "recently used block" could help things around
+    //       here.
+    function getBlockAtOffset(offset) {
+        var blockRange = getBlockRangeForByteRange([offset, offset]);
+        waitForBlocks(blockRange);
+        return blocks[~~(offset/blockSize)];
+    }
+
+    /**
+     * @param {?function()} callback If a function is passed then this function will be asynchronous and the callback invoked when the blocks have been loaded, otherwise it blocks script execution until the request is completed.
+     */
+    function waitForBlocks(blockRange, callback) {
+        // Filter out already downloaded blocks or return if found out that
+        // the entire block range has already been downloaded.
+        while( blocks[blockRange[0]] ) {
+            blockRange[0]++;
+            if( blockRange[0] > blockRange[1] ) return callback ? callback() : undefined;
+        }
+        while( blocks[blockRange[1]] ) {
+            blockRange[1]--;
+            if( blockRange[0] > blockRange[1] ) return callback ? callback() : undefined;
+        }
+        var range = [blockRange[0]*blockSize, (blockRange[1]+1)*blockSize-1];
+        //console.log("Getting: " + range[0] + " to " +  range[1]);
+        sendRequest(
+            strUrl,
+            function(http) {
+                var size = parseInt(http.getResponseHeader("Content-Length"), 10);
+                // Range header not supported
+                if( size == iLength ) {
+                    blockRange[0] = 0;
+                    blockRange[1] = blockTotal-1;
+                    range[0] = 0;
+                    range[1] = iLength-1;
+                }
+                var block = {
+                    data: http.responseBody || http.responseText,
+                    offset: range[0]
+                };
+
+                for( var i = blockRange[0]; i <= blockRange[1]; i++ ) {
+                    blocks[i] = block;
+                }
+                downloadedBytesCount += range[1] - range[0] + 1;
+                if (callback) callback();
+            },
+            fncError,
+            range,
+            "bytes",
+            undefined,
+            !!callback
+        );
+    }
+
+    // Mixin all BinaryFile's methods.
+    // Not using prototype linking since the constructor needs to know
+    // the length of the file.
+    for( var key in binaryFile ) {
+        if( binaryFile.hasOwnProperty(key) &&
+            typeof binaryFile[key] === "function") {
+            this[key] = binaryFile[key];
+        }
+    }
+    /**
+     * @override
+     */
+    this.getByteAt = function(iOffset) {
+        var block = getBlockAtOffset(iOffset);
+        if( typeof block.data == "string" ) {
+            return block.data.charCodeAt(iOffset - block.offset) & 0xFF;
+        } else if( typeof block.data == "unknown" ) {
+            return IEBinary_getByteAt(block.data, iOffset - block.offset);
+        }
+    };
+
+    /**
+     * Gets the number of total bytes that have been downloaded.
+     *
+     * @returns The number of total bytes that have been downloaded.
+     */
+    this.getDownloadedBytesCount = function() {
+        return downloadedBytesCount;
+    };
+
+    /**
+     * Downloads the byte range given. Useful for preloading.
+     *
+     * @param {Array} range Two element array that denotes the first byte to be read on the first position and the last byte to be read on the last position. A range of [2, 5] will download bytes 2,3,4 and 5.
+     * @param {?function()} callback The function to invoke when the blocks have been downloaded, this makes this call asynchronous.
+     */
+    this.loadRange = function(range, callback) {
+        var blockRange = getBlockRangeForByteRange(range);
+        waitForBlocks(blockRange, callback);
+    };
+}
+
+
+/**
+ * @constructor
+ */
+function BinaryFile(strData, iDataOffset, iDataLength) {
+	var data = strData;
+	var dataOffset = iDataOffset || 0;
+	var dataLength = 0;
+
+	this.getRawData = function() {
+		return data;
+	};
+
+	if (typeof strData == "string") {
+		dataLength = iDataLength || data.length;
+
+		this.getByteAt = function(iOffset) {
+			return data.charCodeAt(iOffset + dataOffset) & 0xFF;
+		};
+	} else if (typeof strData == "unknown") {
+		dataLength = iDataLength || IEBinary_getLength(data);
+
+		this.getByteAt = function(iOffset) {
+			return IEBinary_getByteAt(data, iOffset + dataOffset);
+		};
+	}
+    // @aadsm
+    this.getBytesAt = function(iOffset, iLength) {
+        var bytes = new Array(iLength);
+        for( var i = 0; i < iLength; i++ ) {
+            bytes[i] = this.getByteAt(iOffset+i);
+        }
+        return bytes;
+    };
+
+	this.getLength = function() {
+		return dataLength;
+	};
+
+    // @aadsm
+    this.isBitSetAt = function(iOffset, iBit) {
+        var iByte = this.getByteAt(iOffset);
+        return (iByte & (1 << iBit)) != 0;
+    };
+
+	this.getSByteAt = function(iOffset) {
+		var iByte = this.getByteAt(iOffset);
+		if (iByte > 127)
+			return iByte - 256;
+		else
+			return iByte;
+	};
+
+	this.getShortAt = function(iOffset, bBigEndian) {
+		var iShort = bBigEndian ?
+			(this.getByteAt(iOffset) << 8) + this.getByteAt(iOffset + 1)
+			: (this.getByteAt(iOffset + 1) << 8) + this.getByteAt(iOffset);
+		if (iShort < 0) iShort += 65536;
+		return iShort;
+	};
+	this.getSShortAt = function(iOffset, bBigEndian) {
+		var iUShort = this.getShortAt(iOffset, bBigEndian);
+		if (iUShort > 32767)
+			return iUShort - 65536;
+		else
+			return iUShort;
+	};
+	this.getLongAt = function(iOffset, bBigEndian) {
+		var iByte1 = this.getByteAt(iOffset),
+			iByte2 = this.getByteAt(iOffset + 1),
+			iByte3 = this.getByteAt(iOffset + 2),
+			iByte4 = this.getByteAt(iOffset + 3);
+
+		var iLong = bBigEndian ?
+			(((((iByte1 << 8) + iByte2) << 8) + iByte3) << 8) + iByte4
+			: (((((iByte4 << 8) + iByte3) << 8) + iByte2) << 8) + iByte1;
+		if (iLong < 0) iLong += 4294967296;
+		return iLong;
+	};
+	this.getSLongAt = function(iOffset, bBigEndian) {
+		var iULong = this.getLongAt(iOffset, bBigEndian);
+		if (iULong > 2147483647)
+			return iULong - 4294967296;
+		else
+			return iULong;
+	};
+	// @aadsm
+	this.getInteger24At = function(iOffset, bBigEndian) {
+        var iByte1 = this.getByteAt(iOffset),
+			iByte2 = this.getByteAt(iOffset + 1),
+			iByte3 = this.getByteAt(iOffset + 2);
+
+		var iInteger = bBigEndian ?
+			((((iByte1 << 8) + iByte2) << 8) + iByte3)
+			: ((((iByte3 << 8) + iByte2) << 8) + iByte1);
+		if (iInteger < 0) iInteger += 16777216;
+		return iInteger;
+    };
+	this.getStringAt = function(iOffset, iLength) {
+		var aStr = [];
+		for (var i=iOffset,j=0;i<iOffset+iLength;i++,j++) {
+			aStr[j] = String.fromCharCode(this.getByteAt(i));
+		}
+		return aStr.join("");
+	};
+	// @aadsm
+	this.getStringWithCharsetAt = function(iOffset, iLength, iCharset) {
+		if(!(iOffset>0) || !(iLength>0)){
+		    return '';
+		}
+		var bytes = this.getBytesAt(iOffset, iLength),
+		    originalString = this.getStringAt(iOffset, iLength),
+		    iCharset=iCharset || jschardet.detect(originalString).encoding,
+		    sString;
+        console.log('Charset:',iCharset);
+
+		switch( iCharset.toLowerCase() ) {
+
+		    case 'utf-16':
+		    case 'utf-16le':
+		    case 'utf-16be':
+		        sString = StringUtils.readUTF16String(bytes, iCharset);
+		        break;
+
+		    case 'utf-8':
+		        sString = StringUtils.readUTF8String(bytes);
+		        break;
+            case 'iso-8859-1':
+                var charsetDetection=jschardet.detect(originalString);
+                console.log('Detection:',charsetDetection);
+                if('TIS-620'===charsetDetection.encoding ||
+                'windows-1253'===charsetDetection.encoding ||
+                'windows-1251'===charsetDetection.encoding ||
+                'EUC-TV'===charsetDetection.encoding){
+                    sString = StringUtils.readWin1251String(originalString);
+                    break;
+                }
+            case 'windows-1251':
+                sString = StringUtils.readWin1251String(originalString);
+                break;
+            case 'maccyrillic':
+                sString = StringUtils.readWin1251String(originalString);
+                break;
+		    default:
+		        sString = StringUtils.readNullTerminatedString(bytes);
+		        break;
+		}
+        console.log('Result',sString);
+		return sString;
+	};
+
+	this.getCharAt = function(iOffset) {
+		return String.fromCharCode(this.getByteAt(iOffset));
+	};
+	this.toBase64 = function() {
+		return window.btoa(data);
+	};
+	this.fromBase64 = function(strBase64) {
+		data = window.atob(strBase64);
+	};
+
+    this.loadRange = function(range, callback) {
+        callback();
+    };
+}
+/**
+ * Copyright (c) 2011 Anton Podviaznikov, podviaznikov@gmail.com
+ * MIT License [http://www.opensource.org/licenses/mit-license.php]
+ *
+ */
+ (function(ns) {
+    ns["FileAPIReader"] = function(binaryData) {
+        return function(url, fncCallback, fncError) {
+                fncCallback(new BinaryFile(binaryData));
+        }
+    };
+})(this);
+
+// Modified version of http://www.webtoolkit.info/javascript-base64.html
+(function(ns) {
+    ns.Base64 = {
+    	// private property
+    	_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+    	// public method for encoding
+    	encodeBytes : function (input) {
+    		var output = "";
+    		var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    		var i = 0;
+
+    		while (i < input.length) {
+
+    			chr1 = input[i++];
+    			chr2 = input[i++];
+    			chr3 = input[i++];
+
+    			enc1 = chr1 >> 2;
+    			enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+    			enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+    			enc4 = chr3 & 63;
+
+    			if (isNaN(chr2)) {
+    				enc3 = enc4 = 64;
+    			} else if (isNaN(chr3)) {
+    				enc4 = 64;
+    			}
+
+    			output = output +
+    			Base64._keyStr.charAt(enc1) + Base64._keyStr.charAt(enc2) +
+    			Base64._keyStr.charAt(enc3) + Base64._keyStr.charAt(enc4);
+
+    		}
+
+    		return output;
+    	}
+    };
+
+    // Export functions for closure compiler
+    ns["Base64"] = ns.Base64;
+    ns.Base64["encodeBytes"] = ns.Base64.encodeBytes;
+})(this);
+/*
+ * JavaScript ID3 Tag Reader 0.1.2
+ * Copyright (c) 2008 Jacob Seidelin, cupboy@gmail.com, http://blog.nihilogic.dk/
+ * MIT License [http://www.opensource.org/licenses/mit-license.php]
+ *
+ * Extended by António Afonso (antonio.afonso@opera.com), Opera Software ASA
+ * Modified by António Afonso <antonio.afonso gmail.com>
+ */
+
+(function(ns) {
+    var ID3 = ns.ID3 = {};
+
+    var _files = {};
+    // location of the format identifier
+    var _formatIDRange = [0, 7];
+
+    /**
+     * Finds out the tag format of this data and returns the appropriate
+     * reader.
+     */
+    function getTagReader(data) {
+        // FIXME: improve this detection according to the spec
+        return data.getStringAt(4, 7) == "ftypM4A" ? ID4 :
+               (data.getStringAt(0, 3) == "ID3" ? ID3v2 : ID3v1);
+    }
+
+    function readTags(reader, data, url, tags) {
+        var tagsFound = reader.readTagsFromData(data, tags);
+        var tags = _files[url] || {};
+        for( var tag in tagsFound ) if( tagsFound.hasOwnProperty(tag) ) {
+            tags[tag] = tagsFound[tag];
+        }
+        _files[url] = tags;
+    }
+
+    /**
+     * @param {string} url The location of the sound file to read.
+     * @param {function()} cb The callback function to be invoked when all tags have been read.
+     * @param {{tags: Array.<string>, dataReader: function(string, function(BinaryReader))}} options The set of options that can specify the tags to be read and the dataReader to use in order to read the file located at url.
+     */
+    ID3.loadTags = function(url, cb, options) {
+        options = options || {};
+        var dataReader = options["dataReader"];
+
+        dataReader(url, function(data) {
+            // preload the format identifier
+            data.loadRange(_formatIDRange, function() {
+                var reader = getTagReader(data);
+                reader.loadData(data, function() {
+                    readTags(reader, data, url, options["tags"]);
+                    if( cb ) cb();
+                });
+            });
+        });
+    };
+
+    ID3.getAllTags = function(url) {
+        if (!_files[url]) return null;
+
+        var tags = {};
+        for (var a in _files[url]) {
+            if (_files[url].hasOwnProperty(a))
+                tags[a] = _files[url][a];
+        }
+        return tags;
+    };
+
+    ID3.getTag = function(url, tag) {
+        if (!_files[url]) return null;
+
+        return _files[url][tag];
+    };
+
+    // Export functions for closure compiler
+    ns["ID3"] = ns.ID3;
+    ID3["loadTags"] = ID3.loadTags;
+    ID3["getAllTags"] = ID3.getAllTags;
+    ID3["getTag"] = ID3.getTag;
+})(this);
+/*
+ * JavaScript ID3 Tag Reader 0.1.2
+ * Copyright (c) 2008 Jacob Seidelin, cupboy@gmail.com, http://blog.nihilogic.dk/
+ * MIT License [http://www.opensource.org/licenses/mit-license.php]
+ *
+ * Extended by António Afonso (antonio.afonso@opera.com), Opera Software ASA
+ * Modified by António Afonso (antonio.afonso gmail.com)
+ */
+
+(function(ns) {
+    var ID3v1 = ns.ID3v1 = {};
+    var genres = [
+    	"Blues","Classic Rock","Country","Dance","Disco","Funk","Grunge",
+    	"Hip-Hop","Jazz","Metal","New Age","Oldies","Other","Pop","R&B",
+    	"Rap","Reggae","Rock","Techno","Industrial","Alternative","Ska",
+    	"Death Metal","Pranks","Soundtrack","Euro-Techno","Ambient",
+    	"Trip-Hop","Vocal","Jazz+Funk","Fusion","Trance","Classical",
+    	"Instrumental","Acid","House","Game","Sound Clip","Gospel",
+    	"Noise","AlternRock","Bass","Soul","Punk","Space","Meditative",
+    	"Instrumental Pop","Instrumental Rock","Ethnic","Gothic",
+    	"Darkwave","Techno-Industrial","Electronic","Pop-Folk",
+    	"Eurodance","Dream","Southern Rock","Comedy","Cult","Gangsta",
+    	"Top 40","Christian Rap","Pop/Funk","Jungle","Native American",
+    	"Cabaret","New Wave","Psychadelic","Rave","Showtunes","Trailer",
+    	"Lo-Fi","Tribal","Acid Punk","Acid Jazz","Polka","Retro",
+    	"Musical","Rock & Roll","Hard Rock","Folk","Folk-Rock",
+    	"National Folk","Swing","Fast Fusion","Bebob","Latin","Revival",
+    	"Celtic","Bluegrass","Avantgarde","Gothic Rock","Progressive Rock",
+    	"Psychedelic Rock","Symphonic Rock","Slow Rock","Big Band",
+    	"Chorus","Easy Listening","Acoustic","Humour","Speech","Chanson",
+    	"Opera","Chamber Music","Sonata","Symphony","Booty Bass","Primus",
+    	"Porn Groove","Satire","Slow Jam","Club","Tango","Samba",
+    	"Folklore","Ballad","Power Ballad","Rhythmic Soul","Freestyle",
+    	"Duet","Punk Rock","Drum Solo","Acapella","Euro-House","Dance Hall"
+    ];
+
+    ID3v1.loadData = function(data, callback) {
+        var length = data.getLength();
+        data.loadRange([length-128-1, length], callback);
+    }
+
+    ID3v1.readTagsFromData = function(data) {
+    	var offset = data.getLength() - 128;
+    	var header = data.getStringAt(offset, 3);
+    	if (header == "TAG") {
+    		var title = data.getStringWithCharsetAt(offset + 3, 30).replace(/\0/g, "");
+    		var artist = data.getStringWithCharsetAt(offset + 33, 30).replace(/\0/g, "");
+    		var album = data.getStringWithCharsetAt(offset + 63, 30).replace(/\0/g, "");
+    		var year = data.getStringAt(offset + 93, 4).replace(/\0/g, "");
+
+    		var trackFlag = data.getByteAt(offset + 97 + 28);
+    		if (trackFlag == 0) {
+    			var comment = data.getStringAt(offset + 97, 28).replace(/\0/g, "");
+    			var track = data.getByteAt(offset + 97 + 29);
+    		} else {
+    			var comment = "";
+    			var track = 0;
+    		}
+
+    		var genreIdx = data.getByteAt(offset + 97 + 30);
+    		if (genreIdx < 255) {
+    			var genre = genres[genreIdx];
+    		} else {
+    			var genre = "";
+    		}
+
+    		return {
+    		    "version" : '1.1',
+    			"title" : title,
+    			"artist" : artist,
+    			"album" : album,
+    			"year" : year,
+    			"comment" : comment,
+    			"track" : track,
+    			"genre" : genre
+    		}
+    	} else {
+    		return {};
+    	}
+    };
+
+    // Export functions for closure compiler
+    ns["ID3v1"] = ns.ID3v1;
+})(this);
+/*
+ * Copyright (c) 2009 Opera Software ASA, António Afonso (antonio.afonso@opera.com)
+ * Modified by António Afonso <antonio.afonso gmail.com>
+ */
+
+(function(ns) {
+    var ID3v2 = ns.ID3v2 = {};
+
+    ID3v2.readFrameData = {};
+    ID3v2.frames = {
+        // v2.2
+        "BUF" : "Recommended buffer size",
+        "CNT" : "Play counter",
+        "COM" : "Comments",
+        "CRA" : "Audio encryption",
+        "CRM" : "Encrypted meta frame",
+        "ETC" : "Event timing codes",
+        "EQU" : "Equalization",
+        "GEO" : "General encapsulated object",
+        "IPL" : "Involved people list",
+        "LNK" : "Linked information",
+        "MCI" : "Music CD Identifier",
+        "MLL" : "MPEG location lookup table",
+        "PIC" : "Attached picture",
+        "POP" : "Popularimeter",
+        "REV" : "Reverb",
+        "RVA" : "Relative volume adjustment",
+        "SLT" : "Synchronized lyric/text",
+        "STC" : "Synced tempo codes",
+        "TAL" : "Album/Movie/Show title",
+        "TBP" : "BPM (Beats Per Minute)",
+        "TCM" : "Composer",
+        "TCO" : "Content type",
+        "TCR" : "Copyright message",
+        "TDA" : "Date",
+        "TDY" : "Playlist delay",
+        "TEN" : "Encoded by",
+        "TFT" : "File type",
+        "TIM" : "Time",
+        "TKE" : "Initial key",
+        "TLA" : "Language(s)",
+        "TLE" : "Length",
+        "TMT" : "Media type",
+        "TOA" : "Original artist(s)/performer(s)",
+        "TOF" : "Original filename",
+        "TOL" : "Original Lyricist(s)/text writer(s)",
+        "TOR" : "Original release year",
+        "TOT" : "Original album/Movie/Show title",
+        "TP1" : "Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group",
+        "TP2" : "Band/Orchestra/Accompaniment",
+        "TP3" : "Conductor/Performer refinement",
+        "TP4" : "Interpreted, remixed, or otherwise modified by",
+        "TPA" : "Part of a set",
+        "TPB" : "Publisher",
+        "TRC" : "ISRC (International Standard Recording Code)",
+        "TRD" : "Recording dates",
+        "TRK" : "Track number/Position in set",
+        "TSI" : "Size",
+        "TSS" : "Software/hardware and settings used for encoding",
+        "TT1" : "Content group description",
+        "TT2" : "Title/Songname/Content description",
+        "TT3" : "Subtitle/Description refinement",
+        "TXT" : "Lyricist/text writer",
+        "TXX" : "User defined text information frame",
+        "TYE" : "Year",
+        "UFI" : "Unique file identifier",
+        "ULT" : "Unsychronized lyric/text transcription",
+        "WAF" : "Official audio file webpage",
+        "WAR" : "Official artist/performer webpage",
+        "WAS" : "Official audio source webpage",
+        "WCM" : "Commercial information",
+        "WCP" : "Copyright/Legal information",
+        "WPB" : "Publishers official webpage",
+        "WXX" : "User defined URL link frame",
+        // v2.3
+        "AENC" : "Audio encryption",
+        "APIC" : "Attached picture",
+        "COMM" : "Comments",
+        "COMR" : "Commercial frame",
+        "ENCR" : "Encryption method registration",
+        "EQUA" : "Equalization",
+        "ETCO" : "Event timing codes",
+        "GEOB" : "General encapsulated object",
+        "GRID" : "Group identification registration",
+        "IPLS" : "Involved people list",
+        "LINK" : "Linked information",
+        "MCDI" : "Music CD identifier",
+        "MLLT" : "MPEG location lookup table",
+        "OWNE" : "Ownership frame",
+        "PRIV" : "Private frame",
+        "PCNT" : "Play counter",
+        "POPM" : "Popularimeter",
+        "POSS" : "Position synchronisation frame",
+        "RBUF" : "Recommended buffer size",
+        "RVAD" : "Relative volume adjustment",
+        "RVRB" : "Reverb",
+        "SYLT" : "Synchronized lyric/text",
+        "SYTC" : "Synchronized tempo codes",
+        "TALB" : "Album/Movie/Show title",
+        "TBPM" : "BPM (beats per minute)",
+        "TCOM" : "Composer",
+        "TCON" : "Content type",
+        "TCOP" : "Copyright message",
+        "TDAT" : "Date",
+        "TDLY" : "Playlist delay",
+        "TENC" : "Encoded by",
+        "TEXT" : "Lyricist/Text writer",
+        "TFLT" : "File type",
+        "TIME" : "Time",
+        "TIT1" : "Content group description",
+        "TIT2" : "Title/songname/content description",
+        "TIT3" : "Subtitle/Description refinement",
+        "TKEY" : "Initial key",
+        "TLAN" : "Language(s)",
+        "TLEN" : "Length",
+        "TMED" : "Media type",
+        "TOAL" : "Original album/movie/show title",
+        "TOFN" : "Original filename",
+        "TOLY" : "Original lyricist(s)/text writer(s)",
+        "TOPE" : "Original artist(s)/performer(s)",
+        "TORY" : "Original release year",
+        "TOWN" : "File owner/licensee",
+        "TPE1" : "Lead performer(s)/Soloist(s)",
+        "TPE2" : "Band/orchestra/accompaniment",
+        "TPE3" : "Conductor/performer refinement",
+        "TPE4" : "Interpreted, remixed, or otherwise modified by",
+        "TPOS" : "Part of a set",
+        "TPUB" : "Publisher",
+        "TRCK" : "Track number/Position in set",
+        "TRDA" : "Recording dates",
+        "TRSN" : "Internet radio station name",
+        "TRSO" : "Internet radio station owner",
+        "TSIZ" : "Size",
+        "TSRC" : "ISRC (international standard recording code)",
+        "TSSE" : "Software/Hardware and settings used for encoding",
+        "TYER" : "Year",
+        "TXXX" : "User defined text information frame",
+        "UFID" : "Unique file identifier",
+        "USER" : "Terms of use",
+        "USLT" : "Unsychronized lyric/text transcription",
+        "WCOM" : "Commercial information",
+        "WCOP" : "Copyright/Legal information",
+        "WOAF" : "Official audio file webpage",
+        "WOAR" : "Official artist/performer webpage",
+        "WOAS" : "Official audio source webpage",
+        "WORS" : "Official internet radio station homepage",
+        "WPAY" : "Payment",
+        "WPUB" : "Publishers official webpage",
+        "WXXX" : "User defined URL link frame"
+    };
+
+    var _shortcuts = {
+        "title"     : ["TIT2", "TT2"],
+        "artist"    : ["TPE1", "TP1"],
+        "album"     : ["TALB", "TAL"],
+        "year"      : ["TYER", "TYE"],
+        "comment"   : ["COMM", "COM"],
+        "track"     : ["TRCK", "TRK"],
+        "genre"     : ["TCON", "TCO"],
+        "picture"   : ["APIC", "PIC"],
+        "lyrics"    : ["USLT", "ULT"]
+    };
+    var _defaultShortcuts = ["title", "artist", "album", "track"];
+
+    function getTagsFromShortcuts(shortcuts) {
+        var tags = [];
+        for( var i = 0, shortcut; shortcut = shortcuts[i]; i++ ) {
+            tags = tags.concat(_shortcuts[shortcut]||[shortcut]);
+        }
+        return tags;
+    }
+
+    // The ID3v2 tag/frame size is encoded with four bytes where the most significant bit (bit 7) is set to zero in every byte, making a total of 28 bits. The zeroed bits are ignored, so a 257 bytes long tag is represented as $00 00 02 01.
+    function readSynchsafeInteger32At(offset, data) {
+        var size1 = data.getByteAt(offset);
+        var size2 = data.getByteAt(offset+1);
+        var size3 = data.getByteAt(offset+2);
+        var size4 = data.getByteAt(offset+3);
+        // 0x7f = 0b01111111
+        var size = size4 & 0x7f
+                 | ((size3 & 0x7f) << 7)
+                 | ((size2 & 0x7f) << 14)
+                 | ((size1 & 0x7f) << 21);
+
+        return size;
+    }
+
+    function readFrameFlags(data, offset)
+    {
+        var flags =
+        {
+            message:
+            {
+                tag_alter_preservation  : data.isBitSetAt( offset, 6),
+                file_alter_preservation : data.isBitSetAt( offset, 5),
+                read_only               : data.isBitSetAt( offset, 4)
+            },
+            format:
+            {
+                grouping_identity       : data.isBitSetAt( offset+1, 7),
+                compression             : data.isBitSetAt( offset+1, 3),
+                encription              : data.isBitSetAt( offset+1, 2),
+                unsynchronisation       : data.isBitSetAt( offset+1, 1),
+                data_length_indicator   : data.isBitSetAt( offset+1, 0)
+            }
+        };
+
+        return flags;
+    }
+
+    /** All the frames consists of a frame header followed by one or more fields containing the actual information.
+     * The frame ID made out of the characters capital A-Z and 0-9. Identifiers beginning with "X", "Y" and "Z" are for experimental use and free for everyone to use, without the need to set the experimental bit in the tag header. Have in mind that someone else might have used the same identifier as you. All other identifiers are either used or reserved for future use.
+     * The frame ID is followed by a size descriptor, making a total header size of ten bytes in every frame. The size is calculated as frame size excluding frame header (frame size - 10).
+     */
+    function readFrames(offset, end, data, id3header, tags)
+    {
+        var frames = {};
+        var frameDataSize;
+        var major = id3header["major"];
+
+        tags = getTagsFromShortcuts(tags || _defaultShortcuts);
+
+        while( offset < end ) {
+            var readFrameFunc = null;
+            var frameData = data;
+            var frameDataOffset = offset;
+            var flags = null;
+
+            switch( major ) {
+                case 2:
+                var frameID = frameData.getStringAt(frameDataOffset, 3);
+                var frameSize = frameData.getInteger24At(frameDataOffset+3, true);
+                var frameHeaderSize = 6;
+                break;
+
+                case 3:
+                var frameID = frameData.getStringAt(frameDataOffset, 4);
+                var frameSize = frameData.getLongAt(frameDataOffset+4, true);
+                var frameHeaderSize = 10;
+                break;
+
+                case 4:
+                var frameID = frameData.getStringAt(frameDataOffset, 4);
+                var frameSize = readSynchsafeInteger32At(frameDataOffset+4, frameData);
+                var frameHeaderSize = 10;
+                break;
+            }
+            // if last frame GTFO
+            if( frameID == "" ) { break; }
+
+            // advance data offset to the next frame data
+            offset += frameHeaderSize + frameSize;
+            // skip unwanted tags
+            if( tags.indexOf( frameID ) < 0 ) { continue; }
+
+            // read frame message and format flags
+            if( major > 2 )
+            {
+                flags = readFrameFlags(frameData, frameDataOffset+8);
+            }
+
+            frameDataOffset += frameHeaderSize;
+
+            // the first 4 bytes are the real data size
+            // (after unsynchronisation && encryption)
+            if( flags && flags.format.data_length_indicator )
+            {
+                frameDataSize = readSynchsafeInteger32At(frameDataOffset, frameData);
+                frameDataOffset += 4;
+                frameSize -= 4;
+            }
+
+            // TODO: support unsynchronisation
+            if( flags && flags.format.unsynchronisation )
+            {
+                //frameData = removeUnsynchronisation(frameData, frameSize);
+                continue;
+            }
+
+            // find frame parsing function
+            if( frameID in ID3v2.readFrameData ) {
+                readFrameFunc = ID3v2.readFrameData[frameID];
+            } else if( frameID[0] == "T" ) {
+                readFrameFunc = ID3v2.readFrameData["T*"];
+            }
+
+            var parsedData = readFrameFunc ? readFrameFunc(frameDataOffset, frameSize, frameData, flags) : undefined;
+            var desc = frameID in ID3v2.frames ? ID3v2.frames[frameID] : 'Unknown';
+
+            var frame = {
+                id          : frameID,
+                size        : frameSize,
+                description : desc,
+                data        : parsedData
+            };
+
+            if( frameID in frames ) {
+                if( frames[frameID].id ) {
+                    frames[frameID] = [frames[frameID]];
+                }
+                frames[frameID].push(frame);
+            } else {
+                frames[frameID] = frame;
+            }
+        }
+
+        return frames;
+    }
+
+    //function removeUnsynchronisation(data, size)
+    //{
+    //    return data;
+    //}
+
+    function getFrameData( frames, ids ) {
+        if( typeof ids == 'string' ) { ids = [ids]; }
+
+        for( var i = 0, id; id = ids[i]; i++ ) {
+            if( id in frames ) { return frames[id].data; }
+        }
+    }
+
+    ID3v2.loadData = function(data, callback) {
+        data.loadRange([0, readSynchsafeInteger32At(6, data)], callback);
+    };
+
+    // http://www.id3.org/id3v2.3.0
+    ID3v2.readTagsFromData = function(data, tags) {
+        var offset = 0;
+        var major = data.getByteAt(offset+3);
+        if( major > 4 ) { return {version: '>2.4'}; }
+        var revision = data.getByteAt(offset+4);
+        var unsynch = data.isBitSetAt(offset+5, 7);
+        var xheader = data.isBitSetAt(offset+5, 6);
+        var xindicator = data.isBitSetAt(offset+5, 5);
+        var size = readSynchsafeInteger32At(offset+6, data);
+        offset += 10;
+
+        if( xheader ) {
+            var xheadersize = data.getLongAt(offset, true);
+            // The 'Extended header size', currently 6 or 10 bytes, excludes itself.
+            offset += xheadersize + 4;
+        }
+
+        var id3 = {
+    	    "version" : '2.' + major + '.' + revision,
+    	    "major" : major,
+    	    "revision" : revision,
+    	    "flags" : {
+    	        "unsynchronisation" : unsynch,
+    	        "extended_header" : xheader,
+    	        "experimental_indicator" : xindicator
+    	    },
+    	    "size" : size
+    	};
+        var frames = unsynch ? {} : readFrames(offset, size-10, data, id3, tags);
+    	// create shortcuts for most common data
+    	for( var name in _shortcuts ) if(_shortcuts.hasOwnProperty(name)) {
+    	    var data = getFrameData( frames, _shortcuts[name] );
+    	    if( data ) id3[name] = data;
+    	}
+
+    	for( var frame in frames ) {
+    	    if( frames.hasOwnProperty(frame) ) {
+    	        id3[frame] = frames[frame];
+    	    }
+    	}
+
+    	return id3;
+    };
+
+    // Export functions for closure compiler
+    ns["ID3v2"] = ID3v2;
+})(this);
+/*
+ * Copyright (c) 2009 Opera Software ASA, António Afonso (antonio.afonso@opera.com)
+ * Modified by António Afonso <antonio.afonso gmail.com>
+ */
+(function() {
+    var pictureType = [
+        "32x32 pixels 'file icon' (PNG only)",
+        "Other file icon",
+        "Cover (front)",
+        "Cover (back)",
+        "Leaflet page",
+        "Media (e.g. lable side of CD)",
+        "Lead artist/lead performer/soloist",
+        "Artist/performer",
+        "Conductor",
+        "Band/Orchestra",
+        "Composer",
+        "Lyricist/text writer",
+        "Recording Location",
+        "During recording",
+        "During performance",
+        "Movie/video screen capture",
+        "A bright coloured fish",
+        "Illustration",
+        "Band/artist logotype",
+        "Publisher/Studio logotype"
+    ];
+
+    function getTextEncoding( bite ) {
+        var charset;
+        switch( bite )
+        {
+            case 0x00:
+                charset = 'iso-8859-1';
+                break;
+
+            case 0x01:
+                charset = 'utf-16';
+                break;
+
+            case 0x02:
+                charset = 'utf-16be';
+                break;
+
+            case 0x03:
+                charset = 'utf-8';
+                break;
+        }
+
+        return charset;
+    }
+
+    function getTime( duration )
+    {
+        var duration    = duration/1000,
+            seconds     = Math.floor( duration ) % 60,
+            minutes     = Math.floor( duration/60 ) % 60,
+            hours       = Math.floor( duration/3600 );
+
+        return {
+            seconds : seconds,
+            minutes : minutes,
+            hours   : hours
+        };
+    }
+
+    function formatTime( time )
+    {
+        var seconds = time.seconds < 10 ? '0'+time.seconds : time.seconds;
+        var minutes = (time.hours > 0 && time.minutes < 10) ? '0'+time.minutes : time.minutes;
+
+        return (time.hours>0?time.hours+':':'') + minutes + ':' + seconds;
+    }
+
+    ID3v2.readFrameData['APIC'] = function readPictureFrame(offset, length, data, flags, v) {
+        v = v || '3';
+        return {
+            "format" : '',
+            "type" : '',
+            "description" : '',
+            "data" : ''
+        };
+    };
+
+    ID3v2.readFrameData['COMM'] = function readCommentsFrame(offset, length, data) {
+        var start = offset;
+        var charset = getTextEncoding( data.getByteAt(offset) );
+        var language = data.getStringAt( offset+1, 3 );
+        var shortdesc = data.getStringWithCharsetAt(offset+4, length-4, charset);
+
+        offset += 4 + shortdesc.bytesReadCount;
+        var text = data.getStringWithCharsetAt( offset, (start+length) - offset, charset );
+
+        return {
+            language : language,
+            short_description : shortdesc.toString(),
+            text : text.toString()
+        };
+    };
+
+    ID3v2.readFrameData['COM'] = ID3v2.readFrameData['COMM'];
+
+    ID3v2.readFrameData['PIC'] = function(offset, length, data, flags) {
+        return ID3v2.readFrameData['APIC'](offset, length, data, flags, '2');
+    };
+
+    ID3v2.readFrameData['PCNT'] = function readCounterFrame(offset, length, data) {
+        // FIXME: implement the rest of the spec
+        return data.getInteger32At(offset);
+    };
+
+    ID3v2.readFrameData['CNT'] = ID3v2.readFrameData['PCNT'];
+
+    ID3v2.readFrameData['T*'] = function readTextFrame(offset, length, data) {
+        var charset = getTextEncoding( data.getByteAt(offset) );
+
+        return data.getStringWithCharsetAt(offset+1, length-1, charset).toString();
+    };
+
+    ID3v2.readFrameData['TCON'] = function readGenreFrame(offset, length, data) {
+        var text = ID3v2.readFrameData['T*'].apply( this, arguments );
+        return text.replace(/^\(\d+\)/, '');
+    };
+
+    ID3v2.readFrameData['TCO'] = ID3v2.readFrameData['TCON'];
+
+    //ID3v2.readFrameData['TLEN'] = function readLengthFrame(offset, length, data) {
+    //    var text = ID3v2.readFrameData['T*'].apply( this, arguments );
+    //
+    //    return {
+    //        text : text,
+    //        parsed : formatTime( getTime(parseInt(text)) )
+    //    };
+    //};
+
+    ID3v2.readFrameData['USLT'] = function readLyricsFrame(offset, length, data) {
+        var start = offset;
+        var charset = getTextEncoding( data.getByteAt(offset) );
+        var language = data.getStringAt( offset+1, 3 );
+        var descriptor = data.getStringWithCharsetAt( offset+4, length-4, charset );
+
+        offset += 4 + descriptor.bytesReadCount;
+        var lyrics = data.getStringWithCharsetAt( offset, (start+length) - offset, charset );
+
+        return {
+            language : language,
+            descriptor : descriptor.toString(),
+            lyrics : lyrics.toString()
+        };
+    };
+
+    ID3v2.readFrameData['ULT'] = ID3v2.readFrameData['USLT'];
+})();
+/*
+ * Support for iTunes-style m4a tags
+ * See:
+ *   http://atomicparsley.sourceforge.net/mpeg-4files.html
+ *   http://developer.apple.com/mac/library/documentation/QuickTime/QTFF/Metadata/Metadata.html
+ * Authored by Joshua Kifer <joshua.kifer gmail.com>
+ * MIT License [http://www.opensource.org/licenses/mit-license.php]
+ */
+
+(function(ns) {
+    var ID4 = ns.ID4 = {};
+
+    ID4.types = {
+        '0'     : 'uint8',
+        '1'     : 'text',
+        '13'    : 'jpeg',
+        '14'    : 'png',
+        '21'    : 'uint8'
+    };
+    ID4.atom = {
+        '©alb': ['album'],
+        '©art': ['artist'],
+        '©ART': ['artist'],
+        'aART': ['artist'],
+        '©day': ['year'],
+        '©nam': ['title'],
+        '©gen': ['genre'],
+        'trkn': ['track'],
+        '©wrt': ['composer'],
+        '©too': ['encoder'],
+        'cprt': ['copyright'],
+        'covr': ['picture'],
+        '©grp': ['grouping'],
+        'keyw': ['keyword'],
+        '©lyr': ['lyrics'],
+        '©gen': ['genre']
+    };
+
+    ID4.loadData = function(data, callback) {
+        // load the header of the first block
+        data.loadRange([0, 7], function () {
+            loadAtom(data, 0, data.getLength(), callback);
+        });
+    };
+
+    /**
+     * Make sure that the [offset, offset+7] bytes (the block header) are
+     * already loaded before calling this function.
+     */
+    function loadAtom(data, offset, length, callback) {
+        // 8 is the size of the atomSize and atomName fields.
+        // When reading the current block we always read 8 more bytes in order
+        // to also read the header of the next block.
+        var atomSize = data.getLongAt(offset, true);
+        if (atomSize == 0) return callback();
+        var atomName = data.getStringAt(offset + 4, 4);
+
+        // Container atoms
+        if (['moov', 'udta', 'meta', 'ilst'].indexOf(atomName) > -1)
+        {
+            if (atomName == 'meta') offset += 4; // next_item_id (uint32)
+            data.loadRange([offset+8, offset+8 + 8], function() {
+                loadAtom(data, offset + 8, atomSize - 8, callback);
+            });
+        } else {
+            // Value atoms
+            var readAtom = atomName in ID4.atom;
+            data.loadRange([offset+(readAtom?0:atomSize), offset+atomSize + 8], function() {
+                loadAtom(data, offset+atomSize, length, callback);
+            });
+        }
+    };
+
+    ID4.readTagsFromData = function(data) {
+        var tag = {};
+        readAtom(tag, data, 0, data.getLength());
+        return tag;
+    };
+
+    function readAtom(tag, data, offset, length, indent)
+    {
+        indent = indent === undefined ? "" : indent + "  ";
+        var seek = offset;
+        while (seek < offset + length)
+        {
+            var atomSize = data.getLongAt(seek, true);
+            if (atomSize == 0) return;
+            var atomName = data.getStringAt(seek + 4, 4);
+            // Container atoms
+            if (['moov', 'udta', 'meta', 'ilst'].indexOf(atomName) > -1)
+            {
+                if (atomName == 'meta') seek += 4; // next_item_id (uint32)
+                readAtom(tag, data, seek + 8, atomSize - 8, indent);
+                return;
+            }
+            // Value atoms
+            if (ID4.atom[atomName])
+            {
+                var klass = data.getInteger24At(seek + 16 + 1, true);
+                var atom = ID4.atom[atomName];
+                var type = ID4.types[klass];
+                if (atomName == 'trkn')
+                {
+                    tag[atom[0]] = data.getByteAt(seek + 16 + 11);
+                    tag['count'] = data.getByteAt(seek + 16 + 13);
+                }
+                else
+                {
+                    // 16: name + size + "data" + size (4 bytes each)
+                    // 4: atom version (1 byte) + atom flags (3 bytes)
+                    // 4: NULL (usually locale indicator)
+                    var dataStart = seek + 16 + 4 + 4;
+                    var dataEnd = atomSize - 16 - 4 - 4;
+                    switch( type ) {
+                        case 'text':
+                            tag[atom[0]] = data.getStringWithCharsetAt(dataStart, dataEnd, "UTF-8");
+                            break;
+
+                        case 'uint8':
+                            tag[atom[0]] = data.getShortAt(dataStart);
+                            break;
+
+                        case 'jpeg':
+                        case 'png':
+                            tag[atom[0]] = {
+                                format  : "image/" + type,
+                                data    : data.getBytesAt(dataStart, dataEnd)
+                            };
+                            break;
+                    }
+                }
+            }
+            seek += atomSize;
+        }
+    }
+
+    // Export functions for closure compiler
+    ns["ID4"] = ns.ID4;
+})(this);

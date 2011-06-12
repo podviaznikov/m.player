@@ -337,6 +337,7 @@ $(function(){
             fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
                 if(readError){return;}
                 metadataParser.parse(initialFile.name,data,function(tags){
+                    console.log('Tags',tags);
                     var song=new Song();
                     //fix track number
                     if(tags.track && _.isString(tags.track)){

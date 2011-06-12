@@ -4,6 +4,7 @@ index.html
 js/app.js
 js/lib/libs.bundle.js
 js/lib/async.min.js
+js/jschardet.js
 css/styles.css
 css/images/no_picture.png
 css/images/lastfm_square.jpg
