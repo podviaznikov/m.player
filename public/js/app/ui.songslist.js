@@ -150,13 +150,10 @@ $(function(){
             if(albums){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
-                        //todo (anton) model function???
-                        albumSongs=songs.filter(function(song){
-                            return song.get('album')===album;
-                        }),
+                        albumSongs=songs.forAlbum(album),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
-                    this.mapping[album] = albumSongs;
+                    this.mapping[album]=albumSongs;
                     this.filteredLibContent.append(albumView.render().el);
                 }
             }

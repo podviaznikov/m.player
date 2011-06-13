@@ -527,15 +527,15 @@ $(function(){
             this.playLists.fetch();
         },
         keyPressed:function(event){
-            var keyCode = event.keyCode;
-            if(keyCode==13){
+            var keyCode=event.keyCode;
+            if(keyCode===13){
                 this.filterLibrary();
             }
         },
         allArtistsLoaded:function(){
             var lastArtist=settings.getLastArtist();
             if(lastArtist){
-                var lastPlayedArtist = this.artists.forName(lastArtist);
+                var lastPlayedArtist=this.artists.forName(lastArtist);
                 if(lastPlayedArtist && lastPlayedArtist.view){
                     lastPlayedArtist.view.selectArtist();
                 }
@@ -624,7 +624,7 @@ $(function(){
         handleDragStart:function(e){
             var event=e.originalEvent,
                 dataTransferObj=event.dataTransfer,
-                artist=event.srcElement.dataset['artist'],
+                artist=event.srcElement.dataset.artist,
                 dataTransfer=DataTransfer.create('artist',artist);
             dataTransferObj.effectAllowed='move';
             dataTransferObj.setData('text/plain',dataTransfer.toString());
@@ -668,7 +668,7 @@ $(function(){
 
     ui.PlayListMenuView = Backbone.View.extend({
         className:'lib-item-data box',
-        tagName: 'article',
+        tagName:'article',
         tpl:$('#saved_playlist_tpl').html(),
         events:{
             'click':'selectPlayList',
@@ -1098,13 +1098,10 @@ $(function(){
             if(albums){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
-                        //todo (anton) model function???
-                        albumSongs=songs.filter(function(song){
-                            return song.get('album')===album;
-                        }),
+                        albumSongs=songs.forAlbum(album),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
-                    this.mapping[album] = albumSongs;
+                    this.mapping[album]=albumSongs;
                     this.filteredLibContent.append(albumView.render().el);
                 }
             }
