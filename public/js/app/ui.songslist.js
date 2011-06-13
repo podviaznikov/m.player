@@ -30,6 +30,7 @@ $(function(){
             _.bindAll(this, 'addSong','render','renderPlayListInfo','playSongs');
         },
         render:function(){
+            //todo (anton) what is this?
             this.model.findImage();
             _.each(this.model.get('songs'),this.addSong);
             return this;
@@ -68,7 +69,7 @@ $(function(){
             _.bindAll(this,'renderAlbumInfo','render','playSongs');
         },
         renderAlbumInfo:function(data){
-            var html = _.template(this.tpl,{
+            var html=_.template(this.tpl,{
                 image:data.image,
                 name:data.name,
                 releaseDate:data.releaseDate
@@ -100,7 +101,7 @@ $(function(){
             this.el.dataset.songname=this.model.get('title');
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
-            var html = _.template(this.tpl,{
+            var html=_.template(this.tpl,{
                 track:this.model.get('track')||this.options.key+1,
                 title:this.model.get('title')
             });
@@ -112,7 +113,7 @@ $(function(){
             $(this.el).addClass('selected_song');
         },
         deleteSong:function(){
-            this.model.bind('destroy',this.onDeleteSong)
+            this.model.bind('destroy',this.onDeleteSong);
             this.model.remove();
         },
         onDeleteSong:function(){
@@ -149,6 +150,7 @@ $(function(){
             if(albums){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
+                        //todo (anton) model function???
                         albumSongs=songs.filter(function(song){return song.get('album')===album;}),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
@@ -159,7 +161,7 @@ $(function(){
         },
         showPlayList:function(playList){
             this.filteredLibContent.empty();
-            var playListView = new ui.PlayListFullView({model:playList});
+            var playListView=new ui.PlayListFullView({model:playList});
             this.filteredLibContent.append(playListView.render().el);
         },
         handleDragStart:function(e){

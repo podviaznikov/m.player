@@ -1,52 +1,8 @@
 /**(c) 2011 Enginimation Studio (http://enginimation.com). May be freely distributed under the MIT license.*/
+/*global Porridge: true, UUID: true, fs:true,_:true,Backbone:true, async:true,dataService:true,fbService:true,ID3:true,FileAPIReader:true */
 "use strict";
-var global=window;
-var AppController={
-	init:function(){
-        var newHeight=$(window).height()-105,
-            playingSongPanel=$('#playing_songs');
-        $('.scrollable_panel').height(newHeight);
-        //fixing height for songs panel
-        playingSongPanel.height('initial');
-        playingSongPanel.css('max-height',newHeight-184);
-		this.appView=new ui.AppView;
-		this.playerCtrl=new ui.PlayerCtrl;
-		this.visualizationView=new ui.VisualizationView;
-        this.visualizationView.el.height(newHeight);
-        this.artistBioView=new ui.ArtistBioView;
-        this.artistBioView.el.height(newHeight);
-        var config={
-            dbName:'mdb',
-            dbDescription:'m.player database',
-            dbVersion:'1',
-            stores:[Song.definition,Artist.definition,PlayList.definition]
-        };
-        Porridge.init(config,function(){
-            AppController.playlistView = new ui.PlayListView;
-            AppController.libraryMenu = new ui.LibraryMenu;
-            AppController.songsView = new ui.SongsView;
-            //getting session info if user not logined
-            if(!settings.isLogined()){
-                dataService.getSession(function(data){
-                    console.log(data);
-                    settings.saveUser(data.user);
-                    settings.saveSessionKey(data.key);
-                    console.log(settings.isLogined());
-                    if(!settings.isLogined())
-                    {
-                        AppController.appView.showLastfmLoginBtn();
-                    }
-                });
-            }
-        });
-        //fbService.init();
-        //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
-        //$(document.body).bind("online", this.checkNetworkStatus);
-        //$(document.body).bind("offline", this.checkNetworkStatus);
-        //this.checkNetworkStatus();
-	}
-
-};
+var global=window,
+    ui={};
 //storing all users' settings(locally): volume, last music, pressed buttons etc.
 var settings={
     saveShuffle:function(isShuffle){
@@ -107,8 +63,54 @@ var settings={
         return global.localStorage.getItem('sessionKey')||'';
     },
     isLogined:function(){
-        return this.getUser()!=''&& this.getSessionKey()!='';
+        return this.getUser()!==''&& this.getSessionKey()!=='';
     }
+};
+var AppController={
+	init:function(){
+        var newHeight=$(window).height()-105,
+            playingSongPanel=$('#playing_songs');
+        $('.scrollable_panel').height(newHeight);
+        //fixing height for songs panel
+        playingSongPanel.height('initial');
+        playingSongPanel.css('max-height',newHeight-184);
+		this.appView=new ui.AppView();
+		this.playerCtrl=new ui.PlayerCtrl();
+		this.visualizationView=new ui.VisualizationView();
+        this.visualizationView.el.height(newHeight);
+        this.artistBioView=new ui.ArtistBioView();
+        this.artistBioView.el.height(newHeight);
+        var config={
+            dbName:'mdb',
+            dbDescription:'m.player database',
+            dbVersion:'1',
+            stores:[Song.definition,Artist.definition,PlayList.definition]
+        };
+        Porridge.init(config,function(){
+            AppController.playlistView=new ui.PlayListView();
+            AppController.libraryMenu=new ui.LibraryMenu();
+            AppController.songsView=new ui.SongsView();
+            //getting session info if user not logined
+            if(!settings.isLogined()){
+                dataService.getSession(function(data){
+                    console.log(data);
+                    settings.saveUser(data.user);
+                    settings.saveSessionKey(data.key);
+                    console.log(settings.isLogined());
+                    if(!settings.isLogined())
+                    {
+                        AppController.appView.showLastfmLoginBtn();
+                    }
+                });
+            }
+        });
+        //fbService.init();
+        //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
+        //$(document.body).bind("online", this.checkNetworkStatus);
+        //$(document.body).bind("offline", this.checkNetworkStatus);
+        //this.checkNetworkStatus();
+	}
+
 };
 var metadataParser={
     parse:function(name,binaryData,callback){
@@ -116,7 +118,7 @@ var metadataParser={
 
         ID3.loadTags(name, function(){
             var endDate = new Date().getTime();
-            console.log("Time: " + ((endDate-startDate)/1000)+"s");
+            console.log('Time: ' + ((endDate-startDate)/1000)+'s');
             var tags = ID3.getAllTags(name);
             callback(tags);
     },
@@ -166,7 +168,7 @@ var SongsList = Porridge.Collection.extend({
     //sort by track number or name if track number is not presented
     comparator:function(song){
         var track = song.get('track');
-        if(track && track!=''){
+        if(track && track!==''){
             //should always pass 10. In other case '08'(as example) may be parsed incorrectly
             return parseInt(track,10);
         }
@@ -191,7 +193,7 @@ var Artist = Porridge.Model.extend({
             this.id=UUID.generate();
             this.set({id:this.id});
         }
-        this.songs=new SongsList;
+        this.songs=new SongsList();
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.refresh();
         //this.bind('change',this.refresh);
@@ -258,7 +260,6 @@ var PlayList = Porridge.Model.extend({
     }
 });
 var PlayLists = Porridge.Collection.extend({model: PlayList});
-var ui={};
 $(function(){
     ui.AppView = Backbone.View.extend({
         el: $('body'),
@@ -411,31 +412,31 @@ $(function(){
         keyPressed:function(event)
         {
             var keyCode=event.keyCode,
-                currentSong=undefined;
+                currentSong;
             if(AppController.playlistView){
-                currentSong= AppController.playlistView.currentSong();
+                currentSong=AppController.playlistView.currentSong();
             }
-            if(keyCode==40){
+            if(keyCode===40){
                 //down arrow
                 AppController.playlistView.next(false);
-            } else if(keyCode==38){
+            } else if(keyCode===38){
                 //up key
                 AppController.playlistView.previous(false);
-            }else if(keyCode==13){
+            }else if(keyCode===13){
                 //enter
                 AppController.playlistView.destroyFileURL();
                 if(currentSong){
                     currentSong.view.playSong();
                 }
-            }else if(keyCode==32){
+            }else if(keyCode===32){
                 //space
                 AppController.playerCtrl.togglePause();
-            }else if(keyCode==46){
+            }else if(keyCode===46){
                 //delete-delete song from playlist
                if(currentSong){
                     currentSong.view.remove();
                 }
-            }else if(keyCode==27){
+            }else if(keyCode===27){
                 //escape-comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
@@ -488,14 +489,12 @@ $(function(){
             this.el.hide();
         },
         render:function(){
-
            if(this.model){
                 dataService.getArtistBio(this.model.get('name'),this.renderArtistBio);
            }
            return this;
         },
-        renderArtistBio:function(data)
-        {
+        renderArtistBio:function(data){
             var html = unescape(data.summary);
             $(this.el).html(html);
         }
@@ -515,8 +514,8 @@ $(function(){
             'keyup input':'keyPressed'
         },
         initialize:function(){
-            this.artists=new ArtistsList;//should be first in this method!
-            this.playLists=new PlayLists;//should be first in this method!
+            this.artists=new ArtistsList();//should be first in this method!
+            this.playLists=new PlayLists();//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded',
                 'filterLibrary','keyPressed');
             this.artists.bind('add',this.addArtist);
@@ -566,7 +565,7 @@ $(function(){
         },
         filterLibrary:function(){
             var filterValue=this.searchField.val();
-            if(!filterValue || filterValue==''){
+            if(!filterValue || filterValue===''){
                 this.artists.each(function(artist){
                     if(artist.view){
                         artist.view.show();
@@ -726,7 +725,7 @@ $(function(){
             'click #clear_playlist':'clearPlaylist'
         },
         initialize: function(){
-            this.songs=new SongsList;//should be first in this method!
+            this.songs=new SongsList();//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','saveFileURL','destroyFileURL','currentSong', 'currentSongIndex',
              'randomSong','renderAlbumInfo','render','clearPlaylist',
               'playSongModel','savePlayList','setPlayListModel','removePlayListModel','setSongsAndPlay');
@@ -979,6 +978,7 @@ $(function(){
             _.bindAll(this, 'addSong','render','renderPlayListInfo','playSongs');
         },
         render:function(){
+            //todo (anton) what is this?
             this.model.findImage();
             _.each(this.model.get('songs'),this.addSong);
             return this;
@@ -1017,7 +1017,7 @@ $(function(){
             _.bindAll(this,'renderAlbumInfo','render','playSongs');
         },
         renderAlbumInfo:function(data){
-            var html = _.template(this.tpl,{
+            var html=_.template(this.tpl,{
                 image:data.image,
                 name:data.name,
                 releaseDate:data.releaseDate
@@ -1049,7 +1049,7 @@ $(function(){
             this.el.dataset.songname=this.model.get('title');
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
-            var html = _.template(this.tpl,{
+            var html=_.template(this.tpl,{
                 track:this.model.get('track')||this.options.key+1,
                 title:this.model.get('title')
             });
@@ -1098,6 +1098,7 @@ $(function(){
             if(albums){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
+                        //todo (anton) model function???
                         albumSongs=songs.filter(function(song){return song.get('album')===album;}),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
@@ -1108,7 +1109,7 @@ $(function(){
         },
         showPlayList:function(playList){
             this.filteredLibContent.empty();
-            var playListView = new ui.PlayListFullView({model:playList});
+            var playListView=new ui.PlayListFullView({model:playList});
             this.filteredLibContent.append(playListView.render().el);
         },
         handleDragStart:function(e){

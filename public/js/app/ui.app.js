@@ -1,4 +1,3 @@
-var ui={};
 $(function(){
     ui.AppView = Backbone.View.extend({
         el: $('body'),
@@ -151,31 +150,31 @@ $(function(){
         keyPressed:function(event)
         {
             var keyCode=event.keyCode,
-                currentSong=undefined;
+                currentSong;
             if(AppController.playlistView){
-                currentSong= AppController.playlistView.currentSong();
+                currentSong=AppController.playlistView.currentSong();
             }
-            if(keyCode==40){
+            if(keyCode===40){
                 //down arrow
                 AppController.playlistView.next(false);
-            } else if(keyCode==38){
+            } else if(keyCode===38){
                 //up key
                 AppController.playlistView.previous(false);
-            }else if(keyCode==13){
+            }else if(keyCode===13){
                 //enter
                 AppController.playlistView.destroyFileURL();
                 if(currentSong){
                     currentSong.view.playSong();
                 }
-            }else if(keyCode==32){
+            }else if(keyCode===32){
                 //space
                 AppController.playerCtrl.togglePause();
-            }else if(keyCode==46){
+            }else if(keyCode===46){
                 //delete-delete song from playlist
                if(currentSong){
                     currentSong.view.remove();
                 }
-            }else if(keyCode==27){
+            }else if(keyCode===27){
                 //escape-comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
@@ -228,14 +227,12 @@ $(function(){
             this.el.hide();
         },
         render:function(){
-
            if(this.model){
                 dataService.getArtistBio(this.model.get('name'),this.renderArtistBio);
            }
            return this;
         },
-        renderArtistBio:function(data)
-        {
+        renderArtistBio:function(data){
             var html = unescape(data.summary);
             $(this.el).html(html);
         }

@@ -1,51 +1,7 @@
+/*global Porridge: true, UUID: true, fs:true,_:true,Backbone:true, async:true,dataService:true,fbService:true,ID3:true,FileAPIReader:true */
 "use strict";
-var global=window;
-var AppController={
-	init:function(){
-        var newHeight=$(window).height()-105,
-            playingSongPanel=$('#playing_songs');
-        $('.scrollable_panel').height(newHeight);
-        //fixing height for songs panel
-        playingSongPanel.height('initial');
-        playingSongPanel.css('max-height',newHeight-184);
-		this.appView=new ui.AppView;
-		this.playerCtrl=new ui.PlayerCtrl;
-		this.visualizationView=new ui.VisualizationView;
-        this.visualizationView.el.height(newHeight);
-        this.artistBioView=new ui.ArtistBioView;
-        this.artistBioView.el.height(newHeight);
-        var config={
-            dbName:'mdb',
-            dbDescription:'m.player database',
-            dbVersion:'1',
-            stores:[Song.definition,Artist.definition,PlayList.definition]
-        };
-        Porridge.init(config,function(){
-            AppController.playlistView = new ui.PlayListView;
-            AppController.libraryMenu = new ui.LibraryMenu;
-            AppController.songsView = new ui.SongsView;
-            //getting session info if user not logined
-            if(!settings.isLogined()){
-                dataService.getSession(function(data){
-                    console.log(data);
-                    settings.saveUser(data.user);
-                    settings.saveSessionKey(data.key);
-                    console.log(settings.isLogined());
-                    if(!settings.isLogined())
-                    {
-                        AppController.appView.showLastfmLoginBtn();
-                    }
-                });
-            }
-        });
-        //fbService.init();
-        //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
-        //$(document.body).bind("online", this.checkNetworkStatus);
-        //$(document.body).bind("offline", this.checkNetworkStatus);
-        //this.checkNetworkStatus();
-	}
-
-};
+var global=window,
+    ui={};
 //storing all users' settings(locally): volume, last music, pressed buttons etc.
 var settings={
     saveShuffle:function(isShuffle){
@@ -106,8 +62,54 @@ var settings={
         return global.localStorage.getItem('sessionKey')||'';
     },
     isLogined:function(){
-        return this.getUser()!=''&& this.getSessionKey()!='';
+        return this.getUser()!==''&& this.getSessionKey()!=='';
     }
+};
+var AppController={
+	init:function(){
+        var newHeight=$(window).height()-105,
+            playingSongPanel=$('#playing_songs');
+        $('.scrollable_panel').height(newHeight);
+        //fixing height for songs panel
+        playingSongPanel.height('initial');
+        playingSongPanel.css('max-height',newHeight-184);
+		this.appView=new ui.AppView();
+		this.playerCtrl=new ui.PlayerCtrl();
+		this.visualizationView=new ui.VisualizationView();
+        this.visualizationView.el.height(newHeight);
+        this.artistBioView=new ui.ArtistBioView();
+        this.artistBioView.el.height(newHeight);
+        var config={
+            dbName:'mdb',
+            dbDescription:'m.player database',
+            dbVersion:'1',
+            stores:[Song.definition,Artist.definition,PlayList.definition]
+        };
+        Porridge.init(config,function(){
+            AppController.playlistView=new ui.PlayListView();
+            AppController.libraryMenu=new ui.LibraryMenu();
+            AppController.songsView=new ui.SongsView();
+            //getting session info if user not logined
+            if(!settings.isLogined()){
+                dataService.getSession(function(data){
+                    console.log(data);
+                    settings.saveUser(data.user);
+                    settings.saveSessionKey(data.key);
+                    console.log(settings.isLogined());
+                    if(!settings.isLogined())
+                    {
+                        AppController.appView.showLastfmLoginBtn();
+                    }
+                });
+            }
+        });
+        //fbService.init();
+        //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
+        //$(document.body).bind("online", this.checkNetworkStatus);
+        //$(document.body).bind("offline", this.checkNetworkStatus);
+        //this.checkNetworkStatus();
+	}
+
 };
 var metadataParser={
     parse:function(name,binaryData,callback){
@@ -115,7 +117,7 @@ var metadataParser={
 
         ID3.loadTags(name, function(){
             var endDate = new Date().getTime();
-            console.log("Time: " + ((endDate-startDate)/1000)+"s");
+            console.log('Time: ' + ((endDate-startDate)/1000)+'s');
             var tags = ID3.getAllTags(name);
             callback(tags);
     },

@@ -69,9 +69,9 @@ $(function(){
             if(this.loadedMusicSlider){
                 var newX=e.offsetX,
                     width=this.musicSlider.width(),
-                    max=parseFloat(this.musicSlider.attr('max'));
+                    max=parseFloat(this.musicSlider.attr('max')),
+                    newProgressValue=(newX/width*max);
                 console.log(newX,width,max);
-                var newProgressValue=(newX/width*max);
                 this.musicSlider.attr('value',newProgressValue);
                 this.audioEL.setTime(newProgressValue);
             }
@@ -79,7 +79,7 @@ $(function(){
         changedVolume:function(e){
             var newX=e.offsetX,
                 width=this.volumeSlider.width(),
-                percent = newX/width;
+                percent=newX/width;
             //minor hack for possibility to make 100% loud
             if(percent>0.95)
             {
@@ -151,7 +151,7 @@ $(function(){
             this.audioEL.pause();
         },
         togglePause:function(){
-            var isPaused = this.$(this.playToggle).hasClass('paused');
+            var isPaused=this.$(this.playToggle).hasClass('paused');
             isPaused?this.play():this.pause();
         },
         stop:function(){
@@ -167,15 +167,15 @@ $(function(){
             AppController.playlistView.next();
         },
         updateAudioProgress:function(duration,currentTime){
-            var timeInSeconds=parseInt(currentTime, 10),
+            var timeInSeconds=parseInt(currentTime,10),
                 songDuration=parseInt(duration,10),
-                rem=parseInt(duration - currentTime, 10),
+                rem=parseInt(duration - currentTime,10),
                 pos=(timeInSeconds / duration) * 100,
                 mins=Math.floor(currentTime/60,10),
                 secs=timeInSeconds - mins*60,
                 timeCounter= mins + ':' + (secs > 9 ? secs : '0' + secs),
                 currentSong=AppController.playlistView.currentSong();
-            if(rem==0 && currentSong){
+            if(rem===0 && currentSong){
                 this.loadedMusicSlider=false;
                 dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();

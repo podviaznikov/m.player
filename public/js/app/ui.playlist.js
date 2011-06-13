@@ -15,7 +15,7 @@ $(function(){
             'click #clear_playlist':'clearPlaylist'
         },
         initialize: function(){
-            this.songs=new SongsList;//should be first in this method!
+            this.songs=new SongsList();//should be first in this method!
             _.bindAll(this, 'addOne', 'addAll','saveFileURL','destroyFileURL','currentSong', 'currentSongIndex',
              'randomSong','renderAlbumInfo','render','clearPlaylist',
               'playSongModel','savePlayList','setPlayListModel','removePlayListModel','setSongsAndPlay');

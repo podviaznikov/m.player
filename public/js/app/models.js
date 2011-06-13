@@ -39,7 +39,7 @@ var SongsList = Porridge.Collection.extend({
     //sort by track number or name if track number is not presented
     comparator:function(song){
         var track = song.get('track');
-        if(track && track!=''){
+        if(track && track!==''){
             //should always pass 10. In other case '08'(as example) may be parsed incorrectly
             return parseInt(track,10);
         }
@@ -64,7 +64,7 @@ var Artist = Porridge.Model.extend({
             this.id=UUID.generate();
             this.set({id:this.id});
         }
-        this.songs=new SongsList;
+        this.songs=new SongsList();
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.refresh();
         //this.bind('change',this.refresh);

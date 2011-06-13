@@ -652,6 +652,10 @@ footer.saved_playlist_toolbar
 {
     margin-bottom:10px;
 }
+#new_play_list
+{
+    width:70px;
+}
 #new_play_list:focus
 {
     background-color:#FF6900;

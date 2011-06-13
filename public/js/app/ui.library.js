@@ -12,8 +12,8 @@ $(function(){
             'keyup input':'keyPressed'
         },
         initialize:function(){
-            this.artists=new ArtistsList;//should be first in this method!
-            this.playLists=new PlayLists;//should be first in this method!
+            this.artists=new ArtistsList();//should be first in this method!
+            this.playLists=new PlayLists();//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','showArtists','showPlayLists','allArtistsLoaded',
                 'filterLibrary','keyPressed');
             this.artists.bind('add',this.addArtist);
@@ -63,7 +63,7 @@ $(function(){
         },
         filterLibrary:function(){
             var filterValue=this.searchField.val();
-            if(!filterValue || filterValue==''){
+            if(!filterValue || filterValue===''){
                 this.artists.each(function(artist){
                     if(artist.view){
                         artist.view.show();
