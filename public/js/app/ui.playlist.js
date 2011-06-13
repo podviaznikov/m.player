@@ -24,10 +24,10 @@ $(function(){
             this.songs.bind('add',this.addOne);
             this.songs.bind('refresh',this.addAll);
             this.songs.bind('all',this.render);
-            var playlist=settings.getPlayList();
+            var playlist=AppController.settings.getPlayList();
             if(playlist){
                 this.songs.refresh(playlist.models);
-                var lastSong=settings.getLastSong();
+                var lastSong=AppController.settings.getLastSong();
                 if(lastSong){
                     this.selectSong(new Song(lastSong));
                 }
@@ -45,11 +45,11 @@ $(function(){
                 //playing first song from list
                 firstSong.view.playSong();
                 //saving settings
-                settings.saveLastAlbum(firstSong.get('album'));
-                settings.saveLastArtist(firstSong.get('artist'));
+                AppController.settings.saveLastAlbum(firstSong.get('album'));
+                AppController.settings.saveLastArtist(firstSong.get('artist'));
             }
             //saving settings
-            settings.savePlayList(songs);
+            AppController.settings.savePlayList(songs);
         },
         setPlayListModel:function(playList){
             this.playList = playList;
@@ -74,7 +74,7 @@ $(function(){
         clearPlaylist:function(){
             this.songsEl.empty();
             this.songs.refresh([]);
-            settings.savePlayList(this.songs);
+            AppController.settings.savePlayList(this.songs);
             this.render();
         },
         addOne:function(song){
@@ -153,14 +153,14 @@ $(function(){
         next:function(playSongFlag){
             var playSong=!playSongFlag,
                 nextSongId=-1;
-            if(playSong && settings.isShuffle()){
+            if(playSong && AppController.settings.isShuffle()){
                 nextSongId=this.randomSong();
             }else{
                 var indexOfSelectedSong=this.currentSongIndex();
                 if(indexOfSelectedSong===this.songs.length-1){
                     //to have first one
                     indexOfSelectedSong=-1;
-                    if(!settings.isRepeat()){
+                    if(!AppController.settings.isRepeat()){
                         playSong=false;
                     }
                 }

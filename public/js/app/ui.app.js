@@ -5,7 +5,6 @@ $(function(){
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
         mainPanels:$('section.main_panel'),
-        lastfmLoginBtn:$('#lastfm_login'),
         isRegularMode:true,
         events:{
             'keyup':'keyPressed',
@@ -20,13 +19,10 @@ $(function(){
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn','fbLogin');
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile','fbLogin');
         },
         fbLogin:function(){
             fbService.login();
-        },
-        showLastfmLoginBtn:function(){
-            this.lastfmLoginBtn.show();
         },
         showArtistBio:function(artist){
             this.mainPanels.addClass('hidden');
@@ -75,7 +71,7 @@ $(function(){
             this.$('#uploading_files_progress header span').html(file.name);
             fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
                 if(readError){return;}
-                metadataParser.parse(initialFile.name,data,function(tags){
+                AppController.metadataParser.parse(initialFile.name,data,function(tags){
                     console.log('Tags',tags);
                     var song=new Song();
                     //fix track number
@@ -107,12 +103,13 @@ $(function(){
                                     AppController.libraryMenu.artists.add(artist);
                                     callback(null);
                                 });
-                            }else{
+                            }
+                            else{
                                 //if artist was deleted: mark it as undeleted
                                 artist.set({isDeleted:false});
                                 var songsCount=artist.get('songsCount')||0;
                                 artist.set({songsCount:songsCount+1});
-                                artist.songs.add(song);
+                                artist.songs.add(song,{silent: true});
                                 artist.save();
                                 artist.change();
                                 callback(null);
@@ -142,13 +139,13 @@ $(function(){
             this.el.removeClass('fullscreen');
             if(this.isRegularMode){
                 this.mainPanels.removeClass('hidden');
-            }else{
+            }
+            else{
                 this.helpPanels.removeClass('hidden');
             }
             AppController.visualizationView.hide();
         },
-        keyPressed:function(event)
-        {
+        keyPressed:function(event){
             var keyCode=event.keyCode,
                 currentSong;
             if(AppController.playlistView){
@@ -157,24 +154,29 @@ $(function(){
             if(keyCode===40){
                 //down arrow
                 AppController.playlistView.next(false);
-            } else if(keyCode===38){
+            }
+            else if(keyCode===38){
                 //up key
                 AppController.playlistView.previous(false);
-            }else if(keyCode===13){
+            }
+            else if(keyCode===13){
                 //enter
                 AppController.playlistView.destroyFileURL();
                 if(currentSong){
                     currentSong.view.playSong();
                 }
-            }else if(keyCode===32){
+            }
+            else if(keyCode===32){
                 //space
                 AppController.playerCtrl.togglePause();
-            }else if(keyCode===46){
+            }
+            else if(keyCode===46){
                 //delete-delete song from playlist
                if(currentSong){
                     currentSong.view.remove();
                 }
-            }else if(keyCode===27){
+            }
+            else if(keyCode===27){
                 //escape-comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();

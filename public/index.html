@@ -14,7 +14,7 @@
     <script>$(function(){AppController.init();});</script>
 </head>
 <body>
-<a id="lastfm_login" href="http://www.last.fm/api/auth/?api_key=e3377f4b4d8c6de47c7e2c81485a65f5" title="Login to Last.fm"><img src="css/images/lastfm_square.jpg"></a>
+
 <!--<div id="fb-root"></div>
 <a id="fb_login" title="Login to FaceBook">FaceBook</a>-->
 <aside id="file_upload_status_dialog" class="modal_dialog">
@@ -93,18 +93,21 @@
     </section>
 </div>
 <footer id="player">
-    <span id="shuffle_toggle" class="control off" title="Turn shuffle on"></span>
-    <span id="repeat_toggle" class="control on" title="Turn repeat off"></span>
-    <span id="stop_song" class="control" title="Stop"></span>
-    <span id="previous_song" class="control" title="Previous"></span>
-    <span id="play_toggle" class="control paused" title="Play"></span>
-    <span id="next_song" class="control" title="Next"></span>
-    <span id="sound_toggle" class="control on" title="Mute"></span>
-    <meter id ="volume_slider" value="0.5" min="0" max="1"></meter>
-    <progress id="music_slider" min="0" value="0"></progress>
-    <label id="time_counter">0:00</label>
-    <span id="help" class="control off" title="Help"></span>
-    <span id="expand" class="control on" title="Full screen mode"></span>
+    <span id="shuffle_toggle" class="main control off" title="Turn shuffle on"></span>
+    <span id="repeat_toggle" class="main control on" title="Turn repeat off"></span>
+    <span id="stop_song" class="main control" title="Stop"></span>
+    <span id="previous_song" class="main control" title="Previous"></span>
+    <span id="play_toggle" class="main control paused" title="Play"></span>
+    <span id="next_song" class="main control" title="Next"></span>
+    <span id="sound_toggle" class="main control on" title="Mute"></span>
+    <meter id ="volume_slider" value="0.5" min="0" max="1" class="main"></meter>
+    <progress id="music_slider" min="0" value="0" class="main"></progress>
+    <label id="time_counter" class="main">0:00</label>
+    <span id="help" class="main control off" title="Help"></span>
+    <span id="expand" class="main control on" title="Full screen mode"></span>
+    <span id="fb_login_btn" class="social control hidden" title="Login to Facebook"></span>
+    <label id="label_for_lastfm_login_btn" for="lastfm_login_btn"></label><a id="lastfm_login_btn" href="http://www.last.fm/api/auth/?api_key=e3377f4b4d8c6de47c7e2c81485a65f5" class="social control hidden" title="Login to Last.fm"></a>
+    <span id="social" class="control off" title="Social"></span>
     <audio id="player_ctrl"></audio>
 </footer>
 <article id="album_info_view" class="box"></article>

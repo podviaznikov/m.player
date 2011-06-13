@@ -11,7 +11,7 @@ var dataService={
     },
     scrobble:function(track,artist,trackLength)
     {
-        $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+settings.getUser()+'&key='+settings.getSessionKey());
+        $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getUser()+'&key='+AppController.settings.getSessionKey());
     },
     getArtistImage:function(artist,callback){
         var jqxhr = $.get('/artist/'+artist+'/image',function(data){

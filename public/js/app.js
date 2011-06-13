@@ -3,69 +3,6 @@
 "use strict";
 var global=window,
     ui={};
-//storing all users' settings(locally): volume, last music, pressed buttons etc.
-var settings={
-    saveShuffle:function(isShuffle){
-        global.localStorage.setItem('isShuffle',isShuffle);
-    },
-    isShuffle:function(){
-        var value = global.localStorage.getItem('isShuffle');
-        return value?JSON.parse(value):false;
-    },
-    saveRepeat:function(isRepeat){
-        global.localStorage.setItem('isRepeat',isRepeat);
-    },
-    isRepeat:function(){
-        var value = global.localStorage.getItem('isRepeat');
-        return value?JSON.parse(value):false;
-    },
-    saveLastSong:function(song){
-        global.localStorage.setItem('lastSong',JSON.stringify(song));
-    },
-    getLastSong:function(){
-        return JSON.parse(global.localStorage.getItem('lastSong'));
-    },
-    saveVolume:function(volume){
-        global.localStorage.setItem('playerVolume',volume);
-    },
-    getVolume:function(){
-        return global.localStorage.getItem('playerVolume')||0.5;
-    },
-    savePlayList:function(songs){
-        global.localStorage.setItem('playlist',JSON.stringify(songs));
-    },
-    getPlayList:function(){
-        var models = JSON.parse(global.localStorage.getItem('playlist'));
-        return new SongsList(models);
-    },
-    saveLastArtist:function(artist){
-        global.localStorage.setItem('lastArtist',artist);
-    },
-    getLastArtist:function(){
-        return global.localStorage.getItem('lastArtist');
-    },
-    saveLastAlbum:function(album){
-        global.localStorage.setItem('lastAlbum',album);
-    },
-    getLastAlbum:function(){
-        return global.localStorage.getItem('lastAlbum');
-    },
-    saveUser:function(user){
-        global.localStorage.setItem('user',user);
-    },
-    getUser:function(){
-        return global.localStorage.getItem('user')||'';
-    },
-    saveSessionKey:function(sessionKey){
-        global.localStorage.setItem('sessionKey',sessionKey);
-    },
-    getSessionKey:function(){
-        return global.localStorage.getItem('sessionKey')||'';
-    },
-    isLogined:function(){
-        return this.getUser()!==''&& this.getSessionKey()!=='';
-    }
-};
 var AppController={
 	init:function(){
         var newHeight=$(window).height()-105,
@@ -91,15 +28,17 @@ var AppController={
             AppController.libraryMenu=new ui.LibraryMenu();
             AppController.songsView=new ui.SongsView();
             //getting session info if user not logined
-            if(!settings.isLogined()){
+            if(!AppController.settings.isLogined()){
                 dataService.getSession(function(data){
                     console.log(data);
-                    settings.saveUser(data.user);
-                    settings.saveSessionKey(data.key);
-                    console.log(settings.isLogined());
-                    if(!settings.isLogined())
-                    {
-                        AppController.appView.showLastfmLoginBtn();
+                    AppController.settings.saveUser(data.user);
+                    AppController.settings.saveSessionKey(data.key);
+                    console.log(AppController.settings.isLogined());
+                    if(AppController.settings.isLogined()){
+                        AppController.playerCtrl.lastFmOff();
+                    }
+                    else{
+                        AppController.playerCtrl.lastFmOn();
                     }
                 });
             }
@@ -109,22 +48,82 @@ var AppController={
         //$(document.body).bind("online", this.checkNetworkStatus);
         //$(document.body).bind("offline", this.checkNetworkStatus);
         //this.checkNetworkStatus();
-	}
-
-};
-var metadataParser={
-    parse:function(name,binaryData,callback){
-        var startDate=new Date().getTime();
-
-        ID3.loadTags(name, function(){
-            var endDate = new Date().getTime();
-            console.log('Time: ' + ((endDate-startDate)/1000)+'s');
-            var tags = ID3.getAllTags(name);
-            callback(tags);
+	},
+    //storing all users' settings(locally): volume, last music, pressed buttons etc.
+    settings:{
+        saveShuffle:function(isShuffle){
+            global.localStorage.setItem('isShuffle',isShuffle);
+        },
+        isShuffle:function(){
+            var value=global.localStorage.getItem('isShuffle');
+            return value?JSON.parse(value):false;
+        },
+        saveRepeat:function(isRepeat){
+            global.localStorage.setItem('isRepeat',isRepeat);
+        },
+        isRepeat:function(){
+            var value=global.localStorage.getItem('isRepeat');
+            return value?JSON.parse(value):false;
+        },
+        saveLastSong:function(song){
+            global.localStorage.setItem('lastSong',JSON.stringify(song));
+        },
+        getLastSong:function(){
+            return JSON.parse(global.localStorage.getItem('lastSong'));
+        },
+        saveVolume:function(volume){
+            global.localStorage.setItem('playerVolume',volume);
+        },
+        getVolume:function(){
+            return global.localStorage.getItem('playerVolume')||0.5;
+        },
+        savePlayList:function(songs){
+            global.localStorage.setItem('playlist',JSON.stringify(songs));
+        },
+        getPlayList:function(){
+            var models=JSON.parse(global.localStorage.getItem('playlist'));
+            return new SongsList(models);
+        },
+        saveLastArtist:function(artist){
+            global.localStorage.setItem('lastArtist',artist);
+        },
+        getLastArtist:function(){
+            return global.localStorage.getItem('lastArtist');
+        },
+        saveLastAlbum:function(album){
+            global.localStorage.setItem('lastAlbum',album);
+        },
+        getLastAlbum:function(){
+            return global.localStorage.getItem('lastAlbum');
+        },
+        saveUser:function(user){
+            global.localStorage.setItem('user',user);
+        },
+        getUser:function(){
+            return global.localStorage.getItem('user')||'';
+        },
+        saveSessionKey:function(sessionKey){
+            global.localStorage.setItem('sessionKey',sessionKey);
+        },
+        getSessionKey:function(){
+            return global.localStorage.getItem('sessionKey')||'';
+        },
+        isLogined:function(){
+            return this.getUser()!==''&& this.getSessionKey()!=='';
+        }
     },
-    {tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics", "picture"],
-     dataReader: FileAPIReader(binaryData)});
-  }
+    metadataParser:{
+        parse:function(name,binaryData,callback){
+            var startDate=new Date().getTime();
+            ID3.loadTags(name, function(){
+                var endDate = new Date().getTime();
+                console.log('Time: ' + ((endDate-startDate)/1000)+'s');
+                var tags = ID3.getAllTags(name);
+                callback(tags);
+            },{tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics", "picture"],
+            dataReader: new FileAPIReader(binaryData)});
+        }
+    }
 };
 
 "use strict";
@@ -267,7 +266,6 @@ $(function(){
         infoPanels:$('section.info_panel'),
         helpPanels:$('section.help_panel'),
         mainPanels:$('section.main_panel'),
-        lastfmLoginBtn:$('#lastfm_login'),
         isRegularMode:true,
         events:{
             'keyup':'keyPressed',
@@ -282,13 +280,10 @@ $(function(){
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile','showLastfmLoginBtn','fbLogin');
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile','fbLogin');
         },
         fbLogin:function(){
             fbService.login();
-        },
-        showLastfmLoginBtn:function(){
-            this.lastfmLoginBtn.show();
         },
         showArtistBio:function(artist){
             this.mainPanels.addClass('hidden');
@@ -337,7 +332,7 @@ $(function(){
             this.$('#uploading_files_progress header span').html(file.name);
             fs.read.fileAsBinaryString(file,function(readError,data,initialFile){
                 if(readError){return;}
-                metadataParser.parse(initialFile.name,data,function(tags){
+                AppController.metadataParser.parse(initialFile.name,data,function(tags){
                     console.log('Tags',tags);
                     var song=new Song();
                     //fix track number
@@ -369,12 +364,13 @@ $(function(){
                                     AppController.libraryMenu.artists.add(artist);
                                     callback(null);
                                 });
-                            }else{
+                            }
+                            else{
                                 //if artist was deleted: mark it as undeleted
                                 artist.set({isDeleted:false});
                                 var songsCount=artist.get('songsCount')||0;
                                 artist.set({songsCount:songsCount+1});
-                                artist.songs.add(song);
+                                artist.songs.add(song,{silent: true});
                                 artist.save();
                                 artist.change();
                                 callback(null);
@@ -404,13 +400,13 @@ $(function(){
             this.el.removeClass('fullscreen');
             if(this.isRegularMode){
                 this.mainPanels.removeClass('hidden');
-            }else{
+            }
+            else{
                 this.helpPanels.removeClass('hidden');
             }
             AppController.visualizationView.hide();
         },
-        keyPressed:function(event)
-        {
+        keyPressed:function(event){
             var keyCode=event.keyCode,
                 currentSong;
             if(AppController.playlistView){
@@ -419,24 +415,29 @@ $(function(){
             if(keyCode===40){
                 //down arrow
                 AppController.playlistView.next(false);
-            } else if(keyCode===38){
+            }
+            else if(keyCode===38){
                 //up key
                 AppController.playlistView.previous(false);
-            }else if(keyCode===13){
+            }
+            else if(keyCode===13){
                 //enter
                 AppController.playlistView.destroyFileURL();
                 if(currentSong){
                     currentSong.view.playSong();
                 }
-            }else if(keyCode===32){
+            }
+            else if(keyCode===32){
                 //space
                 AppController.playerCtrl.togglePause();
-            }else if(keyCode===46){
+            }
+            else if(keyCode===46){
                 //delete-delete song from playlist
                if(currentSong){
                     currentSong.view.remove();
                 }
-            }else if(keyCode===27){
+            }
+            else if(keyCode===27){
                 //escape-comeback to the normal view
                 AppController.playerCtrl.turnOffFullScreen();
                 AppController.playerCtrl.turnOffHelpMode();
@@ -533,7 +534,7 @@ $(function(){
             }
         },
         allArtistsLoaded:function(){
-            var lastArtist=settings.getLastArtist();
+            var lastArtist=AppController.settings.getLastArtist();
             if(lastArtist){
                 var lastPlayedArtist=this.artists.forName(lastArtist);
                 if(lastPlayedArtist && lastPlayedArtist.view){
@@ -571,13 +572,15 @@ $(function(){
                         artist.view.show();
                     }
                 });
-            }else{
+            }
+            else{
                 this.artists.each(function(artist){
                     if(artist.get('name').toUpperCase().indexOf(filterValue.toUpperCase()) === -1){
                         if(artist.view){
                             artist.view.hide();
                         }
-                    }else{
+                    }
+                    else{
                         if(artist.view){
                             artist.view.show();
                         }
@@ -734,10 +737,10 @@ $(function(){
             this.songs.bind('add',this.addOne);
             this.songs.bind('refresh',this.addAll);
             this.songs.bind('all',this.render);
-            var playlist=settings.getPlayList();
+            var playlist=AppController.settings.getPlayList();
             if(playlist){
                 this.songs.refresh(playlist.models);
-                var lastSong=settings.getLastSong();
+                var lastSong=AppController.settings.getLastSong();
                 if(lastSong){
                     this.selectSong(new Song(lastSong));
                 }
@@ -755,11 +758,11 @@ $(function(){
                 //playing first song from list
                 firstSong.view.playSong();
                 //saving settings
-                settings.saveLastAlbum(firstSong.get('album'));
-                settings.saveLastArtist(firstSong.get('artist'));
+                AppController.settings.saveLastAlbum(firstSong.get('album'));
+                AppController.settings.saveLastArtist(firstSong.get('artist'));
             }
             //saving settings
-            settings.savePlayList(songs);
+            AppController.settings.savePlayList(songs);
         },
         setPlayListModel:function(playList){
             this.playList = playList;
@@ -784,7 +787,7 @@ $(function(){
         clearPlaylist:function(){
             this.songsEl.empty();
             this.songs.refresh([]);
-            settings.savePlayList(this.songs);
+            AppController.settings.savePlayList(this.songs);
             this.render();
         },
         addOne:function(song){
@@ -863,14 +866,14 @@ $(function(){
         next:function(playSongFlag){
             var playSong=!playSongFlag,
                 nextSongId=-1;
-            if(playSong && settings.isShuffle()){
+            if(playSong && AppController.settings.isShuffle()){
                 nextSongId=this.randomSong();
             }else{
                 var indexOfSelectedSong=this.currentSongIndex();
                 if(indexOfSelectedSong===this.songs.length-1){
                     //to have first one
                     indexOfSelectedSong=-1;
-                    if(!settings.isRepeat()){
+                    if(!AppController.settings.isRepeat()){
                         playSong=false;
                     }
                 }
@@ -1130,18 +1133,23 @@ $(function(){
 $(function(){
     ui.PlayerCtrl = Backbone.View.extend({
         el:$('#player'),
+        mainControls:$('#player .main'),
+        socialControls:$('#player .social'),
         playToggle:$('#play_toggle'),
         soundToggle:$('#sound_toggle'),
         shuffleToggle:$('#shuffle_toggle'),
         repeatToggle:$('#repeat_toggle'),
         playerModeToggle:$('#expand'),
         helpModeToggle:$('#help'),
+        socialModeToggle:$('#social'),
         loadedMusicSlider:false,
         volumeSlider:$('#volume_slider'),
         musicSlider:$('#music_slider'),
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounter:$('#time_counter'),
+        lastfmLoginBtn:$('#lastfm_login_btn'),
+        labelForLastfmLoginBtn:$('#label_for_lastfm_login_btn'),
         events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
@@ -1158,18 +1166,41 @@ $(function(){
             'click #expand.off':'turnOffFullScreen',
             'click #help.on':'turnOffHelpMode',
             'click #help.off':'turnOnHelpMode',
+            'click #social.on':'hideSocialPanel',
+            'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
-                    'turnOnHelpMode','turnOffHelpMode','changedMusicProgress');
-            this.audioEL=new ui.AudioElement({player:this});
+                    'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
+                    'lastFmOn','lastFmOff');
+            this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
-            this.audioEL.setVolume(settings.getVolume());
+            this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
-            this.volumeSlider.attr('value',settings.getVolume());
+            this.volumeSlider.attr('value',AppController.settings.getVolume());
+        },
+        lastFmOn:function(){
+            this.lastfmLoginBtn.hide();
+            this.$(this.labelForLastfmLoginBtn).html(AppController.settings.getUser());
+        },
+        lastFmOff:function(){
+            this.lastfmLoginBtn.show();
+            this.$(this.labelForLastfmLoginBtn).html('');
+        },
+        showSocialPanel:function(){
+            this.socialModeToggle.removeClass('off');
+            this.socialModeToggle.addClass('on');
+            this.$(this.mainControls).addClass('hidden');
+            this.$(this.socialControls).removeClass('hidden');
+        },
+        hideSocialPanel:function(){
+            this.socialModeToggle.removeClass('on');
+            this.socialModeToggle.addClass('off');
+            this.$(this.socialControls).addClass('hidden');
+            this.$(this.mainControls).removeClass('hidden');
         },
         turnOnHelpMode:function(){
             this.helpModeToggle.removeClass('off');
@@ -1201,7 +1232,7 @@ $(function(){
                     newProgressValue=(newX/width*max);
                 console.log(newX,width,max);
                 this.musicSlider.attr('value',newProgressValue);
-                this.audioEL.setTime(newProgressValue);
+                this.audioEl.setTime(newProgressValue);
             }
         },
         changedVolume:function(e){
@@ -1209,13 +1240,12 @@ $(function(){
                 width=this.volumeSlider.width(),
                 percent=newX/width;
             //minor hack for possibility to make 100% loud
-            if(percent>0.95)
-            {
+            if(percent>0.95){
                 percent=1;
             }
-            this.audioEL.setVolume(percent);
+            this.audioEl.setVolume(percent);
             this.volumeSlider.attr('value',percent);
-            settings.saveVolume(percent);
+            AppController.settings.saveVolume(percent);
         },
         soundOn:function(){
             this.soundToggle.attr('title','Mute');
@@ -1225,7 +1255,7 @@ $(function(){
             this.soundOnIcon.show();
             this.soundOffIcon.hide();
 
-            this.audioEL.setVolume(this.volume||0.5);
+            this.audioEl.setVolume(this.volume||0.5);
         },
         soundOff:function(){
             this.soundToggle.attr('title','Sound');
@@ -1235,39 +1265,39 @@ $(function(){
             this.soundOffIcon.show();
             this.soundOnIcon.hide();
 
-            this.volume=this.audioEL.getVolume();
-            this.audioEL.setVolume(0);
+            this.volume=this.audioEl.getVolume();
+            this.audioEl.setVolume(0);
         },
         shuffleOn:function(){
             this.shuffleToggle.attr('title','Turn shuffle off');
             this.shuffleToggle.addClass('on');
             this.shuffleToggle.removeClass('off');
-            settings.saveShuffle(true);
+            AppController.settings.saveShuffle(true);
         },
         shuffleOff:function(){
             this.shuffleToggle.attr('title','Turn shuffle on');
             this.shuffleToggle.addClass('off');
             this.shuffleToggle.removeClass('on');
-            settings.saveShuffle(false);
+            AppController.settings.saveShuffle(false);
         },
         repeatOn:function(){
             this.repeatToggle.attr('title','Turn repeat off');
             this.repeatToggle.addClass('on');
             this.repeatToggle.removeClass('off');
-            settings.saveRepeat(true);
+            AppController.settings.saveRepeat(true);
         },
         repeatOff:function(){
             this.repeatToggle.attr('title','Turn repeat on');
             this.repeatToggle.addClass('off');
             this.repeatToggle.removeClass('on');
-            settings.saveRepeat(false);
+            AppController.settings.saveRepeat(false);
         },
         play:function(url){
             this.loadedMusicSlider=false;
             this.playToggle.attr('title','Pause');
             this.playToggle.addClass('playing');
             this.playToggle.removeClass('paused');
-            this.audioEL.play(url);
+            this.audioEl.play(url);
         },
         resume:function(){
             this.play();
@@ -1276,7 +1306,7 @@ $(function(){
             this.$(this.playToggle).attr('title','Play');
             this.$(this.playToggle).addClass('paused');
             this.$(this.playToggle).removeClass('playing');
-            this.audioEL.pause();
+            this.audioEl.pause();
         },
         togglePause:function(){
             var isPaused=this.$(this.playToggle).hasClass('paused');
@@ -1285,7 +1315,7 @@ $(function(){
         stop:function(){
             this.playToggle.addClass('paused');
             this.playToggle.removeClass('playing');
-            this.audioEL.stop();
+            this.audioEl.stop();
             this.loadedMusicSlider=false;
         },
         previous:function(){

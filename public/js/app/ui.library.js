@@ -31,7 +31,7 @@ $(function(){
             }
         },
         allArtistsLoaded:function(){
-            var lastArtist=settings.getLastArtist();
+            var lastArtist=AppController.settings.getLastArtist();
             if(lastArtist){
                 var lastPlayedArtist=this.artists.forName(lastArtist);
                 if(lastPlayedArtist && lastPlayedArtist.view){
@@ -69,13 +69,15 @@ $(function(){
                         artist.view.show();
                     }
                 });
-            }else{
+            }
+            else{
                 this.artists.each(function(artist){
                     if(artist.get('name').toUpperCase().indexOf(filterValue.toUpperCase()) === -1){
                         if(artist.view){
                             artist.view.hide();
                         }
-                    }else{
+                    }
+                    else{
                         if(artist.view){
                             artist.view.show();
                         }

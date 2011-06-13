@@ -262,10 +262,6 @@ footer#player
 {
     display:none;
 }
-#player span
-{
-    display:inline-block;
-}
 #volume_slider
 {
     width: 50px;
@@ -591,6 +587,32 @@ span.info_image img
 {
     background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATxJREFUeNqcUj1PAkEQnV0PQ0JhqLTAgpBgYwyNdPYUJhT+BS24wsqeXwHVNVZ21v4GqDDaUAAJ/gXI+YHLm70Z3IPQOMmbnZ19b3Z3do3rUJeIboEW9d07scWmBJ8CRWCJvCO12MzhEwMhBxXgA7gSQQLytRB78PeYr0TkucZxsSABvMnuRoS8G4vbG07fnVosHHAgIl44F4GhP8uJOBHJEY4Rz4RUoV3T0zxrIpLxBWjQflsBJ/6usTnE+JDd8R/GXeUKFvjMregT5O/Kxk+1tCB8IRgBv1tQ284/AUeRVD9D5VdE5T3NIWnOANwbkiOqlYPuhUf8CZ6qqWQrpGkgSnN3zDo/V/Hizn8W35zJ4puqpQJNQK5JoTH8BeYp4iHGy+Cf+g0sRI8QzTaibLc6vJNYRTb4YclagAEAv5R9jTZ7DQMAAAAASUVORK5CYII=);
 }
+#social
+{
+    width:15px;
+    height:20px;
+}
+#social.off
+{
+    background-image:url(images/social.png);
+}
+#social.on
+{
+    background-image:url(images/social.png);
+}
+#lastfm_login_btn
+{
+    width:20px;
+    height:13px;
+    background-image:url(images/lastfm.png);
+}
+#fb_login_btn
+{
+    width:9px;
+    height:19px;
+    background-image:url(images/facebook.png);
+}
+
 #help
 {
     width:9px;
@@ -710,10 +732,6 @@ footer.saved_playlist_toolbar
 {
     display:inline-block!important;
 }
-.hidden
-{
-    display:none;
-}
 #drop_files,#drop_folder
 {
     visibility:hidden;
@@ -725,7 +743,10 @@ footer.saved_playlist_toolbar
     float:right;
     margin-right:5px;
 }
-
+.hidden
+{
+    display:none;
+}
 
 @media screen and (min-width: 1025px) and (max-width: 1280px)
 {
