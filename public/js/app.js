@@ -771,7 +771,7 @@ $(function(){
         },
         savePlayList:function(){
             var newPlaylistName=this.newPlayListName.val();
-            if(newPlaylistName!='Unsaved list'){
+            if(newPlaylistName!=='Unsaved list'){
                 if(!this.playList){
                     this.playList=new PlayList();
                 }
@@ -796,7 +796,7 @@ $(function(){
             }
         },
         addAll:function(){
-            if(this.songs.length!=0){
+            if(this.songs.length!==0){
                 this.songsEl.empty();
                 this.songs.each(this.addOne);
             }
@@ -841,7 +841,7 @@ $(function(){
             }));
             //fixing max width for song info to prevent problems with big song names
             var playingListPanelWidth=this.el.width();
-       		this.$('#song_info').css('max-width',playingListPanelWidth-115);
+            this.$('#song_info').css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
@@ -853,7 +853,7 @@ $(function(){
         },
         randomSong:function(){
             var randomSong=Math.floor(Math.random()*this.songs.length);
-            if(randomSong==this.currentSong()){
+            if(randomSong===this.currentSong()){
                 return this.randomSong();
             }
             return randomSong;
@@ -867,7 +867,7 @@ $(function(){
                 nextSongId=this.randomSong();
             }else{
                 var indexOfSelectedSong=this.currentSongIndex();
-                if(indexOfSelectedSong==this.songs.length-1){
+                if(indexOfSelectedSong===this.songs.length-1){
                     //to have first one
                     indexOfSelectedSong=-1;
                     if(!settings.isRepeat()){
@@ -882,7 +882,7 @@ $(function(){
         previous:function(playSongFlag){
             var playSong=!playSongFlag,
                 indexOfSelectedSong=this.currentSongIndex();
-            if(indexOfSelectedSong==0){
+            if(indexOfSelectedSong===0){
                 //to have last one
                 indexOfSelectedSong=this.songs.length;
             }
@@ -990,8 +990,8 @@ $(function(){
             });
             $(this.el).append(html);
         },
-        addSong:function(song,key){
-            var song=new Song(song),
+        addSong:function(songData,key){
+            var song=new Song(songData),
                 view=new ui.SongView({
                     model:song,
                     key:key,
@@ -1061,7 +1061,7 @@ $(function(){
             $(this.el).addClass('selected_song');
         },
         deleteSong:function(){
-            this.model.bind('destroy',this.onDeleteSong)
+            this.model.bind('destroy',this.onDeleteSong);
             this.model.remove();
         },
         onDeleteSong:function(){
@@ -1099,7 +1099,9 @@ $(function(){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
                         //todo (anton) model function???
-                        albumSongs=songs.filter(function(song){return song.get('album')===album;}),
+                        albumSongs=songs.filter(function(song){
+                            return song.get('album')===album;
+                        }),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
                     this.mapping[album] = albumSongs;
@@ -1115,7 +1117,7 @@ $(function(){
         handleDragStart:function(e){
             var event=e.originalEvent,
                 dataTransferObj=event.dataTransfer,
-                songId=event.srcElement.dataset['id'];
+                songId=event.srcElement.dataset.id;
             dataTransferObj.effectAllowed='move';
 
             if(this.songs){
@@ -1198,9 +1200,9 @@ $(function(){
             if(this.loadedMusicSlider){
                 var newX=e.offsetX,
                     width=this.musicSlider.width(),
-                    max=parseFloat(this.musicSlider.attr('max'));
+                    max=parseFloat(this.musicSlider.attr('max')),
+                    newProgressValue=(newX/width*max);
                 console.log(newX,width,max);
-                var newProgressValue=(newX/width*max);
                 this.musicSlider.attr('value',newProgressValue);
                 this.audioEL.setTime(newProgressValue);
             }
@@ -1208,7 +1210,7 @@ $(function(){
         changedVolume:function(e){
             var newX=e.offsetX,
                 width=this.volumeSlider.width(),
-                percent = newX/width;
+                percent=newX/width;
             //minor hack for possibility to make 100% loud
             if(percent>0.95)
             {
@@ -1280,7 +1282,7 @@ $(function(){
             this.audioEL.pause();
         },
         togglePause:function(){
-            var isPaused = this.$(this.playToggle).hasClass('paused');
+            var isPaused=this.$(this.playToggle).hasClass('paused');
             isPaused?this.play():this.pause();
         },
         stop:function(){
@@ -1296,15 +1298,15 @@ $(function(){
             AppController.playlistView.next();
         },
         updateAudioProgress:function(duration,currentTime){
-            var timeInSeconds=parseInt(currentTime, 10),
+            var timeInSeconds=parseInt(currentTime,10),
                 songDuration=parseInt(duration,10),
-                rem=parseInt(duration - currentTime, 10),
+                rem=parseInt(duration - currentTime,10),
                 pos=(timeInSeconds / duration) * 100,
                 mins=Math.floor(currentTime/60,10),
                 secs=timeInSeconds - mins*60,
                 timeCounter= mins + ':' + (secs > 9 ? secs : '0' + secs),
                 currentSong=AppController.playlistView.currentSong();
-            if(rem==0 && currentSong){
+            if(rem===0 && currentSong){
                 this.loadedMusicSlider=false;
                 dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();

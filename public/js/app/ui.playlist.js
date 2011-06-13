@@ -61,7 +61,7 @@ $(function(){
         },
         savePlayList:function(){
             var newPlaylistName=this.newPlayListName.val();
-            if(newPlaylistName!='Unsaved list'){
+            if(newPlaylistName!=='Unsaved list'){
                 if(!this.playList){
                     this.playList=new PlayList();
                 }
@@ -86,7 +86,7 @@ $(function(){
             }
         },
         addAll:function(){
-            if(this.songs.length!=0){
+            if(this.songs.length!==0){
                 this.songsEl.empty();
                 this.songs.each(this.addOne);
             }
@@ -131,7 +131,7 @@ $(function(){
             }));
             //fixing max width for song info to prevent problems with big song names
             var playingListPanelWidth=this.el.width();
-       		this.$('#song_info').css('max-width',playingListPanelWidth-115);
+            this.$('#song_info').css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
@@ -143,7 +143,7 @@ $(function(){
         },
         randomSong:function(){
             var randomSong=Math.floor(Math.random()*this.songs.length);
-            if(randomSong==this.currentSong()){
+            if(randomSong===this.currentSong()){
                 return this.randomSong();
             }
             return randomSong;
@@ -157,7 +157,7 @@ $(function(){
                 nextSongId=this.randomSong();
             }else{
                 var indexOfSelectedSong=this.currentSongIndex();
-                if(indexOfSelectedSong==this.songs.length-1){
+                if(indexOfSelectedSong===this.songs.length-1){
                     //to have first one
                     indexOfSelectedSong=-1;
                     if(!settings.isRepeat()){
@@ -172,7 +172,7 @@ $(function(){
         previous:function(playSongFlag){
             var playSong=!playSongFlag,
                 indexOfSelectedSong=this.currentSongIndex();
-            if(indexOfSelectedSong==0){
+            if(indexOfSelectedSong===0){
                 //to have last one
                 indexOfSelectedSong=this.songs.length;
             }

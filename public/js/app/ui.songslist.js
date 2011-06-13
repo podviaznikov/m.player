@@ -42,8 +42,8 @@ $(function(){
             });
             $(this.el).append(html);
         },
-        addSong:function(song,key){
-            var song=new Song(song),
+        addSong:function(songData,key){
+            var song=new Song(songData),
                 view=new ui.SongView({
                     model:song,
                     key:key,
@@ -151,7 +151,9 @@ $(function(){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
                         //todo (anton) model function???
-                        albumSongs=songs.filter(function(song){return song.get('album')===album;}),
+                        albumSongs=songs.filter(function(song){
+                            return song.get('album')===album;
+                        }),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
                     //what is this? key of the array should be always number
                     this.mapping[album] = albumSongs;
@@ -167,7 +169,7 @@ $(function(){
         handleDragStart:function(e){
             var event=e.originalEvent,
                 dataTransferObj=event.dataTransfer,
-                songId=event.srcElement.dataset['id'];
+                songId=event.srcElement.dataset.id;
             dataTransferObj.effectAllowed='move';
 
             if(this.songs){
