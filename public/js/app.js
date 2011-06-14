@@ -94,7 +94,7 @@ var AppController={
         saveLastFmUser:function(user){
             localStorage.setItem('user',user);
         },
-        getLastFMUser:function(){
+        getLastFmUser:function(){
             return localStorage.getItem('user')||'';
         },
         saveLastFmSessionKey:function(sessionKey){
