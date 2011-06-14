@@ -25,8 +25,8 @@ var AppController={
             AppController.playlistView=new ui.PlayListView();
             AppController.libraryMenu=new ui.LibraryMenu();
             AppController.songsView=new ui.SongsView();
-            //getting session info if user not logined
-            if(!AppController.settings.isLogined()){
+            //getting session info if user not logined to last.fm
+            if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
                     console.log(data);
                     AppController.settings.saveLastFmUser(data.user);
