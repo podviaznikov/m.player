@@ -67,7 +67,7 @@ var fbService={
     login:function(callback){
         FB.login(function(response){
             if(response.session){
-                this.getUserName(callback);
+                fbService.getUserName(callback);
             }else{
                 callback('failed to login');
             }
