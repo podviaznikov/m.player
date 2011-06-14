@@ -29,10 +29,10 @@ var AppController={
             //getting session info if user not logined to last.fm
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
-                    console.log(data);
+                    console.log('Last.fm session data',data);
                     AppController.settings.saveLastFmUser(data.user);
                     AppController.settings.saveLastFmSessionKey(data.key);
-                    console.log(AppController.settings.isLastFmLogined());
+                    console.log('Logined into last.fm:',AppController.settings.isLastFmLogined());
                     if(AppController.settings.isLastFmLogined()){
                         AppController.playerCtrl.lastFmLogin();
                     }
@@ -41,8 +41,11 @@ var AppController={
                     }
                 });
             }
+            else{
+                AppController.playerCtrl.lastFmLogin();
+            }
         });
-        //fbService.init();
+        fbService.init();
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
@@ -268,15 +271,11 @@ $(function(){
             'change #drop_folder':'dropFiles',
             'click #import_songs_directory':'importMusicDirectory',
             'click #import_songs_files':'importMusicFiles',
-            'click #fb_login':'fbLogin'
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile','fbLogin');
-        },
-        fbLogin:function(){
-            fbService.login();
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile');
         },
         showArtistBio:function(artist){
             this.mainPanels.addClass('hidden');
@@ -1144,6 +1143,8 @@ $(function(){
         lastFmLoginBtn:$('#lastfm_login_btn'),
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),
+        fbLoginBtn:$('#fb_login_btn'),
+        fbControlPanel:$('#fb_control_panel'),
         events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
@@ -1164,18 +1165,32 @@ $(function(){
             'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress',
-            'click #lastfm_logout_btn':'lastFmExit'
+            'click #lastfm_logout_btn':'lastFmExit',
+            'click #fb_login_btn':'fbLogin',
+            'click #fb_logout_btn':'fbLogout'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
+        },
+        fbLogin:function(){
+            fbService.login();
+            this.fbLoginBtn.hide();
+            this.fbControlPanel.removeClass('unlogined');
+            this.fbControlPanel.addClass('logined');
+        },
+        fbLogout:function(){
+            fbService.logout();
+            this.fbLoginBtn.show();
+            this.fbControlPanel.removeClass('logined');
+            this.fbControlPanel.addClass('unlogined');
         },
         lastFmLogin:function(){
             this.lastFmLoginBtn.hide();

@@ -14,15 +14,11 @@ $(function(){
             'change #drop_folder':'dropFiles',
             'click #import_songs_directory':'importMusicDirectory',
             'click #import_songs_files':'importMusicFiles',
-            'click #fb_login':'fbLogin'
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
-                    'importMusicDirectory','importMusicFiles','processOneAudioFile','fbLogin');
-        },
-        fbLogin:function(){
-            fbService.login();
+                    'importMusicDirectory','importMusicFiles','processOneAudioFile');
         },
         showArtistBio:function(artist){
             this.mainPanels.addClass('hidden');

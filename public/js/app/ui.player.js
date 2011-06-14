@@ -20,6 +20,8 @@ $(function(){
         lastFmLoginBtn:$('#lastfm_login_btn'),
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),
+        fbLoginBtn:$('#fb_login_btn'),
+        fbControlPanel:$('#fb_control_panel'),
         events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
@@ -40,18 +42,32 @@ $(function(){
             'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress',
-            'click #lastfm_logout_btn':'lastFmExit'
+            'click #lastfm_logout_btn':'lastFmExit',
+            'click #fb_login_btn':'fbLogin',
+            'click #fb_logout_btn':'fbLogout'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
+        },
+        fbLogin:function(){
+            fbService.login();
+            this.fbLoginBtn.hide();
+            this.fbControlPanel.removeClass('unlogined');
+            this.fbControlPanel.addClass('logined');
+        },
+        fbLogout:function(){
+            fbService.logout();
+            this.fbLoginBtn.show();
+            this.fbControlPanel.removeClass('logined');
+            this.fbControlPanel.addClass('unlogined');
         },
         lastFmLogin:function(){
             this.lastFmLoginBtn.hide();

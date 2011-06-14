@@ -14,8 +14,6 @@
     <script>$(function(){AppController.init();});</script>
 </head>
 <body>
-<!--<div id="fb-root"></div>
-<a id="fb_login" title="Login to FaceBook">FaceBook</a>-->
 <aside id="file_upload_status_dialog" class="modal_dialog">
     <section id="uploading_files_progress" class="dialog_content">
         <header>Importing: <span></span></header>
@@ -107,13 +105,14 @@
         <span id="expand" class="control on" title="Full screen mode"></span>
     </section>
     <section id="social_controls_panel" class="hidden">
-        <fieldset  id="fb_control_panel" class="unlogined" style="display:none">
-            <label id="facebook_username">podviaznikov</label>
-            <span class="social_logout control" title="Logout from Facebook"></span>
+        <fieldset  id="fb_control_panel" class="unlogined">
+            <div id="fb-root"></div>
+            <label id="facebook_username" class="authorised"></label>
+            <span id="fb_logout_btn" class="social_logout control authorised" title="Logout from Facebook"></span>
             <span id="fb_login_btn" class="control" title="Login to Facebook"></span>
         </fieldset>
         <fieldset id="lastfm_control_panel" class="unlogined">
-            <label id="lastfm_username" class="authorised">podviaznikov</label>
+            <label id="lastfm_username" class="authorised"></label>
             <span id="lastfm_logout_btn" class="social_logout control authorised" title="Logout from Last fm"></span>
             <a id="lastfm_login_btn" href="http://www.last.fm/api/auth/?api_key=e3377f4b4d8c6de47c7e2c81485a65f5" class="control" title="Login to Last.fm"></a>
         </fieldset>
