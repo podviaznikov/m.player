@@ -1,8 +1,7 @@
 /**(c) 2011 Enginimation Studio (http://enginimation.com). May be freely distributed under the MIT license.*/
 /*global Porridge: true, UUID: true, fs:true,_:true,Backbone:true, async:true,dataService:true,fbService:true,ID3:true,FileAPIReader:true */
 "use strict";
-var global=window,
-    ui={};
+var ui={};
 var AppController={
 	init:function(){
         var newHeight=$(window).height()-105,
@@ -31,85 +30,81 @@ var AppController={
             if(!AppController.settings.isLogined()){
                 dataService.getSession(function(data){
                     console.log(data);
-                    AppController.settings.saveUser(data.user);
-                    AppController.settings.saveSessionKey(data.key);
-                    console.log(AppController.settings.isLogined());
-                    if(AppController.settings.isLogined()){
-                        AppController.playerCtrl.lastFmOff();
+                    AppController.settings.saveLastFmUser(data.user);
+                    AppController.settings.saveLastFmSessionKey(data.key);
+                    console.log(AppController.settings.isLastFmLogined());
+                    if(AppController.settings.isLastFmLogined()){
+                        AppController.playerCtrl.lastFmLogin();
                     }
                     else{
-                        AppController.playerCtrl.lastFmOn();
+                        AppController.playerCtrl.lastFmExit();
                     }
                 });
             }
         });
         //fbService.init();
-        //doesn't work now. track http://code.google.com/p/chromium/issues/detail?id=7469
-        //$(document.body).bind("online", this.checkNetworkStatus);
-        //$(document.body).bind("offline", this.checkNetworkStatus);
-        //this.checkNetworkStatus();
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
         saveShuffle:function(isShuffle){
-            global.localStorage.setItem('isShuffle',isShuffle);
+            localStorage.setItem('isShuffle',isShuffle);
         },
         isShuffle:function(){
-            var value=global.localStorage.getItem('isShuffle');
+            var value=localStorage.getItem('isShuffle');
             return value?JSON.parse(value):false;
         },
         saveRepeat:function(isRepeat){
-            global.localStorage.setItem('isRepeat',isRepeat);
+            localStorage.setItem('isRepeat',isRepeat);
         },
         isRepeat:function(){
-            var value=global.localStorage.getItem('isRepeat');
+            var value=localStorage.getItem('isRepeat');
             return value?JSON.parse(value):false;
         },
         saveLastSong:function(song){
-            global.localStorage.setItem('lastSong',JSON.stringify(song));
+            localStorage.setItem('lastSong',JSON.stringify(song));
         },
         getLastSong:function(){
-            return JSON.parse(global.localStorage.getItem('lastSong'));
+            return JSON.parse(localStorage.getItem('lastSong'));
         },
         saveVolume:function(volume){
-            global.localStorage.setItem('playerVolume',volume);
+            localStorage.setItem('playerVolume',volume);
         },
         getVolume:function(){
-            return global.localStorage.getItem('playerVolume')||0.5;
+            return localStorage.getItem('playerVolume')||0.5;
         },
         savePlayList:function(songs){
-            global.localStorage.setItem('playlist',JSON.stringify(songs));
+            localStorage.setItem('playlist',JSON.stringify(songs));
         },
         getPlayList:function(){
-            var models=JSON.parse(global.localStorage.getItem('playlist'));
+            var models=JSON.parse(localStorage.getItem('playlist'));
             return new SongsList(models);
         },
         saveLastArtist:function(artist){
-            global.localStorage.setItem('lastArtist',artist);
+            localStorage.setItem('lastArtist',artist);
         },
         getLastArtist:function(){
-            return global.localStorage.getItem('lastArtist');
+            return localStorage.getItem('lastArtist');
         },
         saveLastAlbum:function(album){
-            global.localStorage.setItem('lastAlbum',album);
+            localStorage.setItem('lastAlbum',album);
         },
         getLastAlbum:function(){
-            return global.localStorage.getItem('lastAlbum');
+            return localStorage.getItem('lastAlbum');
         },
-        saveUser:function(user){
-            global.localStorage.setItem('user',user);
+        saveLastFmUser:function(user){
+            localStorage.setItem('user',user);
         },
-        getUser:function(){
-            return global.localStorage.getItem('user')||'';
+        getLastFMUser:function(){
+            return localStorage.getItem('user')||'';
         },
-        saveSessionKey:function(sessionKey){
-            global.localStorage.setItem('sessionKey',sessionKey);
+        saveLastFmSessionKey:function(sessionKey){
+            localStorage.setItem('sessionKey',sessionKey);
         },
-        getSessionKey:function(){
-            return global.localStorage.getItem('sessionKey')||'';
+        getLastFmSessionKey:function(){
+            return localStorage.getItem('sessionKey')||'';
         },
-        isLogined:function(){
-            return this.getUser()!==''&& this.getSessionKey()!=='';
+        isLastFmLogined:function(){
+            return this.getLastFmUser()!==''&& this.getLastFmSessionKey()!=='';
         }
     },
     metadataParser:{
@@ -195,7 +190,6 @@ var Artist = Porridge.Model.extend({
         this.songs=new SongsList();
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.refresh();
-        //this.bind('change',this.refresh);
     },
     refresh:function(){
         this.songs.fetchByKey('artists',this.get('name'));
@@ -240,10 +234,9 @@ var PlayList = Porridge.Model.extend({
         var songs=this.findSongs();
         if(songs.length>0){
             var firstSong=songs.first();
-            dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),function(image){
-                callback(image);
-            });
-        }else{
+            dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),callback);
+        }
+        else{
             callback('css/images/no_picture.png');
         }
     },
@@ -1133,8 +1126,8 @@ $(function(){
 $(function(){
     ui.PlayerCtrl = Backbone.View.extend({
         el:$('#player'),
-        mainControls:$('#player .main'),
-        socialControls:$('#player .social'),
+        mainControls:$('#main_controls_panel'),
+        socialControls:$('#social_controls_panel'),
         playToggle:$('#play_toggle'),
         soundToggle:$('#sound_toggle'),
         shuffleToggle:$('#shuffle_toggle'),
@@ -1148,8 +1141,9 @@ $(function(){
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounter:$('#time_counter'),
-        lastfmLoginBtn:$('#lastfm_login_btn'),
-        labelForLastfmLoginBtn:$('#label_for_lastfm_login_btn'),
+        lastFmLoginBtn:$('#lastfm_login_btn'),
+        lastFmUsername:$('#lastfm_username'),
+        lastFmControlPanel:$('#lastfm_control_panel'),
         events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
@@ -1169,34 +1163,43 @@ $(function(){
             'click #social.on':'hideSocialPanel',
             'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
-            'click #music_slider':'changedMusicProgress'
+            'click #music_slider':'changedMusicProgress',
+            'click #lastfm_logout_btn':'lastFmExit'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmOn','lastFmOff');
+                    'lastFmLogin','lastFmExit');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
         },
-        lastFmOn:function(){
-            this.lastfmLoginBtn.hide();
-            this.$(this.labelForLastfmLoginBtn).html(AppController.settings.getUser());
+        lastFmLogin:function(){
+            this.lastFmLoginBtn.hide();
+            this.lastFmControlPanel.removeClass('unlogined');
+            this.lastFmControlPanel.addClass('logined');
+            this.$(this.lastFmUsername).html(AppController.settings.getLastFmUser());
         },
-        lastFmOff:function(){
-            this.lastfmLoginBtn.show();
-            this.$(this.labelForLastfmLoginBtn).html('');
+        lastFmExit:function(){
+            AppController.settings.saveLastFmUser('');
+            AppController.settings.saveLastFmSessionKey('');
+            this.lastFmControlPanel.removeClass('logined');
+            this.lastFmControlPanel.addClass('unlogined');
+            this.lastFmLoginBtn.show();
+            this.$(this.lastFmUsername).html('');
         },
         showSocialPanel:function(){
+            this.$(this.el).addClass('socialized');
             this.socialModeToggle.removeClass('off');
             this.socialModeToggle.addClass('on');
             this.$(this.mainControls).addClass('hidden');
             this.$(this.socialControls).removeClass('hidden');
         },
         hideSocialPanel:function(){
+            this.$(this.el).removeClass('socialized');
             this.socialModeToggle.removeClass('on');
             this.socialModeToggle.addClass('off');
             this.$(this.socialControls).addClass('hidden');

@@ -2,8 +2,8 @@
 $(function(){
     ui.PlayerCtrl = Backbone.View.extend({
         el:$('#player'),
-        mainControls:$('#player .main'),
-        socialControls:$('#player .social'),
+        mainControls:$('#main_controls_panel'),
+        socialControls:$('#social_controls_panel'),
         playToggle:$('#play_toggle'),
         soundToggle:$('#sound_toggle'),
         shuffleToggle:$('#shuffle_toggle'),
@@ -17,8 +17,9 @@ $(function(){
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounter:$('#time_counter'),
-        lastfmLoginBtn:$('#lastfm_login_btn'),
-        labelForLastfmLoginBtn:$('#label_for_lastfm_login_btn'),
+        lastFmLoginBtn:$('#lastfm_login_btn'),
+        lastFmUsername:$('#lastfm_username'),
+        lastFmControlPanel:$('#lastfm_control_panel'),
         events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
@@ -38,34 +39,43 @@ $(function(){
             'click #social.on':'hideSocialPanel',
             'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
-            'click #music_slider':'changedMusicProgress'
+            'click #music_slider':'changedMusicProgress',
+            'click #lastfm_logout_btn':'lastFmExit'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmOn','lastFmOff');
+                    'lastFmLogin','lastFmExit');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
         },
-        lastFmOn:function(){
-            this.lastfmLoginBtn.hide();
-            this.$(this.labelForLastfmLoginBtn).html(AppController.settings.getUser());
+        lastFmLogin:function(){
+            this.lastFmLoginBtn.hide();
+            this.lastFmControlPanel.removeClass('unlogined');
+            this.lastFmControlPanel.addClass('logined');
+            this.$(this.lastFmUsername).html(AppController.settings.getLastFmUser());
         },
-        lastFmOff:function(){
-            this.lastfmLoginBtn.show();
-            this.$(this.labelForLastfmLoginBtn).html('');
+        lastFmExit:function(){
+            AppController.settings.saveLastFmUser('');
+            AppController.settings.saveLastFmSessionKey('');
+            this.lastFmControlPanel.removeClass('logined');
+            this.lastFmControlPanel.addClass('unlogined');
+            this.lastFmLoginBtn.show();
+            this.$(this.lastFmUsername).html('');
         },
         showSocialPanel:function(){
+            this.$(this.el).addClass('socialized');
             this.socialModeToggle.removeClass('off');
             this.socialModeToggle.addClass('on');
             this.$(this.mainControls).addClass('hidden');
             this.$(this.socialControls).removeClass('hidden');
         },
         hideSocialPanel:function(){
+            this.$(this.el).removeClass('socialized');
             this.socialModeToggle.removeClass('on');
             this.socialModeToggle.addClass('off');
             this.$(this.socialControls).addClass('hidden');

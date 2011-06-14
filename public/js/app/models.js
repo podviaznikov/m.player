@@ -67,7 +67,6 @@ var Artist = Porridge.Model.extend({
         this.songs=new SongsList();
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.refresh();
-        //this.bind('change',this.refresh);
     },
     refresh:function(){
         this.songs.fetchByKey('artists',this.get('name'));
@@ -112,10 +111,9 @@ var PlayList = Porridge.Model.extend({
         var songs=this.findSongs();
         if(songs.length>0){
             var firstSong=songs.first();
-            dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),function(image){
-                callback(image);
-            });
-        }else{
+            dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),callback);
+        }
+        else{
             callback('css/images/no_picture.png');
         }
     },

@@ -224,6 +224,47 @@ footer#player
     padding-right:10px;
     padding-top: 5px;
 }
+footer#player.socialized
+{
+    text-align:right;
+}
+.social_logout
+{
+    width:11px;
+    height:10px;
+    background-image:url(images/close.png);
+}
+.social_logout:hover
+{
+    background-image:url(images/close_hover.png);
+}
+
+#social_controls_panel
+{
+    margin-right: 40px;
+    margin-top: 8px;
+}
+#social_controls_panel fieldset
+{
+    display:inline-block;
+}
+#lastfm_control_panel.logined #lastfm_login_btn
+{
+    display:none;
+}
+#lastfm_control_panel.logined .authorised
+{
+    display:inline-block;
+}
+#lastfm_control_panel.unlogined #lastfm_login_btn
+{
+    display:inline-block;
+}
+#lastfm_control_panel.unlogined .authorised
+{
+    display:none;
+}
+
 #music_slider
 {
     height: 10px;
@@ -589,8 +630,11 @@ span.info_image img
 }
 #social
 {
-    width:15px;
-    height:20px;
+    width:12px;
+    height:16px;
+    position: absolute;
+    right: 25px;
+    top: 13px;
 }
 #social.off
 {
@@ -598,18 +642,18 @@ span.info_image img
 }
 #social.on
 {
-    background-image:url(images/social.png);
+    background-image:url(images/social_hover.png);
 }
 #lastfm_login_btn
 {
-    width:20px;
+    width:21px;
     height:13px;
     background-image:url(images/lastfm.png);
 }
 #fb_login_btn
 {
-    width:9px;
-    height:19px;
+    width:8px;
+    height:16px;
     background-image:url(images/facebook.png);
 }
 
@@ -747,7 +791,6 @@ footer.saved_playlist_toolbar
 {
     display:none;
 }
-
 @media screen and (min-width: 1025px) and (max-width: 1280px)
 {
     #music_slider
@@ -837,7 +880,7 @@ footer.saved_playlist_toolbar
     }
     #music_slider
     {
-        width:10%;
+        width:20%;
     }
     #volume_slider
     {
@@ -851,6 +894,10 @@ footer.saved_playlist_toolbar
     #clear_playlist
     {
         margin-right:30px;
+    }
+    #repeat_toggle,#shuffle_toggle
+    {
+        display:none;
     }
 }
 @media screen and (min-width: 331px) and (max-width: 400px)
