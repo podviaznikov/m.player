@@ -64,12 +64,12 @@ var fbService={
             xfbml  : false  // don't parse XFBML
         });
     },
-    login:function(){
+    login:function(callback){
         FB.login(function(response){
             if(response.session){
-                alert('Success');
+                this.getUserName(callback);
             }else{
-                alert('Canceled');
+                callback('failed to login');
             }
         });
     },
@@ -77,6 +77,11 @@ var fbService={
         FB.logout(function(response){
             console.log('user was logout-ed')
         });
+    },
+    getUserName:function(callback){
+        FB.api('/me', function(response){
+          callback(undefined,response.name);
+       });
     },
     //change status of teh logined user to new one
     setStatus:function(status){

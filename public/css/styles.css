@@ -248,19 +248,19 @@ footer#player.socialized
 {
     display:inline-block;
 }
-#lastfm_control_panel.logined #lastfm_login_btn
+#lastfm_control_panel.logined #lastfm_login_btn,#fb_control_panel.logined #fb_login_btn
 {
     display:none;
 }
-#lastfm_control_panel.logined .authorised
+#social_controls_panel fieldset.logined .authorised
 {
     display:inline-block;
 }
-#lastfm_control_panel.unlogined #lastfm_login_btn
+#lastfm_control_panel.unlogined #lastfm_login_btn,#fb_control_panel.unlogined #fb_login_btn
 {
     display:inline-block;
 }
-#lastfm_control_panel.unlogined .authorised
+#social_controls_panel fieldset.unlogined .authorised
 {
     display:none;
 }

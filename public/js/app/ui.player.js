@@ -21,6 +21,7 @@ $(function(){
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),
         fbLoginBtn:$('#fb_login_btn'),
+        fbUsername:$('#fb_username'),
         fbControlPanel:$('#fb_control_panel'),
         events:{
             'click #play_toggle.paused': 'resume',
@@ -50,30 +51,35 @@ $(function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit','fbLogin','fbLogout');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbLoginCallback');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
         },
-        fbLogin:function(){
-            fbService.login();
+        fbLoginCallback:function(error,username){
+            if(error){return;}
             this.fbLoginBtn.hide();
             this.fbControlPanel.removeClass('unlogined');
             this.fbControlPanel.addClass('logined');
+            this.fbUsername.html(username);
+        },
+        fbLogin:function(){
+            fbService.login(this.fbLoginCallback);
         },
         fbLogout:function(){
             fbService.logout();
             this.fbLoginBtn.show();
             this.fbControlPanel.removeClass('logined');
             this.fbControlPanel.addClass('unlogined');
+            this.fbUsername.html('');
         },
         lastFmLogin:function(){
             this.lastFmLoginBtn.hide();
             this.lastFmControlPanel.removeClass('unlogined');
             this.lastFmControlPanel.addClass('logined');
-            this.$(this.lastFmUsername).html(AppController.settings.getLastFmUser());
+            this.lastFmUsername.html(AppController.settings.getLastFmUser());
         },
         lastFmExit:function(){
             AppController.settings.saveLastFmUser('');
@@ -81,7 +87,7 @@ $(function(){
             this.lastFmControlPanel.removeClass('logined');
             this.lastFmControlPanel.addClass('unlogined');
             this.lastFmLoginBtn.show();
-            this.$(this.lastFmUsername).html('');
+            this.lastFmUsername.html('');
         },
         showSocialPanel:function(){
             this.$(this.el).addClass('socialized');
