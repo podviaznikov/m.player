@@ -45,7 +45,9 @@ var AppController={
                 AppController.playerCtrl.lastFmLogin();
             }
         });
-        fbService.init();
+        fbService.init(function(){
+            AppController.playerCtrl.fbLogin();
+        });
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{

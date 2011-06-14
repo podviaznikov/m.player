@@ -58,7 +58,7 @@ var dataService={
 };
 var fbService={
     isLogined:false,
-    init:function(){
+    init:function(onlogined){
         FB.init({
             appId  : '222066051151670',
             status : true, // check login status
@@ -67,6 +67,7 @@ var fbService={
         });
         FB.Event.subscribe('auth.login',function(response){
             fbService.isLogined=true;
+            onlogined();
         });
     },
     login:function(callback){
