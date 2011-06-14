@@ -223,7 +223,7 @@ $(function(){
             AppController.visualizationView.selectSong(this.model);
         },
         playSong:function(){
-            settings.saveLastSong(this.model.toJSON());
+            AppController.settings.saveLastSong(this.model.toJSON());
             this.selectSong();
             fs.util.createFileURL(this.model.get('fileName'),this.songFileLoaded);
         },
