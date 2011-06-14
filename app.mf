@@ -11,6 +11,12 @@ http://connect.facebook.net/en_US/all.js
 NETWORK:
 http://userserve-ak.last.fm
 http://player.enginimation.com
+http://connect.facebook.net
+https://connect.facebook.net
+http://graph.facebook.com
+https://graph.facebook.com
+http://api.facebook.com
+https://api.facebook.com
 FALLBACK:
 http://userserve-ak.last.fm/serve/126/*.png /css/images/no_picture.png
 http://userserve-ak.last.fm/serve/126/*.jpg /css/images/no_picture.png
