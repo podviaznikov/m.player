@@ -30,7 +30,7 @@ var AppController={
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
                     console.log('Last.fm session data',data);
-                    //AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
+                    AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
                     AppController.settings.saveLastFmUser(data.user);
                     AppController.settings.saveLastFmSessionKey(data.key);
                     console.log('Logined into last.fm:',AppController.settings.isLastFmLogined());
@@ -46,9 +46,9 @@ var AppController={
                 AppController.playerCtrl.lastFmLogin();
             }
         });
-        fbService.init(function(){
-            AppController.playerCtrl.fbLogin();
-        });
+//        fbService.init(function(){
+//            AppController.playerCtrl.fbLogin();
+//        });
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{

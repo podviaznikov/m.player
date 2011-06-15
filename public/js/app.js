@@ -47,9 +47,9 @@ var AppController={
                 AppController.playerCtrl.lastFmLogin();
             }
         });
-        fbService.init(function(){
-            AppController.playerCtrl.fbLogin();
-        });
+//        fbService.init(function(){
+//            AppController.playerCtrl.fbLogin();
+//        });
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
@@ -1179,8 +1179,8 @@ $(function(){
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress',
             'click #lastfm_logout_btn':'lastFmExit',
-            'click #fb_login_btn':'fbLogin',
-            'click #fb_logout_btn':'fbLogout'
+            //'click #fb_login_btn':'fbLogin',
+            //'click #fb_logout_btn':'fbLogout'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
