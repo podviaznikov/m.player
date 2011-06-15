@@ -11,25 +11,6 @@ var util = require('util'),
     app = express.createServer();
 app.configure(function(){
     app.use(fb.facebook({ appId: '222066051151670', secret: 'e4f631a8fcadb28744da863a9bf00e43' }));
-//    app.use(function(req, res, next) {
-////        if (req.facebook.getSession()){
-////           util.log('fb session is empty');
-////           req.facebook.api('/me', function(me) {
-////                console.log(me);
-////
-////                if (me.error) {
-////                  console.log('An api error occured, so probably you logged out. Refresh to try it again...');
-////                }
-////                else {
-////                  console.log('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
-////                }
-////            });
-////        }
-////        else {
-////          util.log('fb session is empty');
-////        }
-//        next();
-//    });
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
     app.use(express.logger());
@@ -51,12 +32,11 @@ app.get('/session_data',function(req,res){
     if(req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
             util.log(util.inspect(me));
-
             if(me.error){
-              util.log('An api error occured, so probably you logged out. Refresh to try it again...');
+                util.log('An api error occurred, so probably you logged out.');
             }
             else{
-              util.log('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
+                req.session.fbUserFullName=me.name;
             }
         });
         res.redirect('home');
@@ -93,10 +73,20 @@ app.post('/song_played/:artist/:track/:length',function(req,res){
     if(user && key){
         scrobble(req.params.track,req.params.artist,req.params.length,key,user);
     }
+    if(req.facebook.getSession()){
+        req.facebook.api({
+            method:'status.set',
+            status:'Listening '+req.params.track
+        },function(resp){
+            util.log('Resp for the set status query');
+            util.log(util.inspect(resp));
+        });
+    }
+
 });
 app.get('/auth',function(req,res){
-    var token = req.query.token,
-        session = lastfm.session();
+    var token=req.query.token,
+        session=lastfm.session();
     util.log('token='+token);
     session.authorise(token, {
         handlers: {
@@ -104,8 +94,8 @@ app.get('/auth',function(req,res){
                 util.log('authorised');
                 util.log(util.inspect(req));
                 util.log(util.inspect(session));
-                req.session.user = session.user;
-                req.session.key = session.key;
+                req.session.user=session.user;
+                req.session.key=session.key;
                 res.redirect('home');
              }
         }
