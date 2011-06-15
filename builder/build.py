@@ -12,7 +12,7 @@ files = [
     "/js/app/ui.app.js",
     "/js/app/ui.library.js",
     "/js/app/ui.playlist.js",
-    "/js/app/ui.songslist.js",
+    "/js/app/ui.details.js",
     "/js/app/ui.player.js"
 ]
 

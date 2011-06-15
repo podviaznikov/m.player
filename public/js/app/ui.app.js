@@ -2,10 +2,12 @@ $(function(){
     ui.AppView = Backbone.View.extend({
         el: $('body'),
         progress:$('#uploading_files_progress progress'),
-        infoPanels:$('section.info_panel'),
-        helpPanels:$('section.help_panel'),
-        mainPanels:$('section.main_panel'),
+        helpScreen:$('#help_screen'),
+        mainScreen:$('#main_screen'),
         isRegularMode:true,
+        dropFolderCtrl:$('#drop_folder'),
+        dropFilesCtrl:$('#drop_files'),
+        fileUploadStatusDialog:$('#file_upload_status_dialog'),
         events:{
             'keyup':'keyPressed',
             'dragover':'dragOverFiles',
@@ -21,15 +23,14 @@ $(function(){
                     'importMusicDirectory','importMusicFiles','processOneAudioFile');
         },
         showArtistBio:function(artist){
-            this.mainPanels.addClass('hidden');
-            AppController.artistBioView.setArtistModel(artist);
-            AppController.artistBioView.show();
+            this.mainScreen.addClass('hidden');
+            AppController.detailsView.showBio(artist);
         },
         importMusicDirectory:function(){
-            this.$('#drop_folder').click();
+            this.dropFolderCtrl.click();
         },
         importMusicFiles:function(){
-            this.$('#drop_files').click();
+            this.dropFilesCtrl.click();
         },
         dragOverFiles:function(e){
             e.stopPropagation();
@@ -47,15 +48,14 @@ $(function(){
         },
         handleFileSelect:function(files){
             var self=this,
-                fileProcessingFunctions=[],
-                fileUploadStatusDialog=this.$('#file_upload_status_dialog');
-                fileUploadStatusDialog.addClass('active');
+                fileProcessingFunctions=[];
+            this.fileUploadStatusDialog.addClass('active');
             _.each(files,function(file,index){
                 var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
                 fileProcessingFunctions.push(bindedFunct);
             });
-            async.series(fileProcessingFunctions,function(err, results){
-                fileUploadStatusDialog.removeClass('active');
+            async.series(fileProcessingFunctions,function(err,results){
+                self.fileUploadStatusDialog.removeClass('active');
             });
         },
         //todo(anton) some refactoring should be done. get dom elements from here
@@ -92,7 +92,7 @@ $(function(){
                             var artistName=song.get('artist'),
                                 artist=AppController.libraryMenu.artists.forName(artistName);
                             if(!artist){
-                                artist = new Artist({name:artistName});
+                                artist=new Artist({name:artistName});
                                 dataService.getArtistImage(artist.get('name'),function(image){
                                     artist.set({image:image});
                                     artist.save();
@@ -118,26 +118,28 @@ $(function(){
         showHelp:function(){
             this.isRegularMode=false;
             this.el.removeClass('fullscreen');
-            this.helpPanels.removeClass('hidden');
+            this.helpScreen.removeClass('hidden');
+            this.mainScreen.addClass('hidden');
             AppController.visualizationView.hide();
         },
         hideHelp:function(){
             this.isRegularMode=true;
-            this.infoPanels.removeClass('hidden');
-            this.helpPanels.addClass('hidden');
+            this.mainScreen.removeClass('hidden');
+            this.helpScreen.addClass('hidden');
         },
         showFullScreen:function(){
-            this.infoPanels.addClass('hidden');
+            this.hideHelp();
+            this.mainScreen.addClass('hidden');
             this.el.addClass('fullscreen');
             AppController.visualizationView.show();
         },
         hideFullScreen:function(){
             this.el.removeClass('fullscreen');
             if(this.isRegularMode){
-                this.mainPanels.removeClass('hidden');
+                this.mainScreen.removeClass('hidden');
             }
             else{
-                this.helpPanels.removeClass('hidden');
+                this.helpScreen.removeClass('hidden');
             }
             AppController.visualizationView.hide();
         },
@@ -208,31 +210,4 @@ $(function(){
         }
     });
 
-    ui.ArtistBioView = Backbone.View.extend({
-        el: $('#artist_bio'),
-         initialize:function(){
-            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio');
-        },
-        setArtistModel:function(artist)
-        {
-            this.model=artist;
-        },
-        show:function(){
-            this.el.show();
-            this.render();
-        },
-        hide:function(){
-            this.el.hide();
-        },
-        render:function(){
-           if(this.model){
-                dataService.getArtistBio(this.model.get('name'),this.renderArtistBio);
-           }
-           return this;
-        },
-        renderArtistBio:function(data){
-            var html = unescape(data.summary);
-            $(this.el).html(html);
-        }
-    });
 });

@@ -20,8 +20,8 @@
         <progress value="0" min="0" max="100"></progress><span id="file_index"></span>/<span id="total_files_amount"></span>
     </section>
 </aside>
-<div class="main_screen">
-    <section id="how_to_use" class="info_panel help_panel hidden">
+<section id="help_screen" class="screen_panel hidden">
+    <section id="how_to_use" class="info_panel help_panel">
         <header><h1>How to use</h1></header>
         <section>
             <p>m.player - is modern offline/online audio player that works just in browser (it doesn't require Internet connection).
@@ -34,7 +34,7 @@
             <p>Project is build by Enginimation Studio. Feel free to contact <a href="mailto:hello@enginimation.com">us</a> in any time with any reason.</p>
         </section>
     </section>
-    <section id="hot_keys" class="info_panel help_panel hidden">
+    <section id="hot_keys" class="info_panel help_panel">
         <header><h1>Hot keys</h1></header>
         <section>
             <div class="hot_key_row"><div class="cell key_combination">Space</div><div class="cell">Play/Pause</div></div>
@@ -45,7 +45,7 @@
             <div class="hot_key_row"><div class="cell key_combination">Key down</div><div class="cell">Select next track</div></div>
         </section>
     </section>
-    <section id="contributions" class="info_panel help_panel hidden">
+    <section id="contributions" class="info_panel help_panel">
         <header><h1>Thanks</h1></header>
         <section>
             <span><a href="http://documentcloud.github.com/underscore/">underscore.js</a> - utility library for JavaScript.</span>
@@ -59,10 +59,9 @@
             <span><a href="https://github.com/podviaznikov/backbone-indexdb">backbone-indexdb</a> - backbone adapter for IndexDB.</span>
         </section>
     </section>
-</div>
-<section id="artist_bio"></section>
+</section>
 <section id="playing_visualization"></section>
-<div class="main_screen">
+<section id="main_screen" class="screen_panel">
     <section id="library_menu" class="info_panel main_panel">
         <header><h1 id="show_artists">Artists</h1><span>/</span><h1 id="show_playlists">Playlists</h1><input placeholder="Search artist" type="search" maxlength="16" autocomplete="on"></header>
         <section id="artists_library_content" class="library_content_panel scrollable_panel"></section>
@@ -71,6 +70,7 @@
     <section id="filtered_lib" class="info_panel main_panel">
         <header><h1>Albums</h1></header>
         <section id="filtered_lib_content" class="scrollable_panel"></section>
+        <section id="artist_bio"></section>
     </section>
     <section id="playing_list" class="info_panel main_panel">
         <header class="box"><h1>Now playing</h1></header>
@@ -88,7 +88,7 @@
         </section>
         <footer></footer>
     </section>
-</div>
+</section>
 <footer id="player">
     <section id="main_controls_panel">
         <span id="shuffle_toggle" class="control off" title="Turn shuffle on"></span>
@@ -138,7 +138,7 @@
         <div class="genres_box"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag" class="genre_link"><%= genre %></a> <% }); %></div>
         <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
         <footer>
-            <span class="bio_artist command_link" title="Show artist's bio"></span>
+            <span class="bio_artist command_link" title="Show artist's bio">Bio</span>
             <span class="delete_artist command_link" title="Delete this artist from library">Delete</span>
         </footer>
     </section>

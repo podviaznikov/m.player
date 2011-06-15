@@ -132,7 +132,7 @@ $(function(){
         selectArtist:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
-            AppController.songsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
+            AppController.detailsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
         },
         playArtistSongs:function(){
             this.selectArtist();
@@ -141,7 +141,7 @@ $(function(){
         playAlbumSongs:function(e){
             var album=e.currentTarget.dataset.album,
                 albumSongs=this.model.songs.forAlbum(album);
-            AppController.songsView.songs.refresh(albumSongs);
+            AppController.detailsView.songs.refresh(albumSongs);
             AppController.playlistView.setSongsAndPlay(albumSongs);
         },
         deleteArtist:function(){
@@ -153,7 +153,7 @@ $(function(){
         selectAlbum:function(e){
             var album=e.currentTarget.dataset.album,
                 albumSongs=this.model.songs.forAlbum(album);
-            AppController.songsView.songs.refresh(albumSongs);
+            AppController.detailsView.songs.refresh(albumSongs);
         },
         showArtistBio:function(){
             AppController.appView.showArtistBio(this.model);
@@ -196,7 +196,7 @@ $(function(){
         selectPlayList:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
-            AppController.songsView.showPlayList(this.model);
+            AppController.detailsView.showPlayList(this.model);
         },
         playPlayList:function(){
            this.selectPlayList();

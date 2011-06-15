@@ -13,8 +13,6 @@ var AppController={
 		this.playerCtrl=new ui.PlayerCtrl();
 		this.visualizationView=new ui.VisualizationView();
         this.visualizationView.el.height(newHeight);
-        this.artistBioView=new ui.ArtistBioView();
-        this.artistBioView.el.height(newHeight);
         var config={
             dbName:'mdb',
             dbDescription:'m.player database',
@@ -22,9 +20,12 @@ var AppController={
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,function(){
+            //third column
             AppController.playlistView=new ui.PlayListView();
+            //first column
             AppController.libraryMenu=new ui.LibraryMenu();
-            AppController.songsView=new ui.SongsView();
+            //second column
+            AppController.detailsView=new ui.DetailsView();
             //getting session info if user not logined to last.fm
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){

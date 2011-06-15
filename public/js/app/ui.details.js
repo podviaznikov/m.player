@@ -1,8 +1,89 @@
 "use strict";
 $(function(){
+
+    //2nd column view
+    ui.DetailsView = Backbone.View.extend({
+        el:$('#filtered_lib'),
+        libDetailsPanel:$('#filtered_lib_content'),
+        artistBioPanel:$('#artist_bio'),
+        events:{
+            'dragstart':'handleDragStart'
+        },
+        initialize:function(){
+            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart');
+            this.mapping={};
+            this.artistBioView=new ui.ArtistBioView();
+        },
+        showBio:function(artist){
+            this.artistBioPanel.show();
+            this.artistBioView.setArtistModel(artist);
+            this.artistBioView.show();
+            this.libDetailsPanel.hide();
+        },
+        showAlbums:function(albums,artist,songs){
+            this.libDetailsPanel.empty();
+            this.songs=songs;
+            if(albums){
+                for(var i=0;i<albums.length;i++){
+                    var album=albums[i],
+                        albumSongs=songs.forAlbum(album),
+                        albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
+                    //what is this? key of the array should be always number
+                    this.mapping[album]=albumSongs;
+                    this.libDetailsPanel.append(albumView.render().el);
+                }
+            }
+        },
+        showPlayList:function(playList){
+            this.libDetailsPanel.empty();
+            var playListView=new ui.PlayListFullView({model:playList});
+            this.libDetailsPanel.append(playListView.render().el);
+        },
+        handleDragStart:function(e){
+            var event=e.originalEvent,
+                dataTransferObj=event.dataTransfer,
+                songId=event.srcElement.dataset.id;
+            dataTransferObj.effectAllowed='move';
+
+            if(this.songs){
+                var song=this.songs.get(songId),
+                    dataTransfer=DataTransfer.create('song',song);
+                dataTransferObj.setData('text/plain',dataTransfer.toString());
+            }
+        }
+    });
+
+    ui.ArtistBioView = Backbone.View.extend({
+        el: $('#artist_bio'),
+         initialize:function(){
+            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio');
+         },
+         setArtistModel:function(artist)
+         {
+            this.model=artist;
+         },
+         show:function(){
+            this.el.show();
+            this.render();
+         },
+         hide:function(){
+            this.el.hide();
+         },
+         render:function(){
+           if(this.model){
+                dataService.getArtistBio(this.model.get('name'),this.renderArtistBio);
+           }
+           return this;
+         },
+         renderArtistBio:function(data){
+            var html = unescape(data.summary);
+            $(this.el).html(html);
+         }
+    });
+
     ui.AlbumView = Backbone.View.extend({
-        className: 'lib_item_full_info_panel',
-        tagName: 'article',
+        className:'lib_item_full_info_panel',
+        tagName:'article',
         initialize: function(){
             _.bindAll(this, 'addSong','render');
         },
@@ -130,49 +211,6 @@ $(function(){
                 AppController.playlistView.setPlayListModel(this.options.playList);
             }else{
                 AppController.playlistView.removePlayListModel();
-            }
-        }
-    });
-    //2nd column view
-    ui.SongsView = Backbone.View.extend({
-        el:$('#filtered_lib'),
-        filteredLibContent:$('#filtered_lib_content'),
-        events:{
-            'dragstart':'handleDragStart'
-        },
-        initialize:function(){
-            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart');
-            this.mapping={};
-        },
-        showAlbums:function(albums,artist,songs){
-            this.filteredLibContent.empty();
-            this.songs=songs;
-            if(albums){
-                for(var i=0;i<albums.length;i++){
-                    var album=albums[i],
-                        albumSongs=songs.forAlbum(album),
-                        albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
-                    //what is this? key of the array should be always number
-                    this.mapping[album]=albumSongs;
-                    this.filteredLibContent.append(albumView.render().el);
-                }
-            }
-        },
-        showPlayList:function(playList){
-            this.filteredLibContent.empty();
-            var playListView=new ui.PlayListFullView({model:playList});
-            this.filteredLibContent.append(playListView.render().el);
-        },
-        handleDragStart:function(e){
-            var event=e.originalEvent,
-                dataTransferObj=event.dataTransfer,
-                songId=event.srcElement.dataset.id;
-            dataTransferObj.effectAllowed='move';
-
-            if(this.songs){
-                var song=this.songs.get(songId),
-                    dataTransfer=DataTransfer.create('song',song);
-                dataTransferObj.setData('text/plain',dataTransfer.toString());
             }
         }
     });

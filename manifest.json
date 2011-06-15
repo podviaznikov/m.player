@@ -1,18 +1,10 @@
 {
   "name": "m.player",
-  "description": "Offline Music Player with Last.fm and Facebook integration",
-  "version": "2.7",
+  "description": "Offline Music Player",
+  "version": "1.0",
   "app": {
-    "urls": [
-      "*://player.enginimation.com/",
-      "*://connect.facebook.net/" ,
-      "*://graph.facebook.com/",
-      "*://api.facebook.com/",
-      "*://*.facebook.com/",
-      "*://*.facebook.net/"
-    ],
     "launch": {
-      "web_url": "http://player.enginimation.com/"
+       "local_path": "public/index.html"
     }
   },
   "icons": {

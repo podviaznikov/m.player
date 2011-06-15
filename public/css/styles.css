@@ -1,19 +1,21 @@
 /* Let's get this party started */
-::-webkit-scrollbar {
+::-webkit-scrollbar
+{
     width: 10px;
 }
-
 /* Track */
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track
+{
 
 }
-
 /* Handle */
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb
+{
     background: #939393;
     opacity:0.8;
 }
-::-webkit-scrollbar-thumb:window-inactive {
+::-webkit-scrollbar-thumb:window-inactive
+{
 	background: #939393;
 	opacity:0.4;
 }
@@ -33,12 +35,12 @@
     width:50px;
     height:50px;
 }
-div.main_screen
+section.screen_panel
 {
     display: -webkit-box;
     -webkit-box-orient: horizontal;
 }
-div.main_screen section.info_panel
+section.screen_panel section.info_panel
 {
     -webkit-box-flex: 1;
     width:33%;
@@ -788,13 +790,36 @@ footer.saved_playlist_toolbar
 }
 .hidden
 {
-    display:none;
+    display:none!important;
 }
-@media screen and (min-width: 1025px) and (max-width: 1280px)
+@media screen and (min-width: 1281) and (max-width: 1400px)
 {
     #music_slider
     {
-        width:53%;
+        width:63%;
+    }
+    #volume_slider
+    {
+        margin-right:30px;
+    }
+}
+@media screen and (min-width: 1151) and (max-width: 1280px)
+{
+    #music_slider
+    {
+        width:60%;
+    }
+    #volume_slider
+    {
+        margin-right:30px;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1150px)
+{
+    #music_slider
+    {
+        width:55%;
     }
     #volume_slider
     {
@@ -805,7 +830,7 @@ footer.saved_playlist_toolbar
 {
     #music_slider
     {
-        width:45%;
+        width:47%;
     }
 }
 @media screen and (min-width: 801px) and (max-width: 900px)
@@ -915,11 +940,6 @@ footer.saved_playlist_toolbar
     #music_slider,#volume_slider
     {
         display:none!important;
-    }
-    .control
-    {
-        margin-right:0px;
-        margin-left:0px;
     }
     #playlist_toolbar
     {
