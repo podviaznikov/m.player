@@ -30,6 +30,8 @@ var AppController={
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
                     console.log('Last.fm session data',data);
+                    AppController.settings.saveFbLoginURL(data.fbLoginURL);
+                    AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
                     AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
                     AppController.settings.saveLastFmUser(data.user);
                     AppController.settings.saveLastFmSessionKey(data.key);
@@ -43,12 +45,10 @@ var AppController={
                 });
             }
             else{
+                AppController.playerCtrl.fbUpdateButtons(AppController.settings.getFbLoginURL(),AppController.settings.getFbLogoutURL());
                 AppController.playerCtrl.lastFmLogin();
             }
         });
-//        fbService.init(function(){
-//            AppController.playerCtrl.fbLogin();
-//        });
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
@@ -111,6 +111,18 @@ var AppController={
         },
         isLastFmLogined:function(){
             return this.getLastFmUser()!==''&& this.getLastFmSessionKey()!=='';
+        },
+        saveFbLoginURL:function(fbLoginURL){
+            localStorage.setItem('fb_login_url',fbLoginURL);
+        },
+        getFbLoginURL:function(){
+            return localStorage.getItem('fb_login_url')||'';
+        },
+        saveFbLogoutURL:function(fbLogoutURL){
+            localStorage.setItem('fb_logout_url',fbLogoutURL);
+        },
+        getFbLogoutURL:function(){
+            return localStorage.getItem('fb_logout_url')||'';
         }
     },
     metadataParser:{

@@ -11,7 +11,6 @@ var dataService={
     scrobble:function(track,artist,trackLength){
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()
         +'&key='+AppController.settings.getLastFmSessionKey());
-        fbService.setStatus('Listening '+track);
     },
     getArtistImage:function(artist,callback){
         var jqxhr = $.get('/artist/'+artist+'/image',function(data){
@@ -51,75 +50,6 @@ var dataService={
         })
         .error(function() {
             callback({});
-        });
-    }
-};
-var fbService={
-    isLogined:false,
-    init:function(onlogined){
-        FB.init({
-            appId  : '222066051151670',
-            status : true, // check login status
-            cookie : true, // enable cookies to allow the server to access the session
-            xfbml  : false  // don't parse XFBML
-        });
-        FB.Event.subscribe('auth.login',function(response){
-            fbService.isLogined=true;
-            onlogined();
-        });
-    },
-    login:function(callback){
-        //get username if logined
-        if(fbService.isLogined){
-              fbService.getUserName(callback);
-        }
-        //login if not logined
-        else{
-            FB.login(function(response){
-                if(response.session){
-                    fbService.isLogined=true;
-                    fbService.getUserName(callback);
-                }
-                else{
-                    callback('failed to login');
-                }
-            });
-        }
-    },
-    logout:function(){
-        FB.logout(function(response){
-            fbService.isLogined=false;
-        });
-    },
-    getUserName:function(callback){
-        FB.api('/me', function(response){
-          callback(undefined,response.name);
-        });
-    },
-    //change status of teh logined user to new one
-    setStatus:function(status){
-        FB.getLoginStatus(function(response){
-            if(response.session){
-                FB.api({
-                    method:'status.set',
-                    status:status},
-                    function(response){
-                        if(response == 0){
-                            console.log('Your facebook status was not updated.');
-                        }else{
-                            console.log('Your facebook status was updated');
-                        }
-                    }
-                );
-            }else{
-                console.log('user not logined');
-            }
-        });
-    },
-    //get name of the logined user
-    getName:function(callback){
-        FB.api('/me',function(response){
-          callback(response.name);
         });
     }
 };

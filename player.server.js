@@ -76,7 +76,7 @@ app.post('/song_played/:artist/:track/:length',function(req,res){
     if(req.facebook.getSession()){
         req.facebook.api({
             method:'status.set',
-            status:'Listening '+req.params.track
+            status:'Listening '+"'"+req.params.artist+"'"+req.params.track
         },function(resp){
             util.log('Resp for the set status query');
             util.log(util.inspect(resp));
