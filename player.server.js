@@ -48,12 +48,15 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/session',function(req,res){
-    util.log('Attention');
-    util.log(util.inspect(req.facebook));
     res.contentType('application/json');
     var session=req.session;
     if(!session||!req.session.user||!req.session.key){
-        res.send({user:'',key:''});
+        res.send({
+            user:'',
+            key:'',
+            fbLogoutURL:req.facebook.getLogoutUrl(),
+            fbLoginURL:req.facebook.getLoginUrl()
+        });
     }
     else{
         var user=req.session.user||'',
@@ -61,7 +64,9 @@ app.get('/session',function(req,res){
         util.log(util.inspect(session));
         res.send({
             user:user,
-            key:key
+            key:key,
+            fbLogoutURL:req.facebook.getLogoutUrl(),
+            fbLoginURL:req.facebook.getLoginUrl()
         });
     }
 });
