@@ -6,7 +6,7 @@
 "use strict";
 var dataService={
     getSession:function(callback){
-        $.getJSON('/session',callback);
+        $.getJSON('/session_data',callback);
     },
     scrobble:function(track,artist,trackLength){
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()

@@ -47,7 +47,7 @@ app.get('/app.mf', function(req, res){
     res.header('Content-Type', 'text/cache-manifest');
     res.sendfile(__dirname + '/app.mf');
 });
-app.get('/session',function(req,res){
+app.get('/session_data',function(req,res){
     res.contentType('application/json');
     var session=req.session;
     if(!session||!req.session.user||!req.session.key){
