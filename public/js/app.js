@@ -281,7 +281,7 @@ $(function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
                     'hideHelp','showFullScreen','hideFullScreen','keyPressed',
                     'importMusicDirectory','importMusicFiles','processOneAudioFile');
-        }
+        },
         importMusicDirectory:function(){
             this.dropFolderCtrl.click();
         },
