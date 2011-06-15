@@ -28,7 +28,7 @@ app.get('/app.mf', function(req, res){
     res.header('Content-Type', 'text/cache-manifest');
     res.sendfile(__dirname + '/app.mf');
 });
-app.get('/session_data',function(req,res){
+app.get('/fb_data',function(req,res){
     if(req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
             util.log(util.inspect(me));
@@ -42,15 +42,22 @@ app.get('/session_data',function(req,res){
         res.redirect('home');
         return;
     }
+    var session=req.session||{};
     res.contentType('application/json');
+    res.send({
+        fbLogoutURL:req.facebook.getLogoutUrl(),
+        fbLoginURL:req.facebook.getLoginUrl(),
+        fbUser:session.fbUserFullName||''
+    });
+});
+app.get('/session_data',function(req,res){
     var session=req.session;
+    res.contentType('application/json');
+
     if(!session||!req.session.user||!req.session.key){
         res.send({
             user:'',
-            key:'',
-            fbLogoutURL:req.facebook.getLogoutUrl(),
-            fbLoginURL:req.facebook.getLoginUrl(),
-            fbUser:''
+            key:''
         });
     }
     else{
@@ -59,10 +66,7 @@ app.get('/session_data',function(req,res){
         util.log(util.inspect(session));
         res.send({
             user:user,
-            key:key,
-            fbLogoutURL:req.facebook.getLogoutUrl(),
-            fbLoginURL:req.facebook.getLoginUrl(),
-            fbUser:req.session.fbUserFullName
+            key:key
         });
     }
 });
@@ -84,7 +88,6 @@ app.post('/song_played/:artist/:track/:length',function(req,res){
             util.log(util.inspect(resp));
         });
     }
-
 });
 app.get('/auth',function(req,res){
     var token=req.query.token,

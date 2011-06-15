@@ -8,6 +8,9 @@ var dataService={
     getSession:function(callback){
         $.getJSON('/session_data',callback);
     },
+    initFB:function(callback){
+        $.getJSON('/fb_data',callback);
+    },
     scrobble:function(track,artist,trackLength){
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()
         +'&key='+AppController.settings.getLastFmSessionKey());

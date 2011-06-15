@@ -29,10 +29,6 @@ var AppController={
             //getting session info if user not logined to last.fm
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
-                    console.log('Last.fm session data',data);
-                    AppController.settings.saveFbLoginURL(data.fbLoginURL);
-                    AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
-                    AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
                     AppController.settings.saveLastFmUser(data.user);
                     AppController.settings.saveLastFmSessionKey(data.key);
                     console.log('Logined into last.fm:',AppController.settings.isLastFmLogined());
@@ -45,9 +41,14 @@ var AppController={
                 });
             }
             else{
-                AppController.playerCtrl.fbUpdateButtons(AppController.settings.getFbLoginURL(),AppController.settings.getFbLogoutURL());
                 AppController.playerCtrl.lastFmLogin();
             }
+            dataService.initFB(function(data){
+                console.log('Last.fm session data',data);
+                AppController.settings.saveFbLoginURL(data.fbLoginURL);
+                AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
+                AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
+           });
         });
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
