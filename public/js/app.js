@@ -279,13 +279,9 @@ $(function(){
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed',
                     'importMusicDirectory','importMusicFiles','processOneAudioFile');
-        },
-        showArtistBio:function(artist){
-            this.mainScreen.addClass('hidden');
-            AppController.detailsView.showBio(artist);
-        },
+        }
         importMusicDirectory:function(){
             this.dropFolderCtrl.click();
         },
@@ -314,8 +310,8 @@ $(function(){
                 var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
                 fileProcessingFunctions.push(bindedFunct);
             });
-            async.series(fileProcessingFunctions,function(err, results){
-                fileUploadStatusDialog.removeClass('active');
+            async.series(fileProcessingFunctions,function(err,results){
+                self.fileUploadStatusDialog.removeClass('active');
             });
         },
         //todo(anton) some refactoring should be done. get dom elements from here
@@ -629,7 +625,7 @@ $(function(){
             AppController.detailsView.songs.refresh(albumSongs);
         },
         showArtistBio:function(){
-            AppController.appView.showArtistBio(this.model);
+            AppController.detailsView.showBio(this.model);
         },
         hide:function(){
             this.$(this.el).hide();

@@ -19,13 +19,9 @@ $(function(){
         },
         initialize:function(){
             _.bindAll(this,'dragOverFiles','dropFiles','handleFileSelect','showHelp',
-                    'hideHelp','showFullScreen','hideFullScreen','keyPressed','showArtistBio',
+                    'hideHelp','showFullScreen','hideFullScreen','keyPressed',
                     'importMusicDirectory','importMusicFiles','processOneAudioFile');
-        },
-        showArtistBio:function(artist){
-            this.mainScreen.addClass('hidden');
-            AppController.detailsView.showBio(artist);
-        },
+        }
         importMusicDirectory:function(){
             this.dropFolderCtrl.click();
         },

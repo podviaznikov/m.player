@@ -156,7 +156,7 @@ $(function(){
             AppController.detailsView.songs.refresh(albumSongs);
         },
         showArtistBio:function(){
-            AppController.appView.showArtistBio(this.model);
+            AppController.detailsView.showBio(this.model);
         },
         hide:function(){
             this.$(this.el).hide();
