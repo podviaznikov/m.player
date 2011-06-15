@@ -29,7 +29,8 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/fb_data',function(req,res){
-    res.contentType('application/json');
+     var userName='';
+     res.contentType('application/json');
      if(req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
             util.log("Get user's info: "+util.inspect(me));
