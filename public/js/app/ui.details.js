@@ -17,6 +17,7 @@ $(function(){
         showBio:function(artist){
             this.artistBioPanel.show();
             this.artistBioView.setArtistModel(artist);
+            this.artistBioView.render();
             this.libDetailsPanel.hide();
         },
         hideBio:function(){
@@ -62,8 +63,7 @@ $(function(){
          initialize:function(){
             _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
          },
-         setArtistModel:function(artist)
-         {
+         setArtistModel:function(artist){
             this.model=artist;
          },
          render:function(){
