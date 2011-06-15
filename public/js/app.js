@@ -934,7 +934,6 @@ $(function(){
         showBio:function(artist){
             this.artistBioPanel.show();
             this.artistBioView.setArtistModel(artist);
-            this.artistBioView.show();
             this.libDetailsPanel.hide();
         },
         hideBio:function(){
