@@ -48,6 +48,12 @@ var AppController={
                 AppController.settings.saveFbLoginURL(data.fbLoginURL);
                 AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
                 AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
+                if(data.fbUser){
+                    AppController.playerCtrl.fbLogin(data.fbUser);
+                }
+                else{
+                   AppController.playerCtrl.fbLogout();
+                }
            });
         });
 	},

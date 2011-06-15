@@ -49,6 +49,12 @@ var AppController={
                 AppController.settings.saveFbLoginURL(data.fbLoginURL);
                 AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
                 AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
+                if(data.fbUser){
+                    AppController.playerCtrl.fbLogin(data.fbUser);
+                }
+                else{
+                   AppController.playerCtrl.fbLogout();
+                }
            });
         });
 	},
@@ -1197,7 +1203,7 @@ $(function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbLoginCallback','fbUpdateButtons');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbUpdateButtons');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
@@ -1208,18 +1214,13 @@ $(function(){
             this.$(this.fbLoginBtn).attr('href',loginURL);
             this.$(this.fbLogoutBtn).attr('href',logoutURL);
         },
-        fbLoginCallback:function(error,username){
-            if(error){return;}
+        fbLogin:function(name){
             this.fbLoginBtn.hide();
             this.fbControlPanel.removeClass('unlogined');
             this.fbControlPanel.addClass('logined');
-            this.fbUsername.html(username);
-        },
-        fbLogin:function(){
-            fbService.login(this.fbLoginCallback);
+            this.fbUsername.html(name);
         },
         fbLogout:function(){
-            fbService.logout();
             this.fbLoginBtn.show();
             this.fbControlPanel.removeClass('logined');
             this.fbControlPanel.addClass('unlogined');
