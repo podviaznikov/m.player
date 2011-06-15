@@ -5,12 +5,10 @@
 // https://github.com/podviaznikov/m.player.
 "use strict";
 var dataService={
-    getSession:function(callback)
-    {
+    getSession:function(callback){
         $.getJSON('/session',callback);
     },
-    scrobble:function(track,artist,trackLength)
-    {
+    scrobble:function(track,artist,trackLength){
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()
         +'&key='+AppController.settings.getLastFmSessionKey());
         fbService.setStatus('Listening '+track);
