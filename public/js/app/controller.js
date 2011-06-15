@@ -45,8 +45,6 @@ var AppController={
             }
             dataService.initFB(function(data){
                 console.log('FB session data',data);
-                AppController.settings.saveFbLoginURL(data.fbLoginURL);
-                AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
                 AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
                 if(data.fbUser){
                     AppController.playerCtrl.fbLogin(data.fbUser);
@@ -118,18 +116,6 @@ var AppController={
         },
         isLastFmLogined:function(){
             return this.getLastFmUser()!==''&& this.getLastFmSessionKey()!=='';
-        },
-        saveFbLoginURL:function(fbLoginURL){
-            localStorage.setItem('fb_login_url',fbLoginURL);
-        },
-        getFbLoginURL:function(){
-            return localStorage.getItem('fb_login_url')||'';
-        },
-        saveFbLogoutURL:function(fbLogoutURL){
-            localStorage.setItem('fb_logout_url',fbLogoutURL);
-        },
-        getFbLogoutURL:function(){
-            return localStorage.getItem('fb_logout_url')||'';
         }
     },
     metadataParser:{
