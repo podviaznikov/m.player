@@ -690,7 +690,7 @@ span.info_image img
     margin-top:10px;
     margin-bottom:10px;
 }
-.help_panel a
+.help_panel a,#artist_bio a
 {
     color:#FF6900;
     text-decoration:underline;

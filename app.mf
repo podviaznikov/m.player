@@ -1,7 +1,7 @@
 CACHE MANIFEST
 index.html
-16.png
 js/app.js
+16.png
 js/lib/libs.bundle.js
 css/styles.css
 css/images/no_picture.png

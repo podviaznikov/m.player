@@ -10,7 +10,7 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart');
+            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart','showBio','hideBio');
             this.mapping={};
             this.artistBioView=new ui.ArtistBioView();
         },
@@ -20,22 +20,27 @@ $(function(){
             this.artistBioView.show();
             this.libDetailsPanel.hide();
         },
-        showAlbums:function(albums,artist,songs){
+        hideBio:function(){
+            this.artistBioPanel.hide();
+            this.artistBioView.clear();
+            this.libDetailsPanel.show();
             this.libDetailsPanel.empty();
+        },
+        showAlbums:function(albums,artist,songs){
+            this.hideBio();
             this.songs=songs;
             if(albums){
                 for(var i=0;i<albums.length;i++){
                     var album=albums[i],
                         albumSongs=songs.forAlbum(album),
                         albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
-                    //what is this? key of the array should be always number
                     this.mapping[album]=albumSongs;
                     this.libDetailsPanel.append(albumView.render().el);
                 }
             }
         },
         showPlayList:function(playList){
-            this.libDetailsPanel.empty();
+            this.hideBio();
             var playListView=new ui.PlayListFullView({model:playList});
             this.libDetailsPanel.append(playListView.render().el);
         },
@@ -56,18 +61,11 @@ $(function(){
     ui.ArtistBioView = Backbone.View.extend({
         el: $('#artist_bio'),
          initialize:function(){
-            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio');
+            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio','clear');
          },
          setArtistModel:function(artist)
          {
             this.model=artist;
-         },
-         show:function(){
-            this.el.show();
-            this.render();
-         },
-         hide:function(){
-            this.el.hide();
          },
          render:function(){
            if(this.model){
@@ -76,8 +74,11 @@ $(function(){
            return this;
          },
          renderArtistBio:function(data){
-            var html = unescape(data.summary);
+            var html=unescape(data.summary);
             $(this.el).html(html);
+         },
+         clear:function(){
+            $(this.el).html('');
          }
     });
 
@@ -88,7 +89,7 @@ $(function(){
             _.bindAll(this, 'addSong','render');
         },
         render:function(){
-            this.albumInfoView = new ui.AlbumInfoView({model:this.model});
+            this.albumInfoView=new ui.AlbumInfoView({model:this.model});
             $(this.el).append(this.albumInfoView.render().el);
             _.each(this.model.songs,this.addSong);
             return this;
@@ -111,8 +112,7 @@ $(function(){
             _.bindAll(this, 'addSong','render','renderPlayListInfo','playSongs');
         },
         render:function(){
-            //todo (anton) what is this?
-            this.model.findImage();
+            this.model.findImage(this.renderPlayListInfo);
             _.each(this.model.get('songs'),this.addSong);
             return this;
         },
