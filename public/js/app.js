@@ -1190,9 +1190,7 @@ $(function(){
             'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress',
-            'click #lastfm_logout_btn':'lastFmExit',
-            //'click #fb_login_btn':'fbLogin',
-            //'click #fb_logout_btn':'fbLogout'
+            'click #lastfm_logout_btn':'lastFmExit'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);

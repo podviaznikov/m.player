@@ -49,7 +49,8 @@ app.get('/session_data',function(req,res){
             user:'',
             key:'',
             fbLogoutURL:req.facebook.getLogoutUrl(),
-            fbLoginURL:req.facebook.getLoginUrl()
+            fbLoginURL:req.facebook.getLoginUrl(),
+            fbUser:''
         });
     }
     else{
@@ -60,7 +61,8 @@ app.get('/session_data',function(req,res){
             user:user,
             key:key,
             fbLogoutURL:req.facebook.getLogoutUrl(),
-            fbLoginURL:req.facebook.getLoginUrl()
+            fbLoginURL:req.facebook.getLoginUrl(),
+            fbUser:req.session.fbUserFullName
         });
     }
 });
@@ -76,7 +78,7 @@ app.post('/song_played/:artist/:track/:length',function(req,res){
     if(req.facebook.getSession()){
         req.facebook.api({
             method:'status.set',
-            status:'Listening '+"'"+req.params.artist+"'"+req.params.track
+            status:'Listening '+"'"+req.params.artist+"' "+req.params.track
         },function(resp){
             util.log('Resp for the set status query');
             util.log(util.inspect(resp));
