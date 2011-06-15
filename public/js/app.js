@@ -31,6 +31,7 @@ var AppController={
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
                     console.log('Last.fm session data',data);
+                    AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
                     AppController.settings.saveLastFmUser(data.user);
                     AppController.settings.saveLastFmSessionKey(data.key);
                     console.log('Logined into last.fm:',AppController.settings.isLastFmLogined());
@@ -934,6 +935,7 @@ $(function(){
         showBio:function(artist){
             this.artistBioPanel.show();
             this.artistBioView.setArtistModel(artist);
+            this.artistBioView.render();
             this.libDetailsPanel.hide();
         },
         hideBio:function(){
@@ -979,8 +981,7 @@ $(function(){
          initialize:function(){
             _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
          },
-         setArtistModel:function(artist)
-         {
+         setArtistModel:function(artist){
             this.model=artist;
          },
          render:function(){
@@ -1154,6 +1155,7 @@ $(function(){
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),
         fbLoginBtn:$('#fb_login_btn'),
+        fbLogoutBtn:$('#fb_logout_btn'),
         fbUsername:$('#fb_username'),
         fbControlPanel:$('#fb_control_panel'),
         events:{
@@ -1184,12 +1186,16 @@ $(function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbLoginCallback');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbLoginCallback','fbUpdateButtons');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
+        },
+        fbUpdateButtons:function(loginURL,logoutURL){
+            this.$(this.fbLoginBtn).attr('href',loginURL);
+            this.$(this.fbLogoutBtn).attr('href',logoutURL);
         },
         fbLoginCallback:function(error,username){
             if(error){return;}

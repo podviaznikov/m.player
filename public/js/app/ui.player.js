@@ -21,6 +21,7 @@ $(function(){
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),
         fbLoginBtn:$('#fb_login_btn'),
+        fbLogoutBtn:$('#fb_logout_btn'),
         fbUsername:$('#fb_username'),
         fbControlPanel:$('#fb_control_panel'),
         events:{
@@ -51,12 +52,16 @@ $(function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbLoginCallback');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbLoginCallback','fbUpdateButtons');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
+        },
+        fbUpdateButtons:function(loginURL,logoutURL){
+            this.$(this.fbLoginBtn).attr('href',loginURL);
+            this.$(this.fbLogoutBtn).attr('href',logoutURL);
         },
         fbLoginCallback:function(error,username){
             if(error){return;}
