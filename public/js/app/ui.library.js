@@ -101,7 +101,7 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
+            _.bindAll(this,'render','selectArtist','playArtistSongs','hide','show',
                     'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio','handleDragStart');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
@@ -159,10 +159,10 @@ $(function(){
             AppController.detailsView.showBio(this.model);
         },
         hide:function(){
-            this.$(this.el).hide();
+            this.el.hide();
         },
         show:function(){
-            this.$(this.el).show();
+            this.el.show();
         }
     });
 

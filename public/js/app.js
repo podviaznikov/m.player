@@ -570,7 +570,7 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this, 'render','selectArtist','playArtistSongs','hide','show',
+            _.bindAll(this,'render','selectArtist','playArtistSongs','hide','show',
                     'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio','handleDragStart');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
@@ -628,10 +628,10 @@ $(function(){
             AppController.detailsView.showBio(this.model);
         },
         hide:function(){
-            this.$(this.el).hide();
+            this.el.hide();
         },
         show:function(){
-            this.$(this.el).show();
+            this.el.show();
         }
     });
 
@@ -978,7 +978,7 @@ $(function(){
     ui.ArtistBioView = Backbone.View.extend({
         el: $('#artist_bio'),
          initialize:function(){
-            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio','clear');
+            _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
          },
          setArtistModel:function(artist)
          {
@@ -1012,7 +1012,7 @@ $(function(){
             return this;
         },
         addSong:function(song,key){
-            var view = new ui.SongView({model:song,key:key,songs:this.model.songs});
+            var view=new ui.SongView({model:song,key:key,songs:this.model.songs});
             song.albumView = view;
             $(this.el).append(view.render().el);
         }
@@ -1132,7 +1132,6 @@ $(function(){
         }
     });
 });
-
 "use strict";
 $(function(){
     ui.PlayerCtrl = Backbone.View.extend({

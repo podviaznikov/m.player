@@ -125,7 +125,6 @@ progress::-webkit-progress-value
 html, body
 {
     height:100%;
-    user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select:none;
@@ -492,6 +491,10 @@ span.info_image img
 .lib_item_full_info_panel:first-child
 {
     padding: 0px 0px 15px 0px;
+}
+.lib_item_full_info_panel:last-child
+{
+    border-bottom: 0px solid #939393;
 }
 #playing_songs label
 {

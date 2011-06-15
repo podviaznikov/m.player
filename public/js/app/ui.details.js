@@ -61,7 +61,7 @@ $(function(){
     ui.ArtistBioView = Backbone.View.extend({
         el: $('#artist_bio'),
          initialize:function(){
-            _.bindAll(this,'render','show','hide','setArtistModel','renderArtistBio','clear');
+            _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
          },
          setArtistModel:function(artist)
          {
@@ -95,7 +95,7 @@ $(function(){
             return this;
         },
         addSong:function(song,key){
-            var view = new ui.SongView({model:song,key:key,songs:this.model.songs});
+            var view=new ui.SongView({model:song,key:key,songs:this.model.songs});
             song.albumView = view;
             $(this.el).append(view.render().el);
         }
