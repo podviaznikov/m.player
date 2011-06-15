@@ -59,7 +59,7 @@ app.get('/fb_data',function(req,res){
         res.send({
             fbLogoutURL:req.facebook.getLogoutUrl(),
             fbLoginURL:req.facebook.getLoginUrl(),
-            fbUser:||''
+            fbUser:''
         });
     }
 
