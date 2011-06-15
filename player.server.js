@@ -29,12 +29,27 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/fb_data',function(req,res){
-
-        res.contentType('application/json');
+    res.contentType('application/json');
+     if(req.facebook.getSession()){
+        req.facebook.api('/me', function(me) {
+            util.log("Get user's info: "+util.inspect(me));
+            if(me.error){
+                util.log('An api error occurred, so probably you logged out.');
+            }
+            else{
+                req.session.fbUserFullName=me.name;
+                util.log('New FB username in session:'+req.session.fbUserFullName);
+                userName=me.name;
+            }
+        });
+    }
+    else{
         res.send({
             fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data','').replace('fb_data',''),
             fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','').replace('fb_data',''),
+            fbUser:userName
         });
+    }
 });
 app.get('/fb_account',function(req,res){
     var userName='';
