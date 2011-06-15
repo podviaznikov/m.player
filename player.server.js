@@ -11,25 +11,25 @@ var util = require('util'),
     app = express.createServer();
 app.configure(function(){
     app.use(fb.facebook({ appId: '222066051151670', secret: 'e4f631a8fcadb28744da863a9bf00e43' }));
-    app.use(function(req, res, next) {
-//        if (req.facebook.getSession()){
-//           util.log('fb session is empty');
-//           req.facebook.api('/me', function(me) {
-//                console.log(me);
-//
-//                if (me.error) {
-//                  console.log('An api error occured, so probably you logged out. Refresh to try it again...');
-//                }
-//                else {
-//                  console.log('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
-//                }
-//            });
-//        }
-//        else {
-//          util.log('fb session is empty');
-//        }
-        next();
-    });
+//    app.use(function(req, res, next) {
+////        if (req.facebook.getSession()){
+////           util.log('fb session is empty');
+////           req.facebook.api('/me', function(me) {
+////                console.log(me);
+////
+////                if (me.error) {
+////                  console.log('An api error occured, so probably you logged out. Refresh to try it again...');
+////                }
+////                else {
+////                  console.log('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
+////                }
+////            });
+////        }
+////        else {
+////          util.log('fb session is empty');
+////        }
+//        next();
+//    });
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
     app.use(express.logger());
@@ -49,7 +49,7 @@ app.get('/app.mf', function(req, res){
 });
 app.get('/session',function(req,res){
     util.log('Attention');
-    util.log(sys.inspect(req.facebook));
+    util.log(util.inspect(req.facebook));
     res.contentType('application/json');
     var session=req.session;
     if(!session||!req.session.user||!req.session.key){
