@@ -29,9 +29,11 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/fb_data',function(req,res){
+    var session=req.session||{};
+    util.log('FB data:'+session.fbUserFullName)
     if(!req.session.fbUserFullName && req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
-            util.log(util.inspect(me));
+            util.log("Get user's info"+util.inspect(me));
             if(me.error){
                 util.log('An api error occurred, so probably you logged out.');
             }
@@ -42,7 +44,7 @@ app.get('/fb_data',function(req,res){
         res.redirect('home');
         return;
     }
-    var session=req.session||{};
+
     res.contentType('application/json');
     res.send({
         fbLogoutURL:req.facebook.getLogoutUrl(),

@@ -29,9 +29,9 @@ var AppController={
             //getting session info if user not logined to last.fm
             if(!AppController.settings.isLastFmLogined()){
                 dataService.getSession(function(data){
+                    console.log('Last.fm session data',data);
                     AppController.settings.saveLastFmUser(data.user);
                     AppController.settings.saveLastFmSessionKey(data.key);
-                    console.log('Logined into last.fm:',AppController.settings.isLastFmLogined());
                     if(AppController.settings.isLastFmLogined()){
                         AppController.playerCtrl.lastFmLogin();
                     }
@@ -44,7 +44,7 @@ var AppController={
                 AppController.playerCtrl.lastFmLogin();
             }
             dataService.initFB(function(data){
-                console.log('Last.fm session data',data);
+                console.log('FB session data',data);
                 AppController.settings.saveFbLoginURL(data.fbLoginURL);
                 AppController.settings.saveFbLogoutURL(data.fbLogoutURL);
                 AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
