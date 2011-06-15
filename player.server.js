@@ -29,40 +29,62 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/fb_data',function(req,res){
-    var session=req.session||{};
-    util.log('FB data:'+session.fbUserFullName);
+//    var session=req.session||{};
+//    util.log('FB data:'+session.fbUserFullName);
+//    if(req.facebook.getSession()){
+//        res.redirect('http://player.enginimcation.com?')
+////        req.facebook.api('/me', function(me) {
+////            util.log("Get user's info: "+util.inspect(me));
+////            if(me.error){
+////                util.log('An api error occurred, so probably you logged out.');
+////                res.send({
+////                    fbLogoutURL:req.facebook.getLogoutUrl(),
+////                    fbLoginURL:req.facebook.getLoginUrl(),
+////                    fbUser:''
+////                });
+////            }
+////            else{
+////                req.session.fbUserFullName=me.name;
+////                util.log('New FB username in session:'+req.session.fbUserFullName);
+////                res.send({
+////                    fbLogoutURL:req.facebook.getLogoutUrl(),
+////                    fbLoginURL:req.facebook.getLoginUrl(),
+////                    fbUser:me.name||''
+////                });
+////
+////            }
+////        });
+//    }
+//    else{
+        res.contentType('application/json');
+        res.send({
+            fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data',''),
+            fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','');
+//        });
+    }
+
+});
+app.get('/fb_account',function(req,res){
+    var userName='';
     res.contentType('application/json');
     if(req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
             util.log("Get user's info: "+util.inspect(me));
             if(me.error){
                 util.log('An api error occurred, so probably you logged out.');
-                res.send({
-                    fbLogoutURL:req.facebook.getLogoutUrl(),
-                    fbLoginURL:req.facebook.getLoginUrl(),
-                    fbUser:''
-                });
             }
             else{
                 req.session.fbUserFullName=me.name;
                 util.log('New FB username in session:'+req.session.fbUserFullName);
-                res.send({
-                    fbLogoutURL:req.facebook.getLogoutUrl(),
-                    fbLoginURL:req.facebook.getLoginUrl(),
-                    fbUser:me.name||''
-                });
-
+                userName=me.name;
             }
         });
     }
     else{
         res.send({
-            fbLogoutURL:req.facebook.getLogoutUrl(),
-            fbLoginURL:req.facebook.getLoginUrl(),
-            fbUser:''
+            fbUser:userName
         });
     }
-
 });
 app.get('/session_data',function(req,res){
     var session=req.session;
