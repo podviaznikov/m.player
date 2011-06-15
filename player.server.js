@@ -49,18 +49,17 @@ app.get('/app.mf', function(req, res){
 });
 app.get('/session_data',function(req,res){
     if(req.facebook.getSession()){
-
-        res.redirect('home');
         req.facebook.api('/me', function(me) {
-                util.log(me);
+            util.log(util.inspect(me));
 
-                if (me.error) {
-                  res.end('An api error occured, so probably you logged out. Refresh to try it again...');
-                } else {
-                  res.end('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
-                }
-              });
-
+            if(me.error){
+              util.log('An api error occured, so probably you logged out. Refresh to try it again...');
+            }
+            else{
+              util.log('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
+            }
+        });
+        res.redirect('home');
         return;
     }
     res.contentType('application/json');
