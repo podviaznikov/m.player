@@ -48,6 +48,21 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/session_data',function(req,res){
+    if(req.facebook.getSession()){
+
+        res.redirect('home');
+        req.facebook.api('/me', function(me) {
+                util.log(me);
+
+                if (me.error) {
+                  res.end('An api error occured, so probably you logged out. Refresh to try it again...');
+                } else {
+                  res.end('<a href="' + req.facebook.getLogoutUrl() + '">Logout</a>');
+                }
+              });
+
+        return;
+    }
     res.contentType('application/json');
     var session=req.session;
     if(!session||!req.session.user||!req.session.key){
