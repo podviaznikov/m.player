@@ -33,24 +33,26 @@ app.get('/fb_data',function(req,res){
     util.log('FB data:'+session.fbUserFullName)
     if(!req.session.fbUserFullName && req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
-            util.log("Get user's info"+util.inspect(me));
+            util.log("Get user's info: "+util.inspect(me));
             if(me.error){
                 util.log('An api error occurred, so probably you logged out.');
             }
             else{
                 req.session.fbUserFullName=me.name;
+                util.log('New FB username in session:'+req.session.fbUserFullName)
             }
         });
         res.redirect('home');
-        return;
+    }
+    else{
+        res.contentType('application/json');
+        res.send({
+            fbLogoutURL:req.facebook.getLogoutUrl(),
+            fbLoginURL:req.facebook.getLoginUrl(),
+            fbUser:session.fbUserFullName||''
+        });
     }
 
-    res.contentType('application/json');
-    res.send({
-        fbLogoutURL:req.facebook.getLogoutUrl(),
-        fbLoginURL:req.facebook.getLoginUrl(),
-        fbUser:session.fbUserFullName||''
-    });
 });
 app.get('/session_data',function(req,res){
     var session=req.session;
