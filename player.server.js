@@ -29,7 +29,7 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/fb_data',function(req,res){
-    if(req.facebook.getSession()){
+    if(!req.session.fbUserFullName && req.facebook.getSession()){
         req.facebook.api('/me', function(me) {
             util.log(util.inspect(me));
             if(me.error){
