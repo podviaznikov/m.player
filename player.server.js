@@ -43,13 +43,11 @@ app.get('/fb_data',function(req,res){
             }
         });
     }
-    else{
-        res.send({
-            fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data','').replace('fb_data',''),
-            fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','').replace('fb_data',''),
-            fbUser:userName
-        });
-    }
+    res.send({
+        fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data','').replace('fb_data',''),
+        fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','').replace('fb_data',''),
+        fbUser:userName
+    });
 });
 app.get('/fb_account',function(req,res){
     var userName='';
