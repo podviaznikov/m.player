@@ -60,8 +60,8 @@ app.get('/fb_data',function(req,res){
         res.send({
             fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data',''),
             fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','');
-//        });
-    }
+        });
+//    }
 
 });
 app.get('/fb_account',function(req,res){
