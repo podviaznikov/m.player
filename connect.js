@@ -20,7 +20,7 @@ var validatePasswordFunction = function(username, password, successCallback, fai
 // N.B. TO USE Any of the OAuth or RPX strategies you will need to provide
 // a copy of the example_keys_file (named keys_file)
 try {
-  var example_keys= require('./keys_file');
+  var example_keys= require('./key_file');
   for(var key in example_keys) {
     global[key]= example_keys[key];
   }
