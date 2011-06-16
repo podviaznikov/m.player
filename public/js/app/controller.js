@@ -50,17 +50,22 @@ var AppController={
         });
 	},
 	facebookConnect:function(){
-        var accessToken=window.location.hash.substring(1).split('&')[0].split('=')[1];
-        if(accessToken){
-            console.log('FB access token:',accessToken);
-            dataService.getFbUser(accessToken,function(userData){
-                if(userData.name){
-                    AppController.settings.saveFbAccessToken(accessToken);
-                    AppController.settings.saveFbUser(userData.name);
-                    AppController.playerCtrl.fbLogin(userData.name);
-                }
-            });
-        }
+	    if(AppController.settings.isFbLogined()){
+	        AppController.playerCtrl.fbLogin(AppController.settings.getFbUser());
+	    }
+	    else{
+            var accessToken=window.location.hash.substring(1).split('&')[0].split('=')[1];
+            if(accessToken){
+                console.log('FB access token:',accessToken);
+                dataService.getFbUser(accessToken,function(userData){
+                    if(userData.name){
+                        AppController.settings.saveFbAccessToken(accessToken);
+                        AppController.settings.saveFbUser(userData.name);
+                        AppController.playerCtrl.fbLogin(userData.name);
+                    }
+                });
+            }
+	    }
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
@@ -135,7 +140,10 @@ var AppController={
         },
         getFbUser:function(accessToken){
             return localStorage.getItem('fb_user_name')||'';
-        }
+        },
+        isFbLogined:function(){
+            return this.getFbUser()!==''&& this.getFbAccessToken()!=='';
+        },
     },
     metadataParser:{
         parse:function(name,binaryData,callback){

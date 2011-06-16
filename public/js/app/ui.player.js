@@ -44,22 +44,19 @@ $(function(){
             'click #social.off':'showSocialPanel',
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress',
-            'click #lastfm_logout_btn':'lastFmExit'
+            'click #lastfm_logout_btn':'lastFmExit',
+            'click #fb_logout_btn':'fbLogout'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','fbUpdateButtons');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
-        },
-        fbUpdateButtons:function(loginURL,logoutURL){
-            this.$(this.fbLoginBtn).attr('href',loginURL);
-            this.$(this.fbLogoutBtn).attr('href',logoutURL);
         },
         fbLogin:function(name){
             this.fbLoginBtn.hide();
@@ -72,6 +69,9 @@ $(function(){
             this.fbControlPanel.removeClass('logined');
             this.fbControlPanel.addClass('unlogined');
             this.fbUsername.html('');
+            AppController.settings.saveFbAccessToken('');
+            AppController.settings.saveFbUser('');
+
         },
         lastFmLogin:function(){
             this.lastFmLoginBtn.hide();
