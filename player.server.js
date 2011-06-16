@@ -86,8 +86,10 @@ app.get('/fb_account',function(req,res){
     }
 });
 app.get('/fb_user',function(req,res){
-    util.log('Access token',req.params.access_token);
-    var graph = new facebook.GraphAPI(req.params.access_token);
+    util.log('Access token:',req.query.access_token);
+    var accessToken=req.query.access_token.split('&')[0].split('=')[1];
+    util.log('Access token ready:',accessToken);
+    var graph = new facebook.GraphAPI(accessToken);
     graph.getObject('me', function(error,data){
         util.log('Data from FB:'+data);
         var user = error||data;
