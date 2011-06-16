@@ -88,10 +88,11 @@ app.get('/fb_account',function(req,res){
 app.get('/fb_user',function(req,res){
     util.log('Access token',req.params.access_token);
     var graph = new facebook.GraphAPI(req.params.access_token);
-    function print(error, data) {
-        console.log(error || data);
-    }
-    graph.getObject('me', print);
+    graph.getObject('me', function(error,data){
+        util.log('Data from FB:'+data);
+        var user = error||data;
+        res.send(user);
+    });
 });
 app.get('/session_data',function(req,res){
     var session=req.session;
