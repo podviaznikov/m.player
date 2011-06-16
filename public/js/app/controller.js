@@ -6,6 +6,13 @@ var AppController={
         var newHeight=$(window).height()-105,
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
+        $(window).bind('hashchange', function() {
+            var accessToken = window.location.hash.substring(1);
+            if(accessToken){
+                console.log('FB access token:',accessToken);
+                dataService.getFbUser(accessToken);
+            }
+        });
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
