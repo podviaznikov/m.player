@@ -30,42 +30,34 @@ var AppController={
             //second column
             AppController.detailsView=new ui.DetailsView();
             //getting session info if user not logined to last.fm
-//            if(!AppController.settings.isLastFmLogined()){
-//                dataService.getSession(function(data){
-//                    console.log('Last.fm session data',data);
-//                    AppController.settings.saveLastFmUser(data.user);
-//                    AppController.settings.saveLastFmSessionKey(data.key);
-//                    if(AppController.settings.isLastFmLogined()){
-//                        AppController.playerCtrl.lastFmLogin();
-//                    }
-//                    else{
-//                        AppController.playerCtrl.lastFmExit();
-//                    }
-//                });
-//            }
-//            else{
-//                AppController.playerCtrl.lastFmLogin();
-//            }
+            if(!AppController.settings.isLastFmLogined()){
+                dataService.getSession(function(data){
+                    console.log('Last.fm session data',data);
+                    AppController.settings.saveLastFmUser(data.user);
+                    AppController.settings.saveLastFmSessionKey(data.key);
+                    if(AppController.settings.isLastFmLogined()){
+                        AppController.playerCtrl.lastFmLogin();
+                    }
+                    else{
+                        AppController.playerCtrl.lastFmExit();
+                    }
+                });
+            }
+            else{
+                AppController.playerCtrl.lastFmLogin();
+            }
               AppController.facebookConnect();
-//            dataService.initFB(function(data){
-//                console.log('FB session data',data);
-//                AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
-//                if(data.fbUser){
-//                    AppController.playerCtrl.fbLogin(data.fbUser);
-//                }
-//                else{
-//                   AppController.playerCtrl.fbLogout();
-//                }
-//           });
         });
 	},
 	facebookConnect:function(){
-        var accessToken = window.location.hash.substring(1).split('&')[0].split('=')[1];
+        var accessToken=window.location.hash.substring(1).split('&')[0].split('=')[1];
         if(accessToken){
             console.log('FB access token:',accessToken);
             dataService.getFbUser(accessToken,function(userData){
-                if(userData.user){
-                    AppController.playerCtrl.fbLogin(userData.user);
+                if(userData.name){
+                    AppController.settings.saveFbAccessToken(accessToken);
+                    AppController.settings.saveFbUser(userData.name);
+                    AppController.playerCtrl.fbLogin(userData.name);
                 }
             });
         }
@@ -131,6 +123,18 @@ var AppController={
         },
         isLastFmLogined:function(){
             return this.getLastFmUser()!==''&& this.getLastFmSessionKey()!=='';
+        },
+        saveFbAccessToken:function(accessToken){
+            localStorage.setItem('fb_access_token',accessToken);
+        },
+        getFbAccessToken:function(accessToken){
+            return localStorage.getItem('fb_access_token')||'';
+        },
+        saveFbUser:function(fbUser){
+            localStorage.setItem('fb_user_name',fbUser);
+        },
+        getFbUser:function(accessToken){
+            return localStorage.getItem('fb_user_name')||'';
         }
     },
     metadataParser:{

@@ -33,8 +33,8 @@ app.get('/fb_user',function(req,res){
     util.log('Access token:',req.query.access_token);
     var accessToken=req.query.access_token;
     util.log('Access token ready:',accessToken);
-    var graph = new facebook.GraphAPI(accessToken);
     res.contentType('application/json');
+    var graph=new facebook.GraphAPI(accessToken);
     graph.getObject('me', function(error,data){
         if(error){
             util.log('Error:'+error);
@@ -44,7 +44,6 @@ app.get('/fb_user',function(req,res){
             util.log('Data from FB:'+util.inspect(data));
             res.send(data);
         }
-
     });
 });
 app.get('/session_data',function(req,res){
@@ -69,20 +68,25 @@ app.get('/session_data',function(req,res){
 });
 app.post('/song_played/:artist/:track/:length',function(req,res){
     var user=req.query.user,
-        key=req.query.key;
-    util.log('scrobbling');
-    util.log(user);
-    util.log(key);
+        key=req.query.key,
+        accessToken=req.query.access_token;
+    util.log('scrobbling'+user+key+accessToken);
     if(user && key){
         scrobble(req.params.track,req.params.artist,req.params.length,key,user);
     }
-    if(req.facebook.getSession()){
-        req.facebook.api({
-            method:'status.set',
-            status:'Listening '+"'"+req.params.artist+"' "+req.params.track
-        },function(resp){
-            util.log('Resp for the set status query');
-            util.log(util.inspect(resp));
+    if(accessToken){
+        var graph=new facebook.GraphAPI(accessToken);
+        graph.getObject(putObject('me', 'feed', {
+            message: 'Listening '+"'"+req.params.artist+"' "+req.params.track
+        },function(error,data){
+            if(error){
+                util.log('Error:'+error);
+                res.send({});
+            }
+            else{
+                util.log('Data from FB:'+util.inspect(data));
+                res.send(data);
+            }
         });
     }
 });

@@ -19,7 +19,7 @@ var dataService={
     },
     scrobble:function(track,artist,trackLength){
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()
-        +'&key='+AppController.settings.getLastFmSessionKey());
+        +'&key='+AppController.settings.getLastFmSessionKey()+'&access_token='AppController.settings.getFbAccessToken());
     },
     getArtistImage:function(artist,callback){
         var jqxhr = $.get('/artist/'+artist+'/image',function(data){
