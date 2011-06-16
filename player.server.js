@@ -34,10 +34,17 @@ app.get('/fb_user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('Access token ready:',accessToken);
     var graph = new facebook.GraphAPI(accessToken);
+    res.contentType('application/json');
     graph.getObject('me', function(error,data){
-        util.log('Data from FB:'+util.inspect(data)+';Error:'+error);
-        var user = error||data.user;
-        res.send(user);
+        if(error){
+            util.log('Error:'+error);
+            res.send({});
+        }
+        else{
+            util.log('Data from FB:'+util.inspect(data));
+            res.send(data);
+        }
+
     });
 });
 app.get('/session_data',function(req,res){

@@ -63,8 +63,10 @@ var AppController={
         var accessToken = window.location.hash.substring(1).split('&')[0].split('=')[1];
         if(accessToken){
             console.log('FB access token:',accessToken);
-            dataService.getFbUser(accessToken,function(user){
-                AppController.playerCtrl.fbLogin(user)
+            dataService.getFbUser(accessToken,function(userData){
+                if(userData.user){
+                    AppController.playerCtrl.fbLogin(userData.user);
+                }
             });
         }
 	},
