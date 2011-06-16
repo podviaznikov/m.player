@@ -12,7 +12,7 @@ var dataService={
         $.getJSON('/fb_data',callback);
     },
     getFbUser:function(authToken){
-        $.get('/fb_user?access_token='+authToken);
+        $.get('/fb_user?'+authToken);
     },
     scrobble:function(track,artist,trackLength){
         $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()
