@@ -3,6 +3,7 @@ var util = require('util'),
     express = require('express'),
     connect = require('connect'),
     fb = require('facebook-sdk'),
+    facebook = require('facebook-graph'),
     LastFmNode = require('lastfm').LastFmNode,
     lastfm = new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
@@ -83,6 +84,14 @@ app.get('/fb_account',function(req,res){
             fbUser:userName
         });
     }
+});
+app.get('/fb_user',function(req,res){
+    util.log('Access token',req.params.access_token);
+    var graph = new facebook.GraphAPI(req.params.access_token);
+    function print(error, data) {
+        console.log(error || data);
+    }
+    graph.getObject('me', print);
 });
 app.get('/session_data',function(req,res){
     var session=req.session;

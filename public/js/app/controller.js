@@ -43,16 +43,21 @@ var AppController={
             else{
                 AppController.playerCtrl.lastFmLogin();
             }
-            dataService.initFB(function(data){
-                console.log('FB session data',data);
-                AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
-                if(data.fbUser){
-                    AppController.playerCtrl.fbLogin(data.fbUser);
-                }
-                else{
-                   AppController.playerCtrl.fbLogout();
-                }
-           });
+            var accessToken = window.location.hash.substring(1);
+            if(accessToken){
+                console.log('FB access token',accessToken);
+                dataService.getFbUser(accessToken);
+            }
+//            dataService.initFB(function(data){
+//                console.log('FB session data',data);
+//                AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
+//                if(data.fbUser){
+//                    AppController.playerCtrl.fbLogin(data.fbUser);
+//                }
+//                else{
+//                   AppController.playerCtrl.fbLogout();
+//                }
+//           });
         });
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
