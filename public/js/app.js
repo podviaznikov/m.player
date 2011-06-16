@@ -28,22 +28,22 @@ var AppController={
             //second column
             AppController.detailsView=new ui.DetailsView();
             //getting session info if user not logined to last.fm
-            if(!AppController.settings.isLastFmLogined()){
-                dataService.getSession(function(data){
-                    console.log('Last.fm session data',data);
-                    AppController.settings.saveLastFmUser(data.user);
-                    AppController.settings.saveLastFmSessionKey(data.key);
-                    if(AppController.settings.isLastFmLogined()){
-                        AppController.playerCtrl.lastFmLogin();
-                    }
-                    else{
-                        AppController.playerCtrl.lastFmExit();
-                    }
-                });
-            }
-            else{
-                AppController.playerCtrl.lastFmLogin();
-            }
+//            if(!AppController.settings.isLastFmLogined()){
+//                dataService.getSession(function(data){
+//                    console.log('Last.fm session data',data);
+//                    AppController.settings.saveLastFmUser(data.user);
+//                    AppController.settings.saveLastFmSessionKey(data.key);
+//                    if(AppController.settings.isLastFmLogined()){
+//                        AppController.playerCtrl.lastFmLogin();
+//                    }
+//                    else{
+//                        AppController.playerCtrl.lastFmExit();
+//                    }
+//                });
+//            }
+//            else{
+//                AppController.playerCtrl.lastFmLogin();
+//            }
             var accessToken = window.location.hash.substring(1);
             if(accessToken){
                 console.log('FB access token',accessToken);
