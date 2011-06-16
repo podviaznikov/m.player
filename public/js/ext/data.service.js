@@ -11,9 +11,10 @@ var dataService={
     initFB:function(callback){
         $.getJSON('/fb_data',callback);
     },
-    getFbUser:function(authToken){
+    getFbUser:function(authToken,callback){
         $.get('/fb_user?access_token='+authToken,function(data){
-            alert('done');
+            console.log(data);
+            callback(data);
         });
     },
     scrobble:function(track,artist,trackLength){

@@ -29,70 +29,14 @@ app.get('/app.mf', function(req, res){
     res.header('Content-Type', 'text/cache-manifest');
     res.sendfile(__dirname + '/app.mf');
 });
-app.get('/fb_data',function(req,res){
-     res.contentType('application/json');
-     if(req.facebook.getSession()){
-        req.facebook.api('/me', function(me) {
-            util.log("Get user's info: "+util.inspect(me));
-            if(me.error){
-                util.log('An api error occurred, so probably you logged out.');
-                res.send({
-                    fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data','').replace('fb_data',''),
-                    fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','').replace('fb_data',''),
-                    fbUser:''
-                });
-
-            }
-            else{
-                req.session.fbUserFullName=me.name;
-                util.log('New FB username in session:'+req.session.fbUserFullName);
-                res.send({
-                    fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data','').replace('fb_data',''),
-                    fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','').replace('fb_data',''),
-                    fbUser:me.name
-                });
-
-            }
-        });
-    }
-    else{
-        res.send({
-            fbLogoutURL:req.facebook.getLogoutUrl().replace('fb_data','').replace('fb_data',''),
-            fbLoginURL:req.facebook.getLoginUrl().replace('fb_data','').replace('fb_data',''),
-            fbUser:''
-        });
-    }
-});
-app.get('/fb_account',function(req,res){
-    var userName='';
-    res.contentType('application/json');
-    if(req.facebook.getSession()){
-        req.facebook.api('/me', function(me) {
-            util.log("Get user's info: "+util.inspect(me));
-            if(me.error){
-                util.log('An api error occurred, so probably you logged out.');
-            }
-            else{
-                req.session.fbUserFullName=me.name;
-                util.log('New FB username in session:'+req.session.fbUserFullName);
-                userName=me.name;
-            }
-        });
-    }
-    else{
-        res.send({
-            fbUser:userName
-        });
-    }
-});
 app.get('/fb_user',function(req,res){
     util.log('Access token:',req.query.access_token);
     var accessToken=req.query.access_token;
     util.log('Access token ready:',accessToken);
     var graph = new facebook.GraphAPI(accessToken);
     graph.getObject('me', function(error,data){
-        util.log('Data from FB:'+data+';Error:'+error);
-        var user = error||data;
+        util.log('Data from FB:'+util.inspect(data)+';Error:'+error);
+        var user = error||data.user;
         res.send(user);
     });
 });

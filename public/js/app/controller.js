@@ -62,8 +62,10 @@ var AppController={
 	facebookConnect:function(){
         var accessToken = window.location.hash.substring(1).split('&')[0].split('=')[1];
         if(accessToken){
-          console.log('FB access token:',accessToken);
-          dataService.getFbUser(accessToken);
+            console.log('FB access token:',accessToken);
+            dataService.getFbUser(accessToken,function(user){
+                AppController.playerCtrl.fbLogin(user)
+            });
         }
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
