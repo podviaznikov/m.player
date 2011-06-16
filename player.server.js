@@ -76,7 +76,7 @@ app.post('/song_played/:artist/:track/:length',function(req,res){
     }
     if(accessToken){
         var graph=new facebook.GraphAPI(accessToken);
-        graph.getObject(putObject('me', 'feed', {
+        graph.putObject('me', 'feed', {
             message: 'Listening '+"'"+req.params.artist+"' "+req.params.track
         },function(error,data){
             if(error){
