@@ -6,12 +6,8 @@ var AppController={
         var newHeight=$(window).height()-105,
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
-        $(window).bind('hashchange', function() {
-            var accessToken = window.location.hash.substring(1);
-            if(accessToken){
-                console.log('FB access token:',accessToken);
-                dataService.getFbUser(accessToken);
-            }
+        $(window).bind('hashchange',function(){
+            AppController.facebookConnect();
         });
         //fixing height for songs panel
         playingSongPanel.height('initial');
@@ -50,11 +46,7 @@ var AppController={
 //            else{
 //                AppController.playerCtrl.lastFmLogin();
 //            }
-            var accessToken = window.location.hash.substring(1);
-            if(accessToken){
-                console.log('FB access token',accessToken);
-                dataService.getFbUser(accessToken);
-            }
+              AppController.facebookConnect();
 //            dataService.initFB(function(data){
 //                console.log('FB session data',data);
 //                AppController.playerCtrl.fbUpdateButtons(data.fbLoginURL,data.fbLogoutURL);
@@ -66,6 +58,13 @@ var AppController={
 //                }
 //           });
         });
+	},
+	facebookConnect:function(){
+        var accessToken = window.location.hash.substring(1).split('&')[0].split('=')[1];
+        if(accessToken){
+          console.log('FB access token:',accessToken);
+          dataService.getFbUser(accessToken);
+        }
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{

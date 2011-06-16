@@ -12,7 +12,7 @@ var dataService={
         $.getJSON('/fb_data',callback);
     },
     getFbUser:function(authToken){
-        $.get('/fb_user?'+authToken,function(data){
+        $.get('/fb_user?access_token='+authToken,function(data){
             alert('done');
         });
     },
