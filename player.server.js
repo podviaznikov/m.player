@@ -239,14 +239,15 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
 });
 function scrobble(trackName,artist,trackLength,key,user){
      var session=lastfm.session(user,key),
-         startedTime=Math.round(((new Date().getTime()) / 1000) - trackLength),
+         startedTime=Math.round(((new Date().getTime()) / 1000) - parseInt(trackLength,10)),
          LastFmUpdate=lastfm.update('scrobble',session,{
             track:{
                 name:trackName,
                 artist:{'#text':artist}
             },
-            timestamp: startedTime
+            timestamp:startedTime
          });
+     util.log('Started time for scrobbling is '+startedTime);
      LastFmUpdate.on('success',function(track){
         util.log('succesfull scrobble');
         util.log(util.inspect(track));
