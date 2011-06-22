@@ -80,7 +80,7 @@ app.post('/song_played',function(req,res){
     if(accessToken){
         var graph=new facebook.GraphAPI(accessToken);
         graph.putObject('me', 'feed', {
-            message: 'Listening '+"'"+req.params.artist+"' "+req.params.track
+            message: 'Listening '+"'"+artist+"' "+track
         },function(error,data){
             if(error){
                 util.log('Error:'+error);
