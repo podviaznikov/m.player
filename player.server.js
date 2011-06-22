@@ -67,12 +67,15 @@ app.get('/session_data',function(req,res){
     }
 });
 app.post('/song_played/:artist/:track/:length',function(req,res){
-    var user=req.query.user,
+    var track=req.query.track,
+        artist=req.query.artist,
+        length=req.query.length,
+        user=req.query.user,
         key=req.query.key,
         accessToken=req.query.access_token;
     util.log('scrobbling'+user+key+accessToken);
     if(user && key){
-        scrobble(req.params.track,req.params.artist,req.params.length,key,user);
+        scrobble(track,artist,length,key,user);
     }
     if(accessToken){
         var graph=new facebook.GraphAPI(accessToken);
@@ -81,14 +84,13 @@ app.post('/song_played/:artist/:track/:length',function(req,res){
         },function(error,data){
             if(error){
                 util.log('Error:'+error);
-                res.send({});
             }
             else{
                 util.log('Data from FB:'+util.inspect(data));
-                res.send(data);
-            }
+             }
         });
     }
+
 });
 app.get('/auth',function(req,res){
     var token=req.query.token,
@@ -236,22 +238,20 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
     });
 });
 function scrobble(trackName,artist,trackLength,key,user){
-     var session = lastfm.session(user,key),
-         startedTime = Math.round(((new Date().getTime()) / 1000) - trackLength),
-         LastFmUpdate = lastfm.update('scrobble', session, {
-            track: {
+     var session=lastfm.session(user,key),
+         startedTime=Math.round(((new Date().getTime()) / 1000) - trackLength),
+         LastFmUpdate=lastfm.update('scrobble',session,{
+            track:{
                 name:trackName,
                 artist:{'#text':artist}
             },
             timestamp: startedTime
          });
-     LastFmUpdate.on('success',function(track)
-     {
+     LastFmUpdate.on('success',function(track){
         util.log('succesfull scrobble');
         util.log(util.inspect(track));
      });
-     LastFmUpdate.on('error',function(track,error)
-     {
+     LastFmUpdate.on('error',function(track,error){
         util.log(track);
         util.log(error);
         util.log('unsuccesfull scrobble='+error);

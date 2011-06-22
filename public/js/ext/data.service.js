@@ -18,8 +18,12 @@ var dataService={
         });
     },
     scrobble:function(track,artist,trackLength){
-        $.post('/song_played/'+artist+'/'+track+'/'+trackLength+'?user='+AppController.settings.getLastFmUser()
-        +'&key='+AppController.settings.getLastFmSessionKey()+'&access_token='+AppController.settings.getFbAccessToken());
+        $.post('/song_played?user='+AppController.settings.getLastFmUser()
+            +'&key='+AppController.settings.getLastFmSessionKey()
+            +'&access_token='+AppController.settings.getFbAccessToken()
+            +'&artist='+artist
+            +'&track='+track
+            +'&length='+trackLength);
     },
     getArtistImage:function(artist,callback){
         var jqxhr = $.get('/artist/'+artist+'/image',function(data){
