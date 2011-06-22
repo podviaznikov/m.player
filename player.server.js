@@ -66,7 +66,7 @@ app.get('/session_data',function(req,res){
         });
     }
 });
-app.post('/song_played/:artist/:track/:length',function(req,res){
+app.post('/song_played',function(req,res){
     var track=req.query.track,
         artist=req.query.artist,
         length=req.query.length,
