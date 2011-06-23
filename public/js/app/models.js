@@ -13,7 +13,7 @@ var DataTransfer={
         return JSON.parse(source);
     }
 };
-var Song = Porridge.Model.extend({
+var Song=Porridge.Model.extend({
     defaults:{
         album:'No information',
         title:'No information',
@@ -34,11 +34,11 @@ var Song = Porridge.Model.extend({
         indexes:[{name:'artists',field:'artist'}]
     }
 });
-var SongsList = Porridge.Collection.extend({
+var SongsList=Porridge.Collection.extend({
     model:Song,
     //sort by track number or name if track number is not presented
     comparator:function(song){
-        var track = song.get('track');
+        var track=song.get('track');
         if(track && track!==''){
             //should always pass 10. In other case '08'(as example) may be parsed incorrectly
             return parseInt(track,10);
@@ -48,13 +48,30 @@ var SongsList = Porridge.Collection.extend({
     forAlbum:function(album){
         return this.filter(function(song){return song.get('album')===album;});
     },
+    listOfAlbums:function(){
+        return _.uniq(this.pluck('album'))||[];
+    },
+    listOfGenres:function(){
+        return _.uniq(this.pluck('album'))||[];
+    },
+    lisOfAlbumsModels:function(){
+        var albums=new AlbumList(),
+            artist=this.first().get('artist'),
+            albumsArray=this.listOfAlbums(),
+            self=this;
+        _.each(albumsArray,function(album){
+            var songs=self.forAlbum(album);
+            albums.add(new Album({name:album,artist:artist,songs:songs}));
+        });
+        return albums;
+    },
     remove:function(){
         this.each(function(song){
             song.remove();
         });
     }
 });
-var Artist = Porridge.Model.extend({
+var Artist=Porridge.Model.extend({
     defaults:{
         isDeleted:false
     },
@@ -65,6 +82,7 @@ var Artist = Porridge.Model.extend({
             this.set({id:this.id});
         }
         this.songs=new SongsList();
+        this.albumsModels=new AlbumList();
         this.songs.bind('retrieved',this.setParameterFromSongs);
         this.refresh();
     },
@@ -72,13 +90,15 @@ var Artist = Porridge.Model.extend({
         this.songs.fetchByKey('artists',this.get('name'));
     },
     setParameterFromSongs:function(){
-        var albums=_.uniq(this.songs.pluck('album')),
-            genres=_.uniq(this.songs.pluck('genre')),
+        var albums=this.songs.listOfAlbums(),
+            genres=this.songs.listOfGenres(),
             songsCount=this.songs.length;
         this.set({albums:albums,genres:genres,songsCount:songsCount});
         if(songsCount===0){
             this.set({isDeleted:true});
         }
+        //refresh albums models
+        this.albumsModels.refresh(this.songs.lisOfAlbumsModels().models);
     },
     remove:function(){
         this.set({isDeleted:true});
@@ -91,15 +111,22 @@ var Artist = Porridge.Model.extend({
         key:'name'
     }
 });
-var ArtistsList = Porridge.Collection.extend({
+var ArtistsList=Porridge.Collection.extend({
     model:Artist,
     forName:function(artistName){
         return this.find(function(artist){ return artist.get('name') === artistName; });
     },
     comparator:function(song){return song.get('name');}
 });
-
-var PlayList = Porridge.Model.extend({
+var Album=Backbone.Model.extend({
+    findImage:function(callback){
+        dataService.getAlbumImage(this.get('artist'),this.get('name'),callback);
+    },
+});
+var AlbumList=Backbone.Collection.extend({
+    model:Album
+});
+var PlayList=Porridge.Model.extend({
     defaults:{
         songs:[]
     },
@@ -118,9 +145,7 @@ var PlayList = Porridge.Model.extend({
         }
     },
     findGenres:function(){
-        var songs=this.findSongs(),
-            genres=songs.map(function(song){ return song.get('genre'); });
-        return _.uniq(genres)||[];
+        return this.findSongs().listOfGenres();
     }
 },{
     definition:{
@@ -128,4 +153,4 @@ var PlayList = Porridge.Model.extend({
         key:'id'
     }
 });
-var PlayLists = Porridge.Collection.extend({model: PlayList});
+var PlayLists=Porridge.Collection.extend({model: PlayList});

@@ -4,11 +4,7 @@
   "version": "2.6",
   "app": {
     "urls": [
-      "*://player.enginimation.com/",
-      "*://connect.facebook.net/" ,
-      "*://graph.facebook.com/",
-      "*://api.facebook.com/",
-      "*://*.facebook.com/"
+      "*://player.enginimation.com/"
     ],
     "launch": {
       "web_url": "http://player.enginimation.com/"
