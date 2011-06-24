@@ -10,7 +10,7 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart','showBio','hideBio');
+            _.bindAll(this, 'showAlbums','showAlbum','showPlayList','handleDragStart','showBio','hideBio');
             this.mapping={};
             this.artistBioView=new ui.ArtistBioView();
         },
@@ -38,6 +38,13 @@ $(function(){
                     this.libDetailsPanel.append(albumView.render().el);
                 }
             }
+        },
+        showAlbum:function(album,artist,songs){
+            this.hideBio();
+            this.songs=songs;
+            var albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:songs}});
+            this.mapping[album]=songs;
+            this.libDetailsPanel.append(albumView.render().el);
         },
         showPlayList:function(playList){
             this.hideBio();
@@ -112,7 +119,6 @@ $(function(){
         },
         render:function(){
             this.model.findImage(this.renderPlayListInfo);
-            _.each(this.model.get('songs'),this.addSong);
             return this;
         },
         renderPlayListInfo:function(image){
@@ -121,6 +127,7 @@ $(function(){
               name:this.model.get('name')
             });
             $(this.el).append(html);
+            _.each(this.model.get('songs'),this.addSong);
         },
         addSong:function(songData,key){
             var song=new Song(songData),

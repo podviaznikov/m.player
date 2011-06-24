@@ -707,7 +707,7 @@ $(function(){
         selectAlbum:function(e){
             var album=e.currentTarget.dataset.album,
                 albumSongs=this.model.songs.forAlbum(album);
-            AppController.detailsView.songs.refresh(albumSongs);
+            AppController.detailsView.showAlbum(album,this.model.get('name'),albumSongs);
         },
         showArtistBio:function(){
             AppController.detailsView.showBio(this.model);
@@ -725,11 +725,11 @@ $(function(){
         tagName:'article',
         tpl:$('#album_lib_tpl').html(),
         events:{
-//            'click':'selectPlayList',
-//            'dblclick':'playPlayList',
+            'click':'selectAlbum',
+            'dblclick':'playAlbumSongs',
         },
         initialize:function(){
-            _.bindAll(this,'render','renderAlbumInfo','selectPlayList','playPlayList','deletePlaylist');
+            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
@@ -746,18 +746,16 @@ $(function(){
             });
             $(this.el).html(html);
         },
-        selectPlayList:function(){
-            $('.lib-item-data').removeClass('selected-lib-item');
-            $(this.el).addClass('selected-lib-item');
-            AppController.detailsView.showPlayList(this.model);
-        },
-        playPlayList:function(){
-           this.selectPlayList();
+        playAlbumSongs:function(e){
+            this.selectAlbum();
             AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         },
-        deletePlaylist:function(){
-            this.model.destroy();
-            this.$(this.el).remove();
+        selectAlbum:function(){
+            $('.lib-item-data').removeClass('selected-lib-item');
+            $(this.el).addClass('selected-lib-item');
+            var albumSongs=this.model.get('songs');
+            //AppController.detailsView.songs.refresh(albumSongs.models);
+            AppController.detailsView.showAlbum(this.model.get('name'),this.model.get('artist'),albumSongs);
         }
     });
 
@@ -1053,7 +1051,7 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this, 'showAlbums','showPlayList','handleDragStart','showBio','hideBio');
+            _.bindAll(this, 'showAlbums','showAlbum','showPlayList','handleDragStart','showBio','hideBio');
             this.mapping={};
             this.artistBioView=new ui.ArtistBioView();
         },
@@ -1081,6 +1079,13 @@ $(function(){
                     this.libDetailsPanel.append(albumView.render().el);
                 }
             }
+        },
+        showAlbum:function(album,artist,songs){
+            this.hideBio();
+            this.songs=songs;
+            var albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:songs}});
+            this.mapping[album]=songs;
+            this.libDetailsPanel.append(albumView.render().el);
         },
         showPlayList:function(playList){
             this.hideBio();
@@ -1155,7 +1160,6 @@ $(function(){
         },
         render:function(){
             this.model.findImage(this.renderPlayListInfo);
-            _.each(this.model.get('songs'),this.addSong);
             return this;
         },
         renderPlayListInfo:function(image){
@@ -1164,6 +1168,7 @@ $(function(){
               name:this.model.get('name')
             });
             $(this.el).append(html);
+            _.each(this.model.get('songs'),this.addSong);
         },
         addSong:function(songData,key){
             var song=new Song(songData),

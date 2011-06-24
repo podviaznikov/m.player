@@ -175,7 +175,7 @@ $(function(){
         selectAlbum:function(e){
             var album=e.currentTarget.dataset.album,
                 albumSongs=this.model.songs.forAlbum(album);
-            AppController.detailsView.songs.refresh(albumSongs);
+            AppController.detailsView.showAlbum(album,this.model.get('name'),albumSongs);
         },
         showArtistBio:function(){
             AppController.detailsView.showBio(this.model);
@@ -193,11 +193,11 @@ $(function(){
         tagName:'article',
         tpl:$('#album_lib_tpl').html(),
         events:{
-//            'click':'selectPlayList',
-//            'dblclick':'playPlayList',
+            'click':'selectAlbum',
+            'dblclick':'playAlbumSongs',
         },
         initialize:function(){
-            _.bindAll(this,'render','renderAlbumInfo','selectPlayList','playPlayList','deletePlaylist');
+            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
@@ -214,18 +214,16 @@ $(function(){
             });
             $(this.el).html(html);
         },
-        selectPlayList:function(){
-            $('.lib-item-data').removeClass('selected-lib-item');
-            $(this.el).addClass('selected-lib-item');
-            AppController.detailsView.showPlayList(this.model);
-        },
-        playPlayList:function(){
-           this.selectPlayList();
+        playAlbumSongs:function(e){
+            this.selectAlbum();
             AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         },
-        deletePlaylist:function(){
-            this.model.destroy();
-            this.$(this.el).remove();
+        selectAlbum:function(){
+            $('.lib-item-data').removeClass('selected-lib-item');
+            $(this.el).addClass('selected-lib-item');
+            var albumSongs=this.model.get('songs');
+            //AppController.detailsView.songs.refresh(albumSongs.models);
+            AppController.detailsView.showAlbum(this.model.get('name'),this.model.get('artist'),albumSongs);
         }
     });
 
