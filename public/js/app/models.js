@@ -55,14 +55,16 @@ var SongsList=Porridge.Collection.extend({
         return _.uniq(this.pluck('album'))||[];
     },
     lisOfAlbumsModels:function(){
-        var albums=new AlbumList(),
-            artist=this.first().get('artist'),
-            albumsArray=this.listOfAlbums(),
-            self=this;
-        _.each(albumsArray,function(album){
-            var songs=self.forAlbum(album);
-            albums.add(new Album({name:album,artist:artist,songs:songs}));
-        });
+        var albums=new AlbumList();
+        if(this.length>0){
+            var artist=this.first().get('artist'),
+                albumsArray=this.listOfAlbums(),
+                self=this;
+            _.each(albumsArray,function(album){
+                var songs=self.forAlbum(album);
+                albums.add(new Album({name:album,artist:artist,songs:songs}));
+            });
+        }
         return albums;
     },
     remove:function(){
