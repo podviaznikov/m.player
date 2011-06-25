@@ -27,10 +27,10 @@ var AppController={
         Porridge.init(config,function(){
             //third column
             AppController.playlistView=new ui.PlayListView();
-            //init soundcloud
-            AppController.soundcloudConnect();
             //first column
             AppController.libraryMenu=new ui.LibraryMenu();
+            //init soundcloud
+            AppController.soundcloudConnect();
             //second column
             AppController.detailsView=new ui.DetailsView();
             //getting session info if user not logined to last.fm
@@ -74,7 +74,7 @@ var AppController={
 	soundcloudConnect:function(){
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
-	        AppController.playlistView.showSoundCloudMenu();
+	        AppController.libraryMenu.showSoundCloudMenu();
 	    }
 	    else{
             var accessToken=_.firstHashValue();
@@ -86,6 +86,7 @@ var AppController={
                         AppController.settings.saveScAccessToken(accessToken);
                         AppController.settings.saveScUser(scUsername);
                         AppController.playerCtrl.scLogin(scUsername);
+                        AppController.libraryMenu.showSoundCloudMenu();
                     }
                 });
             }
@@ -169,6 +170,12 @@ var AppController={
             return this.getFbUser()!==''&& this.getFbAccessToken()!=='';
         },
         //SoundCloud integration
+        saveScAccessToken:function(accessToken){
+            localStorage.setItem('sc_access_token',accessToken);
+        },
+        getScAccessToken:function(accessToken){
+            return localStorage.getItem('sc_access_token')||'';
+        },
         saveScUser:function(scUser){
             localStorage.setItem('sc_user_name',fbUser);
         },
