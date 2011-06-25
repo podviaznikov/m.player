@@ -750,8 +750,13 @@ footer.saved_playlist_toolbar
 #library_menu header h1
 {
     display:inline-block;
-    margin-right:5px;
+    margin-right:0px;
     cursor:pointer;
+}
+#library_menu header h1:after
+{
+    content:' / ';
+    text-decoration:none;
 }
 #library_menu header h1:hover
 {
@@ -767,11 +772,11 @@ footer.saved_playlist_toolbar
 {
     -webkit-appearance: textfield;
     float:right;
-    margin-right: 10px;
 }
 #library_menu header input[type='search']:focus
 {
     background-color:#FF6900;
+    -webkit-appearance: textfield;
 }
 .library_content_panel
 {

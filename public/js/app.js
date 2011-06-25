@@ -27,6 +27,8 @@ var AppController={
         Porridge.init(config,function(){
             //third column
             AppController.playlistView=new ui.PlayListView();
+            //init soundcloud
+            AppController.soundcloudConnect();
             //first column
             AppController.libraryMenu=new ui.LibraryMenu();
             //second column
@@ -48,7 +50,6 @@ var AppController={
             else{
                 AppController.playerCtrl.lastFmLogin();
             }
-            AppController.soundcloudConnect();
             AppController.facebookConnect();
         });
 	},
@@ -73,6 +74,7 @@ var AppController={
 	soundcloudConnect:function(){
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
+	        AppController.playlistView.showSoundCloud();
 	    }
 	    else{
             var accessToken=_.firstHashValue();
@@ -574,10 +576,12 @@ $(function(){
         artistsContent:$('#artists_library_content'),
         albumsContent:$('#albums_library_content'),
         playListsContent:$('#playlists_library_content'),
+        soundCloudContent:$('#soundcloud_library_content'),
         events:{
             'click #show_artists':'showArtists',
             'click #show_playlists':'showPlayLists',
             'click #show_albums':'showAlbums',
+            'click #show_soundcloud':'showSoundCloud',
             'blur input':'filterLibrary',
             'keyup input':'keyPressed'
         },
@@ -585,8 +589,8 @@ $(function(){
             this.artists=new ArtistsList();//should be first in this method!
             this.playLists=new PlayLists();//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','addAlbum',
-                'showArtists','showPlayLists','showAlbums',
-                'allArtistsLoaded', 'filterLibrary','keyPressed');
+                'showArtists','showPlayLists','showAlbums','showSoundCloud',
+                'allArtistsLoaded', 'filterLibrary','keyPressed','showSoundCloud');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -595,6 +599,9 @@ $(function(){
             this.artists.fetch();
             this.playLists.fetch();
         },
+        showSoundCloud:function(){
+            this.$('#show_soundcloud').removeClass('hidden');
+        }
         keyPressed:function(event){
             var keyCode=event.keyCode;
             if(keyCode===13){
@@ -614,14 +621,23 @@ $(function(){
             this.artistsContent.show();
             this.albumsContent.hide();
             this.playListsContent.hide();
+            this.soundCloudContent.hide();
         },
         showAlbums:function(){
             this.albumsContent.show();
             this.artistsContent.hide();
             this.playListsContent.hide();
+            this.soundCloudContent.hide();
         },
         showPlayLists:function(){
             this.playListsContent.show();
+            this.artistsContent.hide();
+            this.albumsContent.hide();
+            this.soundCloudContent.hide();
+        },
+        showSoundCloud:function(){
+            this.soundCloudContent.show();
+            this.playListsContent.hide();
             this.artistsContent.hide();
             this.albumsContent.hide();
         },

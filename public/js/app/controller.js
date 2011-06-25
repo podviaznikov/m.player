@@ -26,6 +26,8 @@ var AppController={
         Porridge.init(config,function(){
             //third column
             AppController.playlistView=new ui.PlayListView();
+            //init soundcloud
+            AppController.soundcloudConnect();
             //first column
             AppController.libraryMenu=new ui.LibraryMenu();
             //second column
@@ -47,7 +49,6 @@ var AppController={
             else{
                 AppController.playerCtrl.lastFmLogin();
             }
-            AppController.soundcloudConnect();
             AppController.facebookConnect();
         });
 	},
@@ -72,6 +73,7 @@ var AppController={
 	soundcloudConnect:function(){
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
+	        AppController.playlistView.showSoundCloud();
 	    }
 	    else{
             var accessToken=_.firstHashValue();

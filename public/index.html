@@ -67,10 +67,17 @@
 <section id="playing_visualization"></section>
 <section id="main_screen" class="screen_panel">
     <section id="library_menu" class="info_panel main_panel">
-        <header><h1 id="show_artists">Artists</h1><span>/</span><h1 id="show_albums">Albums</h1><span>/</span><h1 id="show_playlists">Playlists</h1><input placeholder="Search artist" type="search" maxlength="16" autocomplete="on"></header>
+        <header>
+            <h1 id="show_artists">Artists</h1>
+            <h1 id="show_albums">Albums</h1>
+            <h1 id="show_playlists">Playlists</h1>
+            <h1 id="show_soundcloud" class="hidden">SoundCloud</h1>
+            <input placeholder="Search artist" type="search" maxlength="16" autocomplete="on">
+        </header>
         <section id="artists_library_content" class="library_content_panel scrollable_panel"></section>
         <section id="albums_library_content" class="library_content_panel scrollable_panel"></section>
         <section id="playlists_library_content" class="library_content_panel scrollable_panel"></section>
+        <section id="soundcloud_library_content" class="library_content_panel scrollable_panel">Welcome!</section>
     </section>
     <section id="filtered_lib" class="info_panel main_panel">
         <header><h1>Albums</h1></header>
