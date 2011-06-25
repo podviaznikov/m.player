@@ -255,7 +255,7 @@ var SongsList=Porridge.Collection.extend({
         return _.uniq(this.pluck('album'))||[];
     },
     listOfGenres:function(){
-        return _.uniq(this.pluck('album'))||[];
+        return _.uniq(this.pluck('genre'))||[];
     },
     lisOfAlbumsModels:function(){
         var albums=new AlbumList();
