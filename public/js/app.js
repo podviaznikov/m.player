@@ -74,7 +74,7 @@ var AppController={
 	soundcloudConnect:function(){
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
-	        AppController.playlistView.showSoundCloud();
+	        AppController.playlistView.showSoundCloudMenu();
 	    }
 	    else{
             var accessToken=_.firstHashValue();
@@ -590,7 +590,7 @@ $(function(){
             this.playLists=new PlayLists();//should be first in this method!
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','addAlbum',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
-                'allArtistsLoaded', 'filterLibrary','keyPressed','showSoundCloud');
+                'allArtistsLoaded', 'filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
@@ -599,7 +599,7 @@ $(function(){
             this.artists.fetch();
             this.playLists.fetch();
         },
-        showSoundCloud:function(){
+        showSoundCloudMenu:function(){
             this.$('#show_soundcloud').removeClass('hidden');
         },
         keyPressed:function(event){

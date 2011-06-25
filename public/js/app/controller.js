@@ -73,7 +73,7 @@ var AppController={
 	soundcloudConnect:function(){
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
-	        AppController.playlistView.showSoundCloud();
+	        AppController.playlistView.showSoundCloudMenu();
 	    }
 	    else{
             var accessToken=_.firstHashValue();
