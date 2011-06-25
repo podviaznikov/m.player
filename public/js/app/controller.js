@@ -7,8 +7,8 @@ var AppController={
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
         $(window).bind('hashchange',function(){
-            AppController.facebookConnect();
             AppController.soundcloudConnect();
+            AppController.facebookConnect();
         });
         //fixing height for songs panel
         playingSongPanel.height('initial');
@@ -47,7 +47,8 @@ var AppController={
             else{
                 AppController.playerCtrl.lastFmLogin();
             }
-              AppController.facebookConnect();
+            AppController.soundcloudConnect();
+            AppController.facebookConnect();
         });
 	},
 	facebookConnect:function(){
