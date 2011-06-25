@@ -8,11 +8,14 @@ var dataService={
     getSession:function(callback){
         $.getJSON('/session_data',callback);
     },
-    initFB:function(callback){
-        $.getJSON('/fb_data',callback);
-    },
     getFbUser:function(authToken,callback){
         $.get('/fb_user?access_token='+authToken,function(data){
+            console.log(data);
+            callback(data);
+        });
+    },
+    getScUser:function(authToken,callback){
+        $.get('/sc_user?access_token='+authToken,function(data){
             console.log(data);
             callback(data);
         });

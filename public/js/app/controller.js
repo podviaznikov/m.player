@@ -8,6 +8,7 @@ var AppController={
         $('.scrollable_panel').height(newHeight);
         $(window).bind('hashchange',function(){
             AppController.facebookConnect();
+            AppController.soundcloudConnect();
         });
         //fixing height for songs panel
         playingSongPanel.height('initial');
@@ -54,7 +55,7 @@ var AppController={
 	        AppController.playerCtrl.fbLogin(AppController.settings.getFbUser());
 	    }
 	    else{
-            var accessToken=window.location.hash.substring(1).split('&')[0].split('=')[1];
+            var accessToken=_.firstHashValue();
             if(accessToken){
                 console.log('FB access token:',accessToken);
                 dataService.getFbUser(accessToken,function(userData){
@@ -62,6 +63,25 @@ var AppController={
                         AppController.settings.saveFbAccessToken(accessToken);
                         AppController.settings.saveFbUser(userData.name);
                         AppController.playerCtrl.fbLogin(userData.name);
+                    }
+                });
+            }
+	    }
+	},
+	soundcloudConnect:function(){
+	    if(AppController.settings.isScLogined()){
+	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
+	    }
+	    else{
+            var accessToken=_.firstHashValue();
+            if(accessToken){
+                console.log('SC access token:',accessToken);
+                dataService.getScUser(accessToken,function(userData){
+                    var scUsername=userData.full_name||userData.username;
+                    if(scUsername){
+                        AppController.settings.saveScAccessToken(accessToken);
+                        AppController.settings.saveScUser(scUsername);
+                        AppController.playerCtrl.scLogin(scUsername);
                     }
                 });
             }
@@ -144,6 +164,16 @@ var AppController={
         isFbLogined:function(){
             return this.getFbUser()!==''&& this.getFbAccessToken()!=='';
         },
+        //SoundCloud integration
+        saveScUser:function(scUser){
+            localStorage.setItem('sc_user_name',fbUser);
+        },
+        getScUser:function(accessToken){
+            return localStorage.getItem('sc_user_name')||'';
+        },
+        isScLogined:function(){
+            return this.getScUser()!==''&& this.getScAccessToken()!=='';
+        },
     },
     metadataParser:{
         parse:function(name,binaryData,callback){
@@ -153,7 +183,7 @@ var AppController={
                 console.log('Time: ' + ((endDate-startDate)/1000)+'s');
                 var tags = ID3.getAllTags(name);
                 callback(tags);
-            },{tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics", "picture"],
+            },{tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics"],
             dataReader: new FileAPIReader(binaryData)});
         }
     }
@@ -162,5 +192,8 @@ var AppController={
 _.mixin({
     contains:function(str1,str2){
         return str1.toUpperCase().indexOf(str2.toUpperCase())!==-1;
+    },
+    firstHashValue:function(){
+        return window.location.hash.substring(1).split('&')[0].split('=')[1];
     }
 });

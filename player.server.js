@@ -1,17 +1,16 @@
 /**(c) 2011 Enginimation Studio (http://enginimation.com). May be freely distributed under the MIT license.*/
-var util = require('util'),
-    express = require('express'),
-    connect = require('connect'),
-    fb = require('facebook-sdk'),
-    facebook = require('facebook-graph'),
-    LastFmNode = require('lastfm').LastFmNode,
-    lastfm = new LastFmNode({
+var util=require('util'),
+    express=require('express'),
+    connect=require('connect'),
+    soundcloud=require('soundcloud'),
+    facebook=require('facebook-graph'),
+    LastFmNode=require('lastfm').LastFmNode,
+    lastfm=new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
         secret: '99523abcd47bd54b5cfa10cf9bb81f20'
     });
     app = express.createServer();
 app.configure(function(){
-    app.use(fb.facebook({ appId: '222066051151670', secret: 'e4f631a8fcadb28744da863a9bf00e43' }));
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
     app.use(express.logger());
@@ -30,9 +29,8 @@ app.get('/app.mf', function(req, res){
     res.sendfile(__dirname + '/app.mf');
 });
 app.get('/fb_user',function(req,res){
-    util.log('Access token:',req.query.access_token);
     var accessToken=req.query.access_token;
-    util.log('Access token ready:',accessToken);
+    util.log('FB access token ready:',accessToken);
     res.contentType('application/json');
     var graph=new facebook.GraphAPI(accessToken);
     graph.getObject('me', function(error,data){
@@ -44,6 +42,15 @@ app.get('/fb_user',function(req,res){
             util.log('Data from FB:'+util.inspect(data));
             res.send(data);
         }
+    });
+});
+app.get('/sc_user',function(req,res){
+    var accessToken=req.query.access_token;
+    util.log('SC access token ready:',accessToken);
+    res.contentType('application/json');
+    soundcloud.saveOauthToken('90bfd2a3e6cf54515d6da428c1dd4d6a');
+    soundcloud.me(function(data){
+        res.send(data);
     });
 });
 app.get('/session_data',function(req,res){

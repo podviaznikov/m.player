@@ -17,13 +17,20 @@ $(function(){
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounter:$('#time_counter'),
+        //Last.fm integration
         lastFmLoginBtn:$('#lastfm_login_btn'),
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),
+        //facebook integration
         fbLoginBtn:$('#fb_login_btn'),
         fbLogoutBtn:$('#fb_logout_btn'),
         fbUsername:$('#fb_username'),
         fbControlPanel:$('#fb_control_panel'),
+        //sound cloud integration
+        scLoginBtn:$('#sc_login_btn'),
+        scLogoutBtn:$('#sc_logout_btn'),
+        scUsername:$('#sc_username'),
+        scControlPanel:$('#sc_control_panel'),
         events:{
             'click #play_toggle.paused': 'resume',
             'click #play_toggle.playing': 'pause',
@@ -45,18 +52,33 @@ $(function(){
             'click #volume_slider':'changedVolume',
             'click #music_slider':'changedMusicProgress',
             'click #lastfm_logout_btn':'lastFmExit',
-            'click #fb_logout_btn':'fbLogout'
+            'click #fb_logout_btn':'fbLogout',
+            'click #sc_logout_btn':'scLogout'
         },
         initialize:function(){
             this.bind('audio:update',this.updateAudioProgress);
             _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
-                    'lastFmLogin','lastFmExit','fbLogin','fbLogout');
+                    'lastFmLogin','lastFmExit','fbLogin','fbLogout','scLogin','scLogout');
             this.audioEl=new ui.AudioElement({player:this});
             //setting volume to audio element
             this.audioEl.setVolume(AppController.settings.getVolume());
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
+        },
+        scLogin:function(name){
+            this.scLoginBtn.hide();
+            this.scControlPanel.removeClass('unlogined');
+            this.scControlPanel.addClass('logined');
+            this.scUsername.html(name);
+        },
+        scLogout:function(){
+            this.scLoginBtn.show();
+            this.scControlPanel.removeClass('logined');
+            this.scControlPanel.addClass('unlogined');
+            this.scUsername.html('');
+            AppController.settings.saveScAccessToken('');
+            AppController.settings.saveScUser('');
         },
         fbLogin:function(name){
             this.fbLoginBtn.hide();
@@ -71,7 +93,6 @@ $(function(){
             this.fbUsername.html('');
             AppController.settings.saveFbAccessToken('');
             AppController.settings.saveFbUser('');
-
         },
         lastFmLogin:function(){
             this.lastFmLoginBtn.hide();
