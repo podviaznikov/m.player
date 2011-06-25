@@ -601,7 +601,7 @@ $(function(){
         },
         showSoundCloud:function(){
             this.$('#show_soundcloud').removeClass('hidden');
-        }
+        },
         keyPressed:function(event){
             var keyCode=event.keyCode;
             if(keyCode===13){
