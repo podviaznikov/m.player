@@ -176,7 +176,7 @@ var AppController={
             return localStorage.getItem('sc_access_token')||'';
         },
         saveScUser:function(scUser){
-            localStorage.setItem('sc_user_name',fbUser);
+            localStorage.setItem('sc_user_name',scUser);
         },
         getScUser:function(accessToken){
             return localStorage.getItem('sc_user_name')||'';
