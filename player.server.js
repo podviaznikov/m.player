@@ -48,8 +48,10 @@ app.get('/sc_user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('SC access token ready:',accessToken);
     res.contentType('application/json');
-    soundcloud.saveOauthToken('90bfd2a3e6cf54515d6da428c1dd4d6a');
+    soundcloud.saveOauthToken(accessToken);
     soundcloud.me(function(data){
+        util.log('SC resp:');
+        util.log(data.full_name);
         res.send(data);
     });
 });
