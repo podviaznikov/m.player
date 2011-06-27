@@ -38,7 +38,7 @@ $(function(){
             return this;
         },
         setSongsAndPlay:function(songs){
-            this.songs.refresh(songs);
+            this.songs.refresh(songs.models);
             //getting first song
             var firstSong=this.songs.first();
             if(firstSong){

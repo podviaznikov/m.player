@@ -45,6 +45,9 @@ var SongsList=Porridge.Collection.extend({
         }
         return song.get('name');
     },
+    buildAlbumModel:function(album,artist){
+        return new Album({name:album,artist:artist,songs:this.forAlbum(album)});
+    },
     forAlbum:function(album){
         return this.filter(function(song){return song.get('album')===album;});
     },
@@ -62,7 +65,7 @@ var SongsList=Porridge.Collection.extend({
                 self=this;
             _.each(albumsArray,function(album){
                 var songs=self.forAlbum(album);
-                albums.add(new Album({name:album,artist:artist,songs:songs}));
+                albums.add(new Album({name:album,artist:artist,songs:new SongsList(songs)}));
             });
         }
         return albums;
@@ -120,13 +123,22 @@ var ArtistsList=Porridge.Collection.extend({
     },
     comparator:function(song){return song.get('name');}
 });
+//name and artist fields
 var Album=Backbone.Model.extend({
     findImage:function(callback){
         dataService.getAlbumImage(this.get('artist'),this.get('name'),callback);
     },
 });
 var AlbumList=Backbone.Collection.extend({
-    model:Album
+    model:Album,
+    isExist:function(album){
+        var foundedAlbum=this.forModel(album);
+        return foundedAlbum!==undefined;
+    },
+    //find album model from list that has the same name
+    forModel:function(albumToFind){
+        return this.find(function(album){ return album.get('name') === albumToFind.get('name')});
+    }
 });
 var PlayList=Porridge.Model.extend({
     defaults:{

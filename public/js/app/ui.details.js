@@ -2,7 +2,7 @@
 $(function(){
 
     //2nd column view
-    ui.DetailsView = Backbone.View.extend({
+    ui.DetailsView=Backbone.View.extend({
         el:$('#filtered_lib'),
         libDetailsPanel:$('#filtered_lib_content'),
         artistBioPanel:$('#artist_bio'),
@@ -11,7 +11,6 @@ $(function(){
         },
         initialize:function(){
             _.bindAll(this, 'showAlbums','showAlbum','showPlayList','handleDragStart','showBio','hideBio');
-            this.mapping={};
             this.artistBioView=new ui.ArtistBioView();
         },
         showBio:function(artist){
@@ -26,24 +25,19 @@ $(function(){
             this.libDetailsPanel.show();
             this.libDetailsPanel.empty();
         },
-        showAlbums:function(albums,artist,songs){
+        //AlbumList and array of songs
+        showAlbums:function(albumsModels,songs){
             this.hideBio();
-            this.songs=songs;
-            if(albums){
-                for(var i=0;i<albums.length;i++){
-                    var album=albums[i],
-                        albumSongs=songs.forAlbum(album),
-                        albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:albumSongs}});
-                    this.mapping[album]=albumSongs;
-                    this.libDetailsPanel.append(albumView.render().el);
-                }
+            if(albumsModels){
+                albumsModels.each(this.showAlbum);
             }
-        },
-        showAlbum:function(album,artist,songs){
-            this.hideBio();
             this.songs=songs;
-            var albumView=new ui.AlbumView({model:{album:album,artist:artist,songs:songs}});
-            this.mapping[album]=songs;
+        },
+        showAlbum:function(albumModel){
+            this.hideBio();
+            //todo (anton) check this!!!
+            this.songs=albumModel.get('songs');
+            var albumView=new ui.AlbumView({model:albumModel});
             this.libDetailsPanel.append(albumView.render().el);
         },
         showPlayList:function(playList){
@@ -65,7 +59,7 @@ $(function(){
         }
     });
 
-    ui.ArtistBioView = Backbone.View.extend({
+    ui.ArtistBioView=Backbone.View.extend({
         el: $('#artist_bio'),
          initialize:function(){
             _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
@@ -88,7 +82,7 @@ $(function(){
          }
     });
 
-    ui.AlbumView = Backbone.View.extend({
+    ui.AlbumView=Backbone.View.extend({
         className:'lib_item_full_info_panel',
         tagName:'article',
         initialize: function(){
@@ -97,17 +91,17 @@ $(function(){
         render:function(){
             this.albumInfoView=new ui.AlbumInfoView({model:this.model});
             $(this.el).append(this.albumInfoView.render().el);
-            _.each(this.model.songs,this.addSong);
+            this.model.get('songs').each(this.addSong);
             return this;
         },
         addSong:function(song,key){
-            var view=new ui.SongView({model:song,key:key,songs:this.model.songs});
-            song.albumView = view;
+            var view=new ui.SongView({model:song,key:key,songs:this.model.get('songs')});
+            song.albumView=view;
             $(this.el).append(view.render().el);
         }
     });
 
-    ui.PlayListFullView = Backbone.View.extend({
+    ui.PlayListFullView=Backbone.View.extend({
         className:'lib_item_full_info_panel',
         tagName:'article',
         tpl:$('#detailed_playlist_info_tpl').html(),
@@ -145,9 +139,9 @@ $(function(){
         }
     });
 
-    ui.AlbumInfoView = Backbone.View.extend({
-        className: 'detailed_album_info_panel box',
-        tagName: 'section',
+    ui.AlbumInfoView=Backbone.View.extend({
+        className:'detailed_album_info_panel box',
+        tagName:'section',
         tpl:$('#detailed_album_info_tpl').html(),
         events:{
             'click':'playSongs'
@@ -164,15 +158,15 @@ $(function(){
             $(this.el).append(html);
         },
         render:function(){
-            dataService.getAlbumInfo(this.model.artist,this.model.album,this.renderAlbumInfo);
+            dataService.getAlbumInfo(this.model.get('artist'),this.model.get('name'),this.renderAlbumInfo);
             return this;
         },
         playSongs:function(){
-            AppController.playlistView.setSongsAndPlay(this.model.songs);
+            AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
         }
     });
 
-    ui.SongView = Backbone.View.extend({
+    ui.SongView=Backbone.View.extend({
         className:'song-data',
         tpl:$('#song_tpl').html(),
         events:{
@@ -215,7 +209,8 @@ $(function(){
             AppController.playlistView.setSongsAndPlay(songs);
             if(this.options.playList){
                 AppController.playlistView.setPlayListModel(this.options.playList);
-            }else{
+            }
+            else{
                 AppController.playlistView.removePlayListModel();
             }
         }

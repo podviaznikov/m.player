@@ -18,6 +18,7 @@ $(function(){
         initialize:function(){
             this.artists=new ArtistsList();//should be first in this method!
             this.playLists=new PlayLists();//should be first in this method!
+            this.albums=new AlbumList();
             _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','addAlbum',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded', 'filterLibrary','keyPressed','showSoundCloudMenu');
@@ -72,8 +73,16 @@ $(function(){
             this.albumsContent.hide();
         },
         addAlbum:function(album){
-            var view=new ui.AlbumMenuView({model:album});
-            this.albumsContent.append(view.render().el);
+            if(!this.albums.isExist(album)){
+                this.albums.add(album);
+                var view=new ui.AlbumMenuView({model:album});
+                this.albumsContent.append(view.render().el);
+            }
+            else{
+                var albumFromList=this.albums.forModel(album);
+                albumFromList.get('songs').add(album.get('songs').models);
+                albumFromList.trigger('add');
+            }
         },
         //not binded to this because used in addArtist
         addAlbums:function(albums){
@@ -168,11 +177,11 @@ $(function(){
         selectArtist:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
-            AppController.detailsView.showAlbums(this.model.get('albums'),this.model.get('name'),this.model.songs);
+            AppController.detailsView.showAlbums(this.model.albumsModels,this.model.songs);
         },
         playArtistSongs:function(){
             this.selectArtist();
-            AppController.playlistView.setSongsAndPlay(this.model.songs.models);
+            AppController.playlistView.setSongsAndPlay(this.model.songs);
         },
         playAlbumSongs:function(e){
             var album=e.currentTarget.dataset.album,
@@ -188,8 +197,8 @@ $(function(){
         },
         selectAlbum:function(e){
             var album=e.currentTarget.dataset.album,
-                albumSongs=this.model.songs.forAlbum(album);
-            AppController.detailsView.showAlbum(album,this.model.get('name'),albumSongs);
+                albumModel=this.model.songs.buildAlbumModel(album,this.model.get('name'));
+            AppController.detailsView.showAlbum(albumModel);
         },
         showArtistBio:function(){
             AppController.detailsView.showBio(this.model);
@@ -213,6 +222,7 @@ $(function(){
         initialize:function(){
             _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs');
             this.model.bind('change',this.render);
+            this.model.bind('add',this.render);
             this.model.view=this;
         },
         render:function(){
@@ -236,8 +246,7 @@ $(function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             var albumSongs=this.model.get('songs');
-            //AppController.detailsView.songs.refresh(albumSongs.models);
-            AppController.detailsView.showAlbum(this.model.get('name'),this.model.get('artist'),albumSongs);
+            AppController.detailsView.showAlbum(this.model);
         }
     });
 
@@ -275,7 +284,7 @@ $(function(){
         },
         playPlayList:function(){
            this.selectPlayList();
-            AppController.playlistView.setSongsAndPlay(this.model.get('songs'));
+            AppController.playlistView.setSongsAndPlay(this.model.findSongs());
         },
         deletePlaylist:function(){
             this.model.destroy();
