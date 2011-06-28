@@ -44,26 +44,31 @@ var AppController={
 	    var accessToken=_.firstHashValue();
         if(accessToken){
             console.log('Auth token:',accessToken);
-            //facebook authentication
-            dataService.getFbUser(accessToken,function(userData){
-                if(userData.name){
-                    AppController.settings.saveFbAccessToken(accessToken);
-                    AppController.settings.saveFbUser(userData.name);
-                    AppController.playerCtrl.fbLogin(userData.name);
-                }
-            });
-            //soundcloud authentication
-            dataService.getScUser(accessToken,function(userData){
-                var scUsername=userData.full_name||userData.username;
-                if(scUsername){
-                    AppController.settings.saveScAccessToken(accessToken);
-                    AppController.settings.saveScUser(scUsername);
-                    AppController.playerCtrl.scLogin(scUsername);
-                    AppController.libraryMenu.showSoundCloudMenu();
-                    AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
-                    AppController.libraryMenu.soundCloudTracks.fetch();
-                }
-            });
+            if(_.secondHashKey()==='scope'){
+                //soundcloud authentication
+                dataService.getScUser(accessToken,function(userData){
+                    var scUsername=userData.full_name||userData.username;
+                    if(scUsername){
+                        AppController.settings.saveScAccessToken(accessToken);
+                        AppController.settings.saveScUser(scUsername);
+                        AppController.playerCtrl.scLogin(scUsername);
+                        AppController.libraryMenu.showSoundCloudMenu();
+                        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
+                        AppController.libraryMenu.soundCloudTracks.fetch();
+                    }
+                });
+
+            }
+            else{
+                //facebook authentication
+                dataService.getFbUser(accessToken,function(userData){
+                    if(userData.name){
+                        AppController.settings.saveFbAccessToken(accessToken);
+                        AppController.settings.saveFbUser(userData.name);
+                        AppController.playerCtrl.fbLogin(userData.name);
+                    }
+                });
+            }
         }
 	},
 	facebookConnect:function(){
@@ -211,6 +216,9 @@ _.mixin({
     },
     firstHashValue:function(){
         return window.location.hash.substring(1).split('&')[0].split('=')[1];
+    },
+    secondHashKey:function(){
+        return window.location.hash.substring(1).split('&')[1].split('=')[0];
     }
 });
 "use strict";
