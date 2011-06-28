@@ -53,8 +53,6 @@ app.get('/sc/user',function(req,res){
     res.contentType('application/json');
     soundcloud.saveOauthToken(accessToken);
     soundcloud.me(function(data){
-        util.log('SC resp:');
-        util.log(data.full_name);
         res.send(data);
     });
 });
@@ -112,7 +110,6 @@ app.post('/song_played',function(req,res){
              }
         });
     }
-
 });
 app.get('/auth',function(req,res){
     var token=req.query.token,
