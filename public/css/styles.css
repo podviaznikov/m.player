@@ -356,17 +356,6 @@ article.lib-item-data label:after
     font-weight:bold;
     color:black;
 }
-#album_info_view
-{
-    display:none;
-    position:fixed;
-    z-index:10;
-    border: 1px solid rgba(0, 0, 0, 0.21);
-    border-radius: 8px;
-    background-color: white;
-    color: black;
-    padding: 5px 5px 0px 5px;
-}
 
 .detailed_album_info
 {

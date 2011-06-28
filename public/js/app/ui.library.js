@@ -20,7 +20,7 @@ $(function(){
             this.playLists=new PlayLists();//should be first in this method!
             this.albums=new AlbumList();
             this.soundCloudTracks=new SoundCloudTrackList();
-            _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack',
+            _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack','addSoundCloudTracks',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
@@ -28,6 +28,7 @@ $(function(){
             this.playLists.bind('add',this.addPlayList);
             this.playLists.bind('refresh',this.addPlayLists);
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
+            this.soundCloudTracks.bind('refresh',this.addSoundCloudTracks);
             this.artists.fetch();
             this.playLists.fetch();
         },
@@ -107,6 +108,9 @@ $(function(){
         addSoundCloudTrack:function(soundCloudTrack){
             var view=new ui.SoundCloudTrackMenuView({model:soundCloudTrack});
             this.soundCloudContent.append(view.render().el);
+        },
+        addSoundCloudTracks:function(){
+            this.soundCloudTracks.each(this.addSoundCloudTrack);
         },
         addPlayLists:function(){
             this.playLists.each(this.addPlayList);

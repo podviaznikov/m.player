@@ -8,8 +8,7 @@ var AppController={
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
         $(window).bind('hashchange',function(){
-            AppController.soundcloudConnect();
-            AppController.facebookConnect();
+            AppController.handleAuthentication();
         });
         //fixing height for songs panel
         playingSongPanel.height('initial');
@@ -31,44 +30,43 @@ var AppController={
             AppController.libraryMenu=new ui.LibraryMenu();
             //init soundcloud
             AppController.soundcloudConnect();
+            //init facebook
+            AppController.facebookConnect();
+            //init last.fm
+            AppController.lastfmConnect();
             //second column
             AppController.detailsView=new ui.DetailsView();
-            //getting session info if user not logined to last.fm
-            if(!AppController.settings.isLastFmLogined()){
-                dataService.getSession(function(data){
-                    console.log('Last.fm session data',data);
-                    AppController.settings.saveLastFmUser(data.user);
-                    AppController.settings.saveLastFmSessionKey(data.key);
-                    if(AppController.settings.isLastFmLogined()){
-                        AppController.playerCtrl.lastFmLogin();
-                    }
-                    else{
-                        AppController.playerCtrl.lastFmExit();
-                    }
-                });
-            }
-            else{
-                AppController.playerCtrl.lastFmLogin();
-            }
-            AppController.facebookConnect();
         });
+	},
+	handleAuthentication:function(){
+	    var accessToken=_.firstHashValue();
+        if(accessToken){
+            console.log('Auth token:',accessToken);
+            //facebook authentication
+            dataService.getFbUser(accessToken,function(userData){
+                if(userData.name){
+                    AppController.settings.saveFbAccessToken(accessToken);
+                    AppController.settings.saveFbUser(userData.name);
+                    AppController.playerCtrl.fbLogin(userData.name);
+                }
+            });
+            //soundcloud authentication
+            dataService.getScUser(accessToken,function(userData){
+                var scUsername=userData.full_name||userData.username;
+                if(scUsername){
+                    AppController.settings.saveScAccessToken(accessToken);
+                    AppController.settings.saveScUser(scUsername);
+                    AppController.playerCtrl.scLogin(scUsername);
+                    AppController.libraryMenu.showSoundCloudMenu();
+                }
+            });
+            AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
+            AppController.libraryMenu.soundCloudTracks.fetch();
+        }
 	},
 	facebookConnect:function(){
 	    if(AppController.settings.isFbLogined()){
 	        AppController.playerCtrl.fbLogin(AppController.settings.getFbUser());
-	    }
-	    else{
-            var accessToken=_.firstHashValue();
-            if(accessToken){
-                console.log('FB access token:',accessToken);
-                dataService.getFbUser(accessToken,function(userData){
-                    if(userData.name){
-                        AppController.settings.saveFbAccessToken(accessToken);
-                        AppController.settings.saveFbUser(userData.name);
-                        AppController.playerCtrl.fbLogin(userData.name);
-                    }
-                });
-            }
 	    }
 	},
 	soundcloudConnect:function(){
@@ -78,23 +76,24 @@ var AppController={
 	        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
 	        AppController.libraryMenu.soundCloudTracks.fetch();
 	    }
-	    else{
-            var accessToken=_.firstHashValue();
-            if(accessToken){
-                console.log('SC access token:',accessToken);
-                dataService.getScUser(accessToken,function(userData){
-                    var scUsername=userData.full_name||userData.username;
-                    if(scUsername){
-                        AppController.settings.saveScAccessToken(accessToken);
-                        AppController.settings.saveScUser(scUsername);
-                        AppController.playerCtrl.scLogin(scUsername);
-                        AppController.libraryMenu.showSoundCloudMenu();
-                    }
-                });
-                AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
-	            AppController.libraryMenu.soundCloudTracks.fetch();
-            }
-	    }
+	},
+	lastfmConnect:function(){
+	    if(!AppController.settings.isLastFmLogined()){
+            dataService.getSession(function(data){
+                console.log('Last.fm session data',data);
+                AppController.settings.saveLastFmUser(data.user);
+                AppController.settings.saveLastFmSessionKey(data.key);
+                if(AppController.settings.isLastFmLogined()){
+                    AppController.playerCtrl.lastFmLogin();
+                }
+                else{
+                    AppController.playerCtrl.lastFmExit();
+                }
+            });
+        }
+        else{
+            AppController.playerCtrl.lastFmLogin();
+        }
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
@@ -618,7 +617,7 @@ $(function(){
             this.playLists=new PlayLists();//should be first in this method!
             this.albums=new AlbumList();
             this.soundCloudTracks=new SoundCloudTrackList();
-            _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack',
+            _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack','addSoundCloudTracks',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
@@ -626,6 +625,7 @@ $(function(){
             this.playLists.bind('add',this.addPlayList);
             this.playLists.bind('refresh',this.addPlayLists);
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
+            this.soundCloudTracks.bind('refresh',this.addSoundCloudTracks);
             this.artists.fetch();
             this.playLists.fetch();
         },
@@ -705,6 +705,9 @@ $(function(){
         addSoundCloudTrack:function(soundCloudTrack){
             var view=new ui.SoundCloudTrackMenuView({model:soundCloudTrack});
             this.soundCloudContent.append(view.render().el);
+        },
+        addSoundCloudTracks:function(){
+            this.soundCloudTracks.each(this.addSoundCloudTrack);
         },
         addPlayLists:function(){
             this.playLists.each(this.addPlayList);
