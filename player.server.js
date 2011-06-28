@@ -134,17 +134,17 @@ app.get('/auth',function(req,res){
 app.get('/artist/:artistName/image',function(req,res){
     var image='css/images/no_picture.png';
     util.log('Getting image for='+req.params.artistName);
-    var request = lastfm.request('artist.getInfo', {
+    var request=lastfm.request('artist.getInfo',{
         artist: req.params.artistName,
-        handlers: {
-            success: function(apiResp) {
+        handlers:{
+            success:function(apiResp) {
                 var data = JSON.parse(apiResp);
                 if(data && data.artist && data.artist.image[2]){
                     image=data.artist.image[2]['#text']||'css/images/no_picture.png';
                 }
                 res.send(image);
             },
-            error: function(error) {
+            error:function(error) {
                 res.send(image);
             }
         }
@@ -154,16 +154,15 @@ app.get('/artist/:artistName/bio',function(req,res){
     util.log('Getting bio for='+req.params.artistName);
     var bio={},
         artistName=req.params.artistName;
-    var request=lastfm.request('artist.getInfo', {
+    lastfm.request('artist.getInfo',{
         artist:artistName,
         handlers:{
-            success:function(apiResp) {
+            success:function(apiResp){
                 var data=JSON.parse(apiResp);
                 if(data && data.artist && data.artist.bio){
                     bio=data.artist.bio;
                 }
-                nbs.findArtistProfileByName(artistName,function(data)
-                {
+                nbs.findArtistProfileByName(artistName,function(err,data){
                     res.contentType('application/json');
                     bio.profile=data;
                     res.send(bio);
@@ -180,18 +179,18 @@ app.get('/artist/:artistName/bio',function(req,res){
 app.get('/artist/:artistName/album/:albumTitle/image',function(req,res){
     var image='css/images/no_picture.png';
     util.log('Getting image for='+req.params.albumTitle);
-    var request = lastfm.request('album.getInfo', {
-        artist: req.params.artistName,
-        album:  req.params.albumTitle,
-        handlers: {
-            success: function(apiResp) {
-                var data = JSON.parse(apiResp);
+    lastfm.request('album.getInfo',{
+        artist:req.params.artistName,
+        album:req.params.albumTitle,
+        handlers:{
+            success:function(apiResp) {
+                var data=JSON.parse(apiResp);
                 if(data && data.album && data.album.image[2]){
                     image=data.album.image[2]['#text']||'css/images/no_picture.png';
                 }
                 res.send(image);
             },
-            error: function(error) {
+            error:function(error) {
                 res.send(image);
             }
         }
@@ -200,18 +199,18 @@ app.get('/artist/:artistName/album/:albumTitle/image',function(req,res){
 app.get('/artist/:artistName/album/:albumTitle/poster',function(req,res){
     var image='css/images/no_picture.png';
     util.log('Getting image for='+req.params.albumTitle);
-    var request = lastfm.request('album.getInfo', {
-        artist: req.params.artistName,
-        album:  req.params.albumTitle,
-        handlers: {
-            success: function(apiResp) {
-                var data = JSON.parse(apiResp);
+    lastfm.request('album.getInfo',{
+        artist:req.params.artistName,
+        album:req.params.albumTitle,
+        handlers:{
+            success:function(apiResp) {
+                var data=JSON.parse(apiResp);
                 if(data && data.album && data.album.image[4]){
                     image=data.album.image[4]['#text']||'css/images/no_picture.png';
                 }
                 res.send(image);
             },
-            error: function(error) {
+            error:function(error) {
                 res.send(image);
             }
         }
@@ -219,15 +218,14 @@ app.get('/artist/:artistName/album/:albumTitle/poster',function(req,res){
 });
 app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
     util.log('Getting image for='+req.params.albumTitle);
-    var artist = req.params.artistName,
-        album = req.params.albumTitle,
-        request = lastfm.request('album.getInfo', {
-        artist: artist,
-        album:  album,
+    var artist=req.params.artistName,
+        album=req.params.albumTitle,
+        request=lastfm.request('album.getInfo', {
+        artist:artist,
+        album:album,
         handlers: {
-            success: function(apiResp) {
-                var data = JSON.parse(apiResp);
-                data = data.album;
+            success:function(apiResp) {
+                var data=JSON.parse(apiResp).album;
                 if(!data){
                     var image='css/images/no_picture.png',
                         albumName=album,
@@ -253,7 +251,7 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }
            },
-            error: function(error) {
+            error:function(error) {
                 var image='css/images/no_picture.png',
                     albumName=album,
                     releaseDate='no information',

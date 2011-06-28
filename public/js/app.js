@@ -14,7 +14,6 @@ var AppController={
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
-        this.soundCloudTracks=new SoundCloudTrackList();
 		this.appView=new ui.AppView();
 		this.playerCtrl=new ui.PlayerCtrl();
 		this.visualizationView=new ui.VisualizationView();
@@ -76,8 +75,8 @@ var AppController={
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
 	        AppController.libraryMenu.showSoundCloudMenu();
-	        AppController.soundCloudTracks.url=AppController.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
-	        AppController.soundCloudTracks.fetch();
+	        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
+	        AppController.libraryMenu.soundCloudTracks.fetch();
 	    }
 	    else{
             var accessToken=_.firstHashValue();
@@ -92,8 +91,8 @@ var AppController={
                         AppController.libraryMenu.showSoundCloudMenu();
                     }
                 });
-                AppController.soundCloudTracks.url=AppController.soundCloudTracks.url+'?access_token='+accessToken;
-	            AppController.soundCloudTracks.fetch();
+                AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
+	            AppController.libraryMenu.soundCloudTracks.fetch();
             }
 	    }
 	},
@@ -618,14 +617,15 @@ $(function(){
             this.artists=new ArtistsList();//should be first in this method!
             this.playLists=new PlayLists();//should be first in this method!
             this.albums=new AlbumList();
-            _.bindAll(this, 'addArtist', 'addPlayList','addPlayLists','addAlbum',
+            this.soundCloudTracks=new SoundCloudTrackList();
+            _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
-                'allArtistsLoaded', 'filterLibrary','keyPressed','showSoundCloudMenu');
+                'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
             this.playLists.bind('refresh',this.addPlayLists);
-
+            this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
             this.artists.fetch();
             this.playLists.fetch();
         },
@@ -701,6 +701,10 @@ $(function(){
         addPlayList:function(playList){
             var view=new ui.PlayListMenuView({model:playList});
             this.playListsContent.append(view.render().el);
+        },
+        addSoundCloudTrack:function(soundCloudTrack){
+            var view=new ui.SoundCloudTrackMenuView({model:soundCloudTrack});
+            this.soundCloudContent.append(view.render().el);
         },
         addPlayLists:function(){
             this.playLists.each(this.addPlayList);
@@ -868,7 +872,7 @@ $(function(){
             return this;
         },
         renderPlayListInfo:function(image){
-            var html = _.template(this.tpl,{
+            var html=_.template(this.tpl,{
                 image:image,
                 name:this.model.get('name'),
                 genres:this.model.findGenres(),
@@ -888,6 +892,20 @@ $(function(){
         deletePlaylist:function(){
             this.model.destroy();
             this.$(this.el).remove();
+        }
+    });
+
+    ui.SoundCloudTrackMenuView=Backbone.View.extends({
+        className:'lib-item-data box',
+        tagName:'article',
+        tagName:'article',
+        tpl:$('#sound_cloud_track_menu_tpl').html(),
+        render:function(){
+            var html=_.template(this.tpl,{
+                name:this.model.get('name'),
+            });
+            $(this.el).html(html);
+            return this;
         }
     });
 });

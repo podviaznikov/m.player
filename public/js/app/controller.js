@@ -13,7 +13,6 @@ var AppController={
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
-        this.soundCloudTracks=new SoundCloudTrackList();
 		this.appView=new ui.AppView();
 		this.playerCtrl=new ui.PlayerCtrl();
 		this.visualizationView=new ui.VisualizationView();
@@ -75,8 +74,8 @@ var AppController={
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
 	        AppController.libraryMenu.showSoundCloudMenu();
-	        AppController.soundCloudTracks.url=AppController.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
-	        AppController.soundCloudTracks.fetch();
+	        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
+	        AppController.libraryMenu.soundCloudTracks.fetch();
 	    }
 	    else{
             var accessToken=_.firstHashValue();
@@ -91,8 +90,8 @@ var AppController={
                         AppController.libraryMenu.showSoundCloudMenu();
                     }
                 });
-                AppController.soundCloudTracks.url=AppController.soundCloudTracks.url+'?access_token='+accessToken;
-	            AppController.soundCloudTracks.fetch();
+                AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
+	            AppController.libraryMenu.soundCloudTracks.fetch();
             }
 	    }
 	},
