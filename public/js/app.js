@@ -11,6 +11,8 @@ var AppController={
             console.log('Hashchange fired!');
             AppController.handleAuthentication();
         });
+        //handle auth token in URL
+        AppController.handleAuthentication();
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
