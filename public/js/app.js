@@ -895,7 +895,7 @@ $(function(){
         }
     });
 
-    ui.SoundCloudTrackMenuView=Backbone.View.extends({
+    ui.SoundCloudTrackMenuView=Backbone.View.extend({
         className:'lib-item-data box',
         tagName:'article',
         tpl:$('#sound_cloud_track_menu_tpl').html(),
