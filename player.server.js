@@ -3,13 +3,16 @@ var util=require('util'),
     express=require('express'),
     connect=require('connect'),
     soundcloud=require('soundcloud'),
+    nbs=require('nbs'),
     facebook=require('facebook-graph'),
     LastFmNode=require('lastfm').LastFmNode,
     lastfm=new LastFmNode({
         api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
         secret: '99523abcd47bd54b5cfa10cf9bb81f20'
     });
-    app = express.createServer();
+    app=express.createServer();
+
+nbs.init('mplayer');
 app.configure(function(){
     app.use(connect.favicon(__dirname + '/public/16.png'));
     //logger
@@ -28,7 +31,7 @@ app.get('/app.mf', function(req, res){
     res.header('Content-Type', 'text/cache-manifest');
     res.sendfile(__dirname + '/app.mf');
 });
-app.get('/fb_user',function(req,res){
+app.get('/fb/user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('FB access token ready:',accessToken);
     res.contentType('application/json');
@@ -44,7 +47,7 @@ app.get('/fb_user',function(req,res){
         }
     });
 });
-app.get('/sc_user',function(req,res){
+app.get('/sc/user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('SC access token ready:',accessToken);
     res.contentType('application/json');
@@ -52,6 +55,16 @@ app.get('/sc_user',function(req,res){
     soundcloud.me(function(data){
         util.log('SC resp:');
         util.log(data.full_name);
+        res.send(data);
+    });
+});
+app.get('/sc/tracks',function(req,res){
+    var accessToken=req.query.access_token;
+    util.log('SC access token ready:',accessToken);
+    res.contentType('application/json');
+    soundcloud.saveOauthToken(accessToken);
+    soundcloud.myPrivateStreamableTracks(function(data){
+        util.log('SC resp:'+util.inspect(data));
         res.send(data);
     });
 });
@@ -139,19 +152,24 @@ app.get('/artist/:artistName/image',function(req,res){
 });
 app.get('/artist/:artistName/bio',function(req,res){
     util.log('Getting bio for='+req.params.artistName);
-    var bio={};
-    var request = lastfm.request('artist.getInfo', {
-        artist: req.params.artistName,
-        handlers: {
-            success: function(apiResp) {
-                var data = JSON.parse(apiResp);
+    var bio={},
+        artistName=req.params.artistName;
+    var request=lastfm.request('artist.getInfo', {
+        artist:artistName,
+        handlers:{
+            success:function(apiResp) {
+                var data=JSON.parse(apiResp);
                 if(data && data.artist && data.artist.bio){
                     bio=data.artist.bio;
                 }
-                res.contentType('application/json');
-                res.send(bio);
+                nbs.findArtistProfileByName(artistName,function(data)
+                {
+                    res.contentType('application/json');
+                    bio.profile=data;
+                    res.send(bio);
+                });
             },
-            error: function(error) {
+            error:function(error) {
                 res.contentType('application/json');
                 res.send(bio);
             }

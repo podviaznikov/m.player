@@ -168,3 +168,8 @@ var PlayList=Porridge.Model.extend({
     }
 });
 var PlayLists=Porridge.Collection.extend({model: PlayList});
+var SoundCloudTrack=Backbone.Model.extend({});
+var SoundCloudTrackList=Backbone.Collection.extend({
+    model:SoundCloudTrack,
+    url:'/sc/tracks'
+});

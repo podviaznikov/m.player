@@ -9,13 +9,13 @@ var dataService={
         $.getJSON('/session_data',callback);
     },
     getFbUser:function(authToken,callback){
-        $.getJSON('/fb_user?access_token='+authToken,function(data){
+        $.getJSON('/fb/user?access_token='+authToken,function(data){
             console.log(data);
             callback(data);
         });
     },
     getScUser:function(authToken,callback){
-        $.getJSON('/sc_user?access_token='+authToken,function(data){
+        $.getJSON('/sc/user?access_token='+authToken,function(data){
             console.log(data);
             callback(data);
         });
