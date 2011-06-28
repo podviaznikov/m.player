@@ -7,8 +7,10 @@ var AppController={
         var newHeight=$(window).height()-105,
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
-        //always check url (hash) of the loaded page (maybe auth token are present)
-        AppController.handleAuthentication();
+        $(window).bind('hashchange',function(){
+            console.log('Hashchange fired!');
+            AppController.handleAuthentication();
+        });
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
@@ -23,6 +25,7 @@ var AppController={
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,function(){
+            console.log('Inited views and social services/');
             //third column
             AppController.playlistView=new ui.PlayListView();
             //first column
@@ -57,10 +60,10 @@ var AppController={
                     AppController.settings.saveScUser(scUsername);
                     AppController.playerCtrl.scLogin(scUsername);
                     AppController.libraryMenu.showSoundCloudMenu();
+                    AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
+                    AppController.libraryMenu.soundCloudTracks.fetch();
                 }
             });
-            AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
-            AppController.libraryMenu.soundCloudTracks.fetch();
         }
 	},
 	facebookConnect:function(){

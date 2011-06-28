@@ -35,7 +35,7 @@ var dataService={
         var jqxhr = $.get('/artist/'+artist+'/image',function(data){
             callback(data);
         })
-        .error(function() { callback('css/images/no_picture.png'); })
+        .error(function(){ callback('css/images/no_picture.png'); })
     },
     getAlbumImage:function(artist,album,callback){
         artist=escape(artist);
@@ -43,7 +43,7 @@ var dataService={
         var jqxhr=$.get('/artist/'+artist+'/album/'+album+'/image',function(data){
             callback(data);
         })
-        .error(function() { callback('css/images/no_picture.png'); })
+        .error(function(){ callback('css/images/no_picture.png'); })
     },
     getAlbumPoster:function(artist,album,callback){
         artist=escape(artist);
@@ -51,7 +51,7 @@ var dataService={
         var jqxhr=$.get('/artist/'+artist+'/album/'+album+'/poster',function(data){
             callback(data);
         })
-        .error(function() { callback('css/images/no_picture.png'); })
+        .error(function(){ callback('css/images/no_picture.png'); })
     },
     getAlbumInfo:function(artist,album,callback){
         artist=escape(artist);
@@ -59,7 +59,7 @@ var dataService={
         var jqxhr=$.get('/artist/'+artist+'/album/'+album+'/info',function(data){
             callback(data);
         })
-        .error(function() {
+        .error(function(){
             var image='css/images/no_picture.png',
                 albumName=album,
                 releaseDate='no information',
@@ -73,7 +73,7 @@ var dataService={
         var jqxhr=$.getJSON('/artist/'+artist+'/bio',function(data){
             callback(data);
         })
-        .error(function() {
+        .error(function(){
             callback({});
         });
     }

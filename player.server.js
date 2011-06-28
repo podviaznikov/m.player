@@ -53,6 +53,10 @@ app.get('/sc/user',function(req,res){
     res.contentType('application/json');
     soundcloud.saveOauthToken(accessToken);
     soundcloud.me(function(data){
+        util.log('SC profile received');
+        if(data){
+            util.log(util.inspect(data));
+        }
         res.send(data);
     });
 });
