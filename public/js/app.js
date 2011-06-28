@@ -898,7 +898,6 @@ $(function(){
     ui.SoundCloudTrackMenuView=Backbone.View.extends({
         className:'lib-item-data box',
         tagName:'article',
-        tagName:'article',
         tpl:$('#sound_cloud_track_menu_tpl').html(),
         render:function(){
             var html=_.template(this.tpl,{
