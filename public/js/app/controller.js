@@ -6,9 +6,8 @@ var AppController={
         var newHeight=$(window).height()-105,
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
-        $(window).bind('hashchange',function(){
-            AppController.handleAuthentication();
-        });
+        //always check url (hash) of the loaded page (maybe auth token are present)
+        AppController.handleAuthentication();
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);

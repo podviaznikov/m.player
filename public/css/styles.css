@@ -429,15 +429,16 @@ article.lib-item-data label:after
 {
     min-height:120px;
     height:120px;
-    height:120px;
 }
-    #song_image,#song_info
+    #song_image
     {
-        display:inline-block;
+        float:left;
+        width:120px;
     }
     #song_info
     {
         vertical-align:top;
+        margin-left:120px;
     }
     #song_info h1
     {
@@ -833,6 +834,10 @@ footer.saved_playlist_toolbar
     #music_slider
     {
         width:47%;
+    }
+    #library_menu header input[type="search"]
+    {
+        width:70px;
     }
 }
 @media screen and (min-width: 801px) and (max-width: 900px)

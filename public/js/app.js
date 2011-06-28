@@ -7,9 +7,8 @@ var AppController={
         var newHeight=$(window).height()-105,
             playingSongPanel=$('#playing_songs');
         $('.scrollable_panel').height(newHeight);
-        $(window).bind('hashchange',function(){
-            AppController.handleAuthentication();
-        });
+        //always check url (hash) of the loaded page (maybe auth token are present)
+        AppController.handleAuthentication();
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
@@ -340,7 +339,7 @@ var ArtistsList=Porridge.Collection.extend({
 var Album=Backbone.Model.extend({
     findImage:function(callback){
         dataService.getAlbumImage(this.get('artist'),this.get('name'),callback);
-    },
+    }
 });
 var AlbumList=Backbone.Collection.extend({
     model:Album,
@@ -1042,9 +1041,6 @@ $(function(){
                 album:this.selectedSong.get('album'),
                 year:this.selectedSong.get('year')
             }));
-            //fixing max width for song info to prevent problems with big song names
-            var playingListPanelWidth=this.el.width();
-            this.$('#song_info').css('max-width',playingListPanelWidth-115);
         },
         saveFileURL:function(url){
             this.fileURL=url;
