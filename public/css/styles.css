@@ -741,15 +741,19 @@ footer.saved_playlist_toolbar
 {
     color:#FF6900;
 }
-#library_menu header h1
+#library_menu header h1,#filtered_lib header h1
 {
     display:inline-block;
-    margin-right:0px;
+    margin-right:1px;
+    margin-left:1px;
+}
+#library_menu header h1
+{
     cursor:pointer;
 }
-#library_menu header h1:after
+#library_menu header h1:after,#filtered_lib header h1:after
 {
-    content:' / ';
+    content:' /';
 }
 #library_menu header h1:hover
 {
