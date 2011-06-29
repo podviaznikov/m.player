@@ -77,7 +77,7 @@ $(function(){
         renderArtistBio:function(data){
             var html= _.template(this.tpl,{
                 bio:unescape(data.summary),
-                profiles:data.profile
+                profiles:data.profile||{}
             });
             $(this.el).html(html);
         },

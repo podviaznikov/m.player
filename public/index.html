@@ -31,7 +31,7 @@
             <p>Player has integration with Last.fm and Facebook. You can login with Last.fm account and your music will be scrobbled automatically to Last.fm.
                 Also if you login with Facebook account all information about listened songs will be available on your Facebook wall.</p>
             <p>Project is open-source. You can join development <a href="https://github.com/podviaznikov/m.player">here</a>.</p>
-            <p>Current version is 2.6. A lot of new functionality will be implemented in the upcoming months.</p>
+            <p>Current version is 2.9. A lot of new functionality will be implemented in the upcoming months.</p>
             <p>Project is build by <a href="http://enginimation.com">Enginimation Studio</a>. Feel free to contact <a href="mailto:hello@enginimation.com">us</a> in any time with any reason.</p>
         </section>
     </section>
@@ -83,7 +83,7 @@
     <section id="filtered_lib" class="info_panel main_panel">
         <header><h1>Albums</h1></header>
         <section id="filtered_lib_content" class="scrollable_panel"></section>
-        <section id="artist_bio"></section>
+        <article id="artist_bio"></article>
     </section>
     <section id="playing_list" class="info_panel main_panel">
         <header class="box"><h1>Now playing</h1></header>
@@ -209,6 +209,7 @@
 <script type="html/template" id="artist_bio_tpl">
     <section><%= bio %></section>
     <section>
+        <h2>Social profiles:</h2>
         <% _.each(profiles, function(profile) { %> <a rel="network" target="_blank" class="profile_link" href="<%= profile.url %>"><%= profile.name %></a> <% }); %>
     </section>
 </script>

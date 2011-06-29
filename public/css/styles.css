@@ -339,7 +339,7 @@ article.lib-item-data label:after
 {
     -webkit-box-flex: 2;
 }
-.lib-item-info h1
+.lib-item-info h1,#artist_bio h2
 {
     color:black;
     text-transform: uppercase;
