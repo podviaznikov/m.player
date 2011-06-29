@@ -410,6 +410,10 @@ article.lib-item-data label:after
     text-align:left;
     line-height:22px;
 }
+a.profile_link
+{
+    display:block
+}
 #playing_visualization img
 {
     margin:20px;
