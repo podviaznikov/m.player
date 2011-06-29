@@ -746,11 +746,10 @@ footer.saved_playlist_toolbar
 #library_menu header h1:after
 {
     content:' / ';
-    text-decoration:none;
 }
 #library_menu header h1:hover
 {
-    text-decoration:underline;
+    color:#FF6900;
 }
 #library_menu header span
 {

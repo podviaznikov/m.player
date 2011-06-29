@@ -125,7 +125,7 @@
         <fieldset  id="fb_control_panel" class="unlogined">
             <label id="fb_username" class="authorised"></label>
             <a id="fb_logout_btn" class="social_logout control authorised" title="Logout from Facebook"></a>
-            <a id="fb_login_btn" class="control" title="Login to Facebook" href="https://www.facebook.com/dialog/oauth?client_id=222066051151670&redirect_uri=http://player.enginimation.com&&scope=email,read_stream,offline_access&response_type=token"></a>
+            <a id="fb_login_btn" class="control" title="Login to Facebook" href="https://www.facebook.com/dialog/oauth?client_id=222066051151670&redirect_uri=http://player.enginimation.com&scope=email,read_stream,offline_access&response_type=token"></a>
         </fieldset>
         <fieldset id="lastfm_control_panel" class="unlogined">
             <label id="lastfm_username" class="authorised"></label>
@@ -205,6 +205,11 @@
 <script type="html/template" id="sound_cloud_track_menu_tpl">
     <h1><%= name %></h1>
 </script>
-
+<script type="html/template" id="artist_bio_tpl">
+    <section><%= bio %></section>
+    <section>
+        <% _.each(profiles, function(profile) { %> <a rel="network" class="profile_link" href="<%= profile.url %>"><%= profile.name %></a> <% }); %>
+    </section>
+</script>
 </body>
 </html>

@@ -18,8 +18,9 @@ $(function(){
         initialize:function(){
             this.artists=new ArtistsList();//should be first in this method!
             this.playLists=new PlayLists();//should be first in this method!
-            this.albums=new AlbumList();
-            this.soundCloudTracks=new SoundCloudTrackList();
+            this.albums=new AlbumList();//should be first in this method!
+            this.soundCloudTracks=new SoundCloudTrackList();//should be first in this method!
+            this.tabName='artists';
             _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack','addSoundCloudTracks',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
@@ -51,24 +52,32 @@ $(function(){
             }
         },
         showArtists:function(){
+            this.tabName='artists';
+            this.$(this.searchField).attr('placeholder','Search artist');
             this.artistsContent.show();
             this.albumsContent.hide();
             this.playListsContent.hide();
             this.soundCloudContent.hide();
         },
         showAlbums:function(){
+            this.tabName='albums';
+            this.$(this.searchField).attr('placeholder','Search album');
             this.albumsContent.show();
             this.artistsContent.hide();
             this.playListsContent.hide();
             this.soundCloudContent.hide();
         },
         showPlayLists:function(){
+            this.tabName='playlists';
+            this.$(this.searchField).attr('placeholder','Search play list');
             this.playListsContent.show();
             this.artistsContent.hide();
             this.albumsContent.hide();
             this.soundCloudContent.hide();
         },
         showSoundCloud:function(){
+            this.tabName='soundcloud';
+            this.$(this.searchField).attr('placeholder','Search tracks');
             this.soundCloudContent.show();
             this.playListsContent.hide();
             this.artistsContent.hide();
@@ -116,24 +125,34 @@ $(function(){
             this.playLists.each(this.addPlayList);
         },
         filterLibrary:function(){
-            var filterValue=this.searchField.val();
+            var filterValue=this.searchField.val(),
+                containerItems=this.artists;
+            if(this.tabName==='soundcloud'){
+               containerItems=this.soundCloudTracks;
+            }
+            else if(this.tabName==='playlists'){
+                containerItems=this.playLists;
+            }
+            else if(this.tabName==='albums'){
+                containerItems=this.albums;
+            }
             if(!filterValue || filterValue===''){
-                this.artists.each(function(artist){
-                    if(artist.view){
-                        artist.view.show();
+                containerItems.each(function(item){
+                    if(item.view){
+                        item.view.show();
                     }
                 });
             }
             else{
-                this.artists.each(function(artist){
-                    if(_.contains(artist.get('name'),filterValue)){
-                        if(artist.view){
-                            artist.view.show();
+                containerItems.each(function(item){
+                    if(_.contains(item.get('name'),filterValue)){
+                        if(item.view){
+                            item.view.show();
                         }
                     }
                     else{
-                        if(artist.view){
-                            artist.view.hide();
+                        if(item.view){
+                            item.view.hide();
                         }
                     }
                 });
@@ -229,7 +248,7 @@ $(function(){
             'dblclick':'playAlbumSongs',
         },
         initialize:function(){
-            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs');
+            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs','hide','show');
             this.model.bind('change',this.render);
             this.model.bind('add',this.render);
             this.model.view=this;
@@ -256,6 +275,12 @@ $(function(){
             $(this.el).addClass('selected-lib-item');
             var albumSongs=this.model.get('songs');
             AppController.detailsView.showAlbum(this.model);
+        },
+        hide:function(){
+            this.$(this.el).hide();
+        },
+        show:function(){
+            this.$(this.el).show();
         }
     });
 
@@ -269,7 +294,7 @@ $(function(){
             'click .delete_playlist':'deletePlaylist'
         },
         initialize:function(){
-            _.bindAll(this,'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist');
+            _.bindAll(this,'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist','hide','show');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
@@ -298,6 +323,12 @@ $(function(){
         deletePlaylist:function(){
             this.model.destroy();
             this.$(this.el).remove();
+        },
+        hide:function(){
+            this.$(this.el).hide();
+        },
+        show:function(){
+            this.$(this.el).show();
         }
     });
 
@@ -305,12 +336,22 @@ $(function(){
         className:'lib-item-data box',
         tagName:'article',
         tpl:$('#sound_cloud_track_menu_tpl').html(),
+        initialize:function(){
+            _.bindAll(this,'render','hide','show');
+            this.model.view=this;
+        },
         render:function(){
             var html=_.template(this.tpl,{
                 name:this.model.get('name'),
             });
             $(this.el).html(html);
             return this;
+        },
+        hide:function(){
+            this.$(this.el).hide();
+        },
+        show:function(){
+            this.$(this.el).show();
         }
     });
 });

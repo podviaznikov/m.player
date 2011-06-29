@@ -61,25 +61,29 @@ $(function(){
 
     ui.ArtistBioView=Backbone.View.extend({
         el: $('#artist_bio'),
-         initialize:function(){
-            _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
-         },
-         setArtistModel:function(artist){
-            this.model=artist;
-         },
-         render:function(){
-           if(this.model){
+        tpl:$('#artist_bio_tpl').html(),
+        initialize:function(){
+           _.bindAll(this,'render','setArtistModel','renderArtistBio','clear');
+        },
+        setArtistModel:function(artist){
+           this.model=artist;
+        },
+        render:function(){
+            if(this.model){
                 dataService.getArtistBio(this.model.get('name'),this.renderArtistBio);
-           }
-           return this;
-         },
-         renderArtistBio:function(data){
-            var html=unescape(data.summary);
+            }
+            return this;
+        },
+        renderArtistBio:function(data){
+            var html= _.template(this.tpl,{
+                bio:unescape(data.summary),
+                profiles:data.profile
+            });
             $(this.el).html(html);
-         },
-         clear:function(){
+        },
+        clear:function(){
             $(this.el).html('');
-         }
+        }
     });
 
     ui.AlbumView=Backbone.View.extend({
