@@ -121,7 +121,7 @@ var ArtistsList=Porridge.Collection.extend({
     forName:function(artistName){
         return this.find(function(artist){ return artist.get('name') === artistName; });
     },
-    comparator:function(song){return song.get('name');}
+    comparator:function(artist){return artist.get('name');}
 });
 //name and artist fields
 var Album=Backbone.Model.extend({
@@ -138,7 +138,11 @@ var AlbumList=Backbone.Collection.extend({
     //find album model from list that has the same name
     forModel:function(albumToFind){
         return this.find(function(album){ return album.get('name') === albumToFind.get('name')});
-    }
+    },
+    forName:function(albumName){
+        return this.find(function(album){ return album.get('name') === albumName; });
+    },
+    comparator:function(album){return album.get('name');}
 });
 var PlayList=Porridge.Model.extend({
     defaults:{
@@ -167,7 +171,13 @@ var PlayList=Porridge.Model.extend({
         key:'id'
     }
 });
-var PlayLists=Porridge.Collection.extend({model: PlayList});
+var PlayLists=Porridge.Collection.extend({
+    model: PlayList,
+    forName:function(playlistName){
+        return this.find(function(playlist){ return playlist.get('name') === playlistName; });
+    },
+    comparator:function(playlist){return playlist.get('name');}
+});
 var SoundCloudTrack=Backbone.Model.extend({});
 var SoundCloudTrackList=Backbone.Collection.extend({
     model:SoundCloudTrack,

@@ -246,15 +246,19 @@ $(function(){
         events:{
             'click':'selectAlbum',
             'dblclick':'playAlbumSongs',
+            'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs','hide','show');
+            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs','handleDragStart','hide','show');
             this.model.bind('change',this.render);
             this.model.bind('add',this.render);
             this.model.view=this;
+
         },
         render:function(){
             this.model.findImage(this.renderAlbumInfo);
+            this.el.draggable=true;
+            this.el.dataset.album=this.model.get('name');
             return this;
         },
         renderAlbumInfo:function(image){
@@ -265,6 +269,15 @@ $(function(){
                 songsCount:this.model.get('songs').length
             });
             $(this.el).html(html);
+        },
+        //handle drag start event
+        handleDragStart:function(e){
+            var event=e.originalEvent,
+                dataTransferObj=event.dataTransfer,
+                album=event.srcElement.dataset.album,
+                dataTransfer=DataTransfer.create('album',album);
+            dataTransferObj.effectAllowed='move';
+            dataTransferObj.setData('text/plain',dataTransfer.toString());
         },
         playAlbumSongs:function(e){
             this.selectAlbum();
@@ -291,15 +304,19 @@ $(function(){
         events:{
             'click':'selectPlayList',
             'dblclick':'playPlayList',
-            'click .delete_playlist':'deletePlaylist'
+            'click .delete_playlist':'deletePlaylist',
+            'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this,'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist','hide','show');
+            _.bindAll(this,'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist','handleDragStart',
+                'hide','show');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
         render:function(){
             this.model.findImage(this.renderPlayListInfo);
+            this.el.draggable=true;
+            this.el.dataset.playlist=this.model.get('name');
             return this;
         },
         renderPlayListInfo:function(image){
@@ -311,13 +328,22 @@ $(function(){
             });
             $(this.el).html(html);
         },
+        //handle drag start event
+        handleDragStart:function(e){
+            var event=e.originalEvent,
+                dataTransferObj=event.dataTransfer,
+                playlist=event.srcElement.dataset.playlist,
+                dataTransfer=DataTransfer.create('playlist',playlist);
+            dataTransferObj.effectAllowed='move';
+            dataTransferObj.setData('text/plain',dataTransfer.toString());
+        },
         selectPlayList:function(){
             $('.lib-item-data').removeClass('selected-lib-item');
             $(this.el).addClass('selected-lib-item');
             AppController.detailsView.showPlayList(this.model);
         },
         playPlayList:function(){
-           this.selectPlayList();
+            this.selectPlayList();
             AppController.playlistView.setSongsAndPlay(this.model.findSongs());
         },
         deletePlaylist:function(){

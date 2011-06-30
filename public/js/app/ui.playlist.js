@@ -107,7 +107,28 @@ $(function(){
                                 songsFromPlayList.add(song);
                             });
                         }
-                    }else if('song'===transfer.type){
+                    }
+                    else if('album'===transfer.type){
+                        //we have album name here. Get all his songs and add to list
+                        var album=AppController.libraryMenu.albums.forName(transfer.value);
+                        if(album){
+                            var songsFromPlayList=this.songs;
+                            album.get('songs').each(function(song){
+                                songsFromPlayList.add(song);
+                            });
+                        }
+                    }
+                    else if('playlist'===transfer.type){
+                        //we have album name here. Get all his songs and add to list
+                        var playList=AppController.libraryMenu.playLists.forName(transfer.value);
+                        if(playList){
+                            var songsFromPlayList=this.songs;
+                            playList.findSongs().each(function(song){
+                                songsFromPlayList.add(song);
+                            });
+                        }
+                    }
+                    else if('song'===transfer.type){
                         //we have song here. Add it to playlist
                         var song=new Song(transfer.value);
                         this.songs.add(song);

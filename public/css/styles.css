@@ -339,13 +339,16 @@ article.lib-item-data label:after
 {
     -webkit-box-flex: 2;
 }
+.lib-item-info h1
+{
+    cursor:pointer;
+    margin-bottom:15px;
+}
 .lib-item-info h1,#artist_bio h2
 {
     color:black;
     text-transform: uppercase;
-    margin-bottom:15px;
     font-weight:bold;
-    cursor:pointer;
 }
 .lib-item-info div, .lib-item-info label
 {
@@ -647,19 +650,22 @@ span.info_image img
 {
     background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHowAACAmAAA+f8AAIDmAABSCAABFVgAADqXAAAXb2Uu03wAAAD9SURBVHjafNG/LkRREAbw365LJYq1USChpBKJeAEr8adCo+ABvINH0CmUGyJ0FEQiEdGqUIuKQqEiUWB3NXOTm5O7O82ZOfN95/vOTKWzI41RNNDCBT6LzSwBT+IOE1E/YAXvOaCaEE4LYJjFSRFQSSx1lEelm8JVCfipWKSENdwmD8z1+vQPVrGJNo5SuVRhAa9o4hBvmO9GuMQN6ngJ4hju8ZgSmmEFjjGNKZzH3Qz2c0J/bBbOsI1ffGMd19FrIKviAONhY6NkrEv4CMW9KhajsaV77Ma5nGEwRjiAIfQl4D88R17LUCv4b5eMuoWvyOvFxQ33sDSSJ/8DAD7fLtvbqKR9AAAAAElFTkSuQmCC);
 }
-#lastfm_login_btn
+#lastfm_login_btn,#lastfm_icon
 {
     width:21px;
     height:13px;
     background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAANCAYAAABGkiVgAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAXtJREFUeNqE008ow2Ecx/FtrbVSav6kcFErlKXccHBViBIHFyHlJDsqR05KbhQ5cdiU5SCFHIRdyAXtoJw4LEpNEWPez3x+9fjZeOq17Xmez757fs+zx5vL5TyuFkYzqnGPK9wg68qF0IAgHpHCW37GFJUW7OA197NlsYEaK1uPC1duE+X5RSrUhowmnxDDMnbxovFrNCq/rbFTRJFUf9opWoFLDe4jbK3IaEfaWk0At+p3KlOHfoScoqPWSspcBR0d+FDOfHlPnxcK5c3LlgLjRQo6Vq1Cw/hUP4U5NNlFz12PUkzEOhSztz3WtjhtBUETPtJA7z9FfUgoO6uxUozoLJw2YSYW1Yn9UbBKqxtQNl1g/6OaW/PxV43pzzyIKc/v5sc6DpDECSoRdeXu9P7u/Mq8tfw4unXi5tHONP6sCzBkZWdQq0N+0NikU9SvEyzWzIUYsx51qUjuGCVe192PaBtadbfTOERC999uXehDIP/I31sTR+ZLgAEASSnyLy2T6I0AAAAASUVORK5CYII=);
 }
-#fb_login_btn
+#fb_login_btn,#fb_icon
 {
     width:8px;
     height:16px;
     background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAQCAYAAAArij59AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHowAACAmAAA+f8AAIDmAABSCAABFVgAADqXAAAXb2Uu03wAAACsSURBVHjarNExSkNREIXh7z1jkRBjJySV4BJsA2Jjk73YCu7A0tLlxErtJCkt0toKIY14bO6FB89gkx8ODMzMmWGmSaIwwjUu8I1jbCSpekift7Z0z7DQ52dQghNMOokNnrGu9rMk6471Ux09wD1ucN5xuMQdPiV5z35eWjT2M26SzHGFW5yVxBKP2NUlp0lWfy1Z7zAs6tH6h8MVHBX1qL/Y4hVfOMVHLfgdAMiXiV/4nTXhAAAAAElFTkSuQmCC);
 }
-
+#lastfm_icon,#fb_icon
+{
+    cursor:auto;
+}
 #help
 {
     width:9px;
@@ -844,7 +850,7 @@ footer.saved_playlist_toolbar
     }
     #library_menu header input[type="search"]
     {
-        width:70px;
+        width:50px;
     }
 }
 @media screen and (min-width: 801px) and (max-width: 900px)
