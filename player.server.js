@@ -7,21 +7,21 @@ var util=require('util'),
     facebook=require('facebook-graph'),
     LastFmNode=require('lastfm').LastFmNode,
     lastfm=new LastFmNode({
-        api_key: 'e3377f4b4d8c6de47c7e2c81485a65f5',
-        secret: '99523abcd47bd54b5cfa10cf9bb81f20'
+        api_key:'e3377f4b4d8c6de47c7e2c81485a65f5',
+        secret:'99523abcd47bd54b5cfa10cf9bb81f20'
     });
     app=express.createServer();
 
 nbs.init('mplayer');
 app.configure(function(){
-    app.use(connect.favicon(__dirname + '/public/16.png'));
+    app.use(connect.favicon(__dirname+'/public/16.png'));
     //logger
     app.use(express.logger());
     //component for decoding requests' params
     app.use(express.bodyParser());
     //session support
     app.use(express.cookieParser());
-    app.use(express.session({secret: 'super_hard_session_secret',cookie:{ path: '/', httpOnly: true, maxAge: 14400000000000000 }}));
+    app.use(express.session({secret:'super_hard_session_secret',cookie:{path:'/',httpOnly:true,maxAge:14400000000000000 }}));
     //router
     app.use(app.router);
     //public folder for static files
@@ -224,7 +224,7 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
         request=lastfm.request('album.getInfo', {
         artist:artist,
         album:album,
-        handlers: {
+        handlers:{
             success:function(apiResp) {
                 var data=JSON.parse(apiResp).album;
                 if(!data){
@@ -236,10 +236,10 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }
                 else{
-                    var image = 'css/images/no_picture.png',
-                        albumName = album,
-                        releaseDate = data.releasedate.trim().split(',')[0]||'',//getting just date without time
-                        songsCount = data.tracks.length||'';
+                    var image='css/images/no_picture.png',
+                        albumName=album,
+                        releaseDate=data.releasedate.trim().split(',')[0]||'',//getting just date without time
+                        songsCount=data.tracks.length||'';
                     if(data && data.image[2]){
                         image=data.image[2]['#text']||'css/images/no_picture.png';//medium
                     }
@@ -251,7 +251,7 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
                     res.contentType('application/json');
                     res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
                 }
-           },
+            },
             error:function(error) {
                 var image='css/images/no_picture.png',
                     albumName=album,
@@ -265,7 +265,7 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
 });
 function scrobble(trackName,artist,trackLength,key,user){
      var session=lastfm.session(user,key),
-         startedTime=Math.round(((new Date().getTime()) / 1000) - parseInt(trackLength,10)),
+         startedTime=Math.round(((new Date().getTime()) /1000)-parseInt(trackLength,10)),
          LastFmUpdate=lastfm.update('scrobble',session,{
             track:{
                 name:trackName,
