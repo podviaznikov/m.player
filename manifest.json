@@ -4,10 +4,10 @@
   "version": "2.6",
   "app": {
     "urls": [
-      "*://player.enginimation.com/"
+      "*://localhost/"
     ],
     "launch": {
-      "web_url": "http://player.enginimation.com/"
+      "web_url": "http://localhost/"
     }
   },
   "icons": {

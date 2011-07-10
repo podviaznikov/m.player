@@ -1496,7 +1496,7 @@ $(function(){
         musicSlider:$('#music_slider'),
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
-        timeCounter:$('#time_counter'),
+        timeCounterEl:$('#time_counter'),
         //Last.fm integration
         lastFmLoginBtn:$('#lastfm_login_btn'),
         lastFmUsername:$('#lastfm_username'),
@@ -1536,13 +1536,14 @@ $(function(){
             'click #sc_logout_btn':'scLogout'
         },
         initialize:function(){
-            this.bind('audio:update',this.updateAudioProgress);
-            _.bindAll(this,'togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
+            _.bindAll(this,'updateAudioProgress','songFinished','togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
                     'lastFmLogin','lastFmExit','fbLogin','fbLogout','scLogin','scLogout');
-            this.audioEl=new ui.AudioElement({player:this});
+            this.audioEl=AudioEl.newAudio('player_ctrl');
+            this.audioEl.bind('updated',this.updateAudioProgress);
+            this.audioEl.bind('finished',this.songFinished);
             //setting volume to audio element
-            this.audioEl.setVolume(AppController.settings.getVolume());
+            this.audioEl.volume=AppController.settings.getVolume();
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
         },
@@ -1632,7 +1633,7 @@ $(function(){
                     newProgressValue=(newX/width*max);
                 console.log(newX,width,max);
                 this.musicSlider.attr('value',newProgressValue);
-                this.audioEl.setTime(newProgressValue);
+                this.audioEl.time=newProgressValue;
             }
         },
         changedVolume:function(e){
@@ -1643,7 +1644,7 @@ $(function(){
             if(percent>0.95){
                 percent=1;
             }
-            this.audioEl.setVolume(percent);
+            this.audioEl.volume=percent;
             this.volumeSlider.attr('value',percent);
             AppController.settings.saveVolume(percent);
         },
@@ -1655,7 +1656,7 @@ $(function(){
             this.soundOnIcon.show();
             this.soundOffIcon.hide();
 
-            this.audioEl.setVolume(this.volume||0.5);
+            this.audioEl.volume=this.volume||0.5;
         },
         soundOff:function(){
             this.soundToggle.attr('title','Sound');
@@ -1665,8 +1666,8 @@ $(function(){
             this.soundOffIcon.show();
             this.soundOnIcon.hide();
 
-            this.volume=this.audioEl.getVolume();
-            this.audioEl.setVolume(0);
+            this.volume=this.audioEl.volume;
+            this.audioEl.volume=0;
         },
         shuffleOn:function(){
             this.shuffleToggle.attr('title','Turn shuffle off');
@@ -1725,63 +1726,23 @@ $(function(){
             AppController.playlistView.next();
         },
         updateAudioProgress:function(duration,currentTime){
-            var timeInSeconds=parseInt(currentTime,10),
-                songDuration=parseInt(duration,10),
-                rem=parseInt(duration - currentTime,10),
-                pos=(timeInSeconds / duration) * 100,
-                mins=Math.floor(currentTime/60,10),
-                secs=timeInSeconds - mins*60,
-                timeCounter= mins + ':' + (secs > 9 ? secs : '0' + secs),
-                currentSong=AppController.playlistView.currentSong();
-            if(rem===0 && currentSong){
-                this.loadedMusicSlider=false;
-                dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
-                this.next();
-            }
-            this.timeCounter.text(timeCounter);
+            this.$(this.timeCounterEl).text(this.audioEl.timeCounter);
             this.musicSlider.attr('value',currentTime);
 
             if (!this.loadedMusicSlider){
                 this.loadedMusicSlider=true;
                 this.musicSlider.attr('max',duration);
             }
-        }
-    });
-    ui.AudioElement = Backbone.View.extend({
-        id:'player_ctrl',
-        tagName:'audio',
-        events:{
-           'timeupdate':'handlePlaying',
-           'pause': 'pause'
         },
-        handlePlaying:function(){
-           this.options.player.trigger('audio:update',this.el.duration,this.el.currentTime);
-        },
-        play:function(url){
-            if(url){
-                this.el.setAttribute('src',url);
+        songFinished:function(){
+            var currentSong=AppController.playlistView.currentSong(),
+                timeInSeconds=parseInt(this.audioEl.time,10);
+            if(currentSong){
+                this.loadedMusicSlider=false;
+                dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
+                this.next();
             }
-            this.el.play();
-        },
-        pause:function(){
-            this.el.pause();
-        },
-        stop:function(){
-            this.pause();
-            this.el.currentTime=0;
-        },
-        setVolume:function(volume){
-            this.el.volume=volume;
-        },
-        getVolume:function(){
-            return this.el.volume;
-        },
-        getDuration:function(){
-            return this.el.duration;
-        },
-        setTime:function(time){
-            this.el.currentTime=time;
-            this.options.player.trigger('audio:update',this.el.duration,time);
+
         }
     });
 });

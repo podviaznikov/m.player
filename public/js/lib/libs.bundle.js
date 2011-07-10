@@ -9070,3 +9070,8 @@ function BinaryFile(strData, iDataOffset, iDataLength) {
     // Export functions for closure compiler
     ns["ID4"] = ns.ID4;
 })(this);
+//audioEl
+var AudioEl=Object.create({},{version:{value:0.5},newAudio:{value:function(a,b){var c=Object.create(AudioEl.Audio);c.init(a,b);return c}},Audio:{value:Object.create({},{init:{value:function(a,b){_.bindAll(this,"_timeupdate","pause");_.extend(this,Backbone.Events);this.el=document.getElementById(a);b&&this.el.setAttribute("src",b);this.el.addEventListener("timeupdate",this._timeupdate);this.el.addEventListener("pause",this.pause);return this}},_timeupdate:{value:function(){var a=this.time,b=this.duration;
+parseInt(b-a,10)===0?this.trigger("finished"):this.trigger("updated",b,a)}},play:{value:function(a){a&&this.el.setAttribute("src",a);this.el.play();this.trigger("started")}},pause:{value:function(){this.el.pause();this.trigger("paused")}},stop:{value:function(){this.pause();this.el.currentTime=0;this.trigger("stopped")}},volume:{get:function(){return this.el.volume},set:function(a){this.el.volume=a}},duration:{get:function(){return this.el.duration}},time:{get:function(){return this.el.currentTime},
+set:function(a){this.el.currentTime=a}},percent:{get:function(){return this.getTime()/this.getDuration()*100}},hours:{get:function(){var a=Math.floor(this.time/3600,10);return isNaN(a)?0:a}},minutes:{get:function(){var a=Math.floor((this.time-this.hours*3600)/60,10);return isNaN(a)?0:a}},seconds:{get:function(){return parseInt(this.time-this.hours*3600-this.minutes*60,10)}},timeCounter:{get:function(){var a=this.hours,b=this.minutes,c=this.seconds;return a>0?a+":"+(b>9?b:"0"+b)+":"(c>9?c:"0"+c):b+
+":"+(c>9?c:"0"+c)}}})}});
