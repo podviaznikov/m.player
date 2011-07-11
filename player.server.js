@@ -21,7 +21,7 @@ app.configure(function(){
     app.use(express.bodyParser());
     //session support
     app.use(express.cookieParser());
-    app.use(express.session({secret:'super_hard_session_secret',cookie:{path:'/',httpOnly:true,maxAge:14400000000000000 }}));
+    app.use(express.session({secret:'super_hard_session_secret',cookie:{path:'/',httpOnly:true,maxAge:14400000}}));
     //router
     app.use(app.router);
     //public folder for static files
@@ -139,7 +139,7 @@ app.get('/artist/:artistName/image',function(req,res){
         artist: req.params.artistName,
         handlers:{
             success:function(apiResp) {
-                var data = JSON.parse(apiResp);
+                var data=JSON.parse(apiResp);
                 if(data && data.artist && data.artist.image[2]){
                     image=data.artist.image[2]['#text']||'css/images/no_picture.png';
                 }
@@ -255,8 +255,8 @@ app.get('/artist/:artistName/album/:albumTitle/info',function(req,res){
             error:function(error) {
                 var image='css/images/no_picture.png',
                     albumName=album,
-                    releaseDate='no information',
-                    songsCount='no information';
+                    releaseDate='',
+                    songsCount='';
                 res.contentType('application/json');
                 res.send({image:image,name:albumName,releaseDate:releaseDate,songsCount:songsCount});
             }

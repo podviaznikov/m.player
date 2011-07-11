@@ -1415,7 +1415,7 @@ $(function(){
             var html=_.template(this.tpl,{
                 image:data.image,
                 name:this.model.get('name'),
-                releaseDate:data.releaseDate==='no information'?'':data.releaseDate
+                releaseDate:data.releaseDate
             });
             $(this.el).append(html);
         },
