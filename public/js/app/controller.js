@@ -163,7 +163,7 @@ var AppController={
             return localStorage.getItem('sessionKey')||'';
         },
         isLastFmLogined:function(){
-            return this.getLastFmUser()!==''&& this.getLastFmSessionKey()!=='';
+            return this.getLastFmUser()!=='' && this.getLastFmSessionKey()!=='';
         },
         saveFbAccessToken:function(accessToken){
             localStorage.setItem('fb_access_token',accessToken);
@@ -178,7 +178,7 @@ var AppController={
             return localStorage.getItem('fb_user_name')||'';
         },
         isFbLogined:function(){
-            return this.getFbUser()!==''&& this.getFbAccessToken()!=='';
+            return this.getFbUser()!=='' && this.getFbAccessToken()!=='';
         },
         //SoundCloud integration
         saveScAccessToken:function(accessToken){
@@ -194,7 +194,7 @@ var AppController={
             return localStorage.getItem('sc_user_name')||'';
         },
         isScLogined:function(){
-            return this.getScUser()!==''&& this.getScAccessToken()!=='';
+            return this.getScUser()!=='' && this.getScAccessToken()!=='';
         },
     },
     metadataParser:{

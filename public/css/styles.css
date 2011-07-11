@@ -11,7 +11,7 @@
 /* Handle */
 ::-webkit-scrollbar-thumb
 {
-    background: #939393;
+    background:#939393;
     opacity:0.8;
 }
 ::-webkit-scrollbar-thumb:window-inactive
@@ -143,6 +143,7 @@ body.fullscreen
 .scrollable_panel
 {
     overflow-y: auto;
+    overflow-x: hidden;
 }
 section.info_panel
 {

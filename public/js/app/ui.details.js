@@ -156,8 +156,8 @@ $(function(){
         renderAlbumInfo:function(data){
             var html=_.template(this.tpl,{
                 image:data.image,
-                name:data.name,
-                releaseDate:data.releaseDate
+                name:this.model.get('name'),
+                releaseDate:data.releaseDate==='no information'?'':data.releaseDate
             });
             $(this.el).append(html);
         },
