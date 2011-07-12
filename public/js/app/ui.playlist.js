@@ -1,5 +1,5 @@
-"use strict";
 $(function(){
+"use strict";
     ui.PlayListView = Backbone.View.extend({
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),

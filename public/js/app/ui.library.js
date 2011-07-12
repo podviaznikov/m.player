@@ -1,5 +1,5 @@
-"use strict";
 $(function(){
+    "use strict";
     ui.LibraryMenu=Backbone.View.extend({
         el:$('#library_menu'),
         searchField:$('#library_menu header input'),

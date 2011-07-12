@@ -1,6 +1,5 @@
-"use strict";
 $(function(){
-
+    "use strict";
     //2nd column view
     ui.DetailsView=Backbone.View.extend({
         el:$('#filtered_lib'),

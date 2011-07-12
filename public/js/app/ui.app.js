@@ -1,5 +1,6 @@
 $(function(){
-    ui.AppView = Backbone.View.extend({
+"use strict";
+    ui.AppView=Backbone.View.extend({
         el: $('body'),
         progress:$('#uploading_files_progress progress'),
         helpScreen:$('#help_screen'),

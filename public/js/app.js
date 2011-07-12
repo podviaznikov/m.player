@@ -223,7 +223,6 @@ _.mixin({
         return window.location.hash.substring(1).split('&')[1].split('=')[0];
     }
 });
-"use strict";
 var DataTransfer={
     create:function(type,value){
         return Object.create(this,{type:{value:type},value:{value:value}});
@@ -409,7 +408,8 @@ var SoundCloudTrackList=Backbone.Collection.extend({
     url:'/sc/tracks'
 });
 $(function(){
-    ui.AppView = Backbone.View.extend({
+"use strict";
+    ui.AppView=Backbone.View.extend({
         el: $('body'),
         progress:$('#uploading_files_progress progress'),
         helpScreen:$('#help_screen'),
@@ -617,8 +617,8 @@ $(function(){
     });
 
 });
-"use strict";
 $(function(){
+    "use strict";
     ui.LibraryMenu=Backbone.View.extend({
         el:$('#library_menu'),
         searchField:$('#library_menu header input'),
@@ -1000,8 +1000,8 @@ $(function(){
         }
     });
 });
-"use strict";
 $(function(){
+"use strict";
     ui.PlayListView = Backbone.View.extend({
         el:$('#playing_list'),
         infoEl:$('#playing_list #song_info_view'),
@@ -1256,9 +1256,8 @@ $(function(){
     });
 });
 
-"use strict";
 $(function(){
-
+    "use strict";
     //2nd column view
     ui.DetailsView=Backbone.View.extend({
         el:$('#filtered_lib'),
@@ -1478,8 +1477,8 @@ $(function(){
         }
     });
 });
-"use strict";
 $(function(){
+"use strict";
     ui.PlayerCtrl = Backbone.View.extend({
         el:$('#player'),
         mainControls:$('#main_controls_panel'),
@@ -1512,13 +1511,11 @@ $(function(){
         scUsername:$('#sc_username'),
         scControlPanel:$('#sc_control_panel'),
         events:{
-            'click #play_toggle.paused': 'resume',
-            'click #play_toggle.playing': 'pause',
-            'click #stop_song': 'stop',
-            'click #previous_song': 'previous',
-            'click #next_song': 'next',
-            'click #sound_toggle.off': 'soundOn',
-            'click #sound_toggle.on': 'soundOff',
+            'click #play_toggle':'togglePause',
+            'click #stop_song':'stop',
+            'click #previous_song':'previous',
+            'click #next_song':'next',
+            'click #sound_toggle':'toggleSound',
             'click #shuffle_toggle.on':'shuffleOff',
             'click #shuffle_toggle.off':'shuffleOn',
             'click #repeat_toggle.on':'repeatOff',
@@ -1539,11 +1536,11 @@ $(function(){
             _.bindAll(this,'updateAudioProgress','songFinished','togglePause','changedVolume','turnOnFullScreen','turnOffFullScreen',
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
                     'lastFmLogin','lastFmExit','fbLogin','fbLogout','scLogin','scLogout');
-            this.audioEl=AudioEl.newAudio('player_ctrl');
+            this.audioEl=AudioEl.newAudio('player_ctrl',{
+                volume:AppController.settings.getVolume()
+            });
             this.audioEl.on('updated',this.updateAudioProgress);
             this.audioEl.on('finished',this.songFinished);
-            //setting volume to audio element
-            this.audioEl.volume=AppController.settings.getVolume();
             //setting volume to UI control
             this.volumeSlider.attr('value',AppController.settings.getVolume());
         },
@@ -1631,7 +1628,6 @@ $(function(){
                     width=this.musicSlider.width(),
                     max=parseFloat(this.musicSlider.attr('max')),
                     newProgressValue=(newX/width*max);
-                console.log(newX,width,max);
                 this.musicSlider.attr('value',newProgressValue);
                 this.audioEl.time=newProgressValue;
             }
@@ -1648,23 +1644,21 @@ $(function(){
             this.volumeSlider.attr('value',percent);
             AppController.settings.saveVolume(percent);
         },
-        soundOn:function(){
-            this.soundToggle.attr('title','Mute');
-
-            this.soundToggle.addClass('on');
-            this.soundToggle.removeClass('off');
-            this.soundOnIcon.show();
-            this.soundOffIcon.hide();
-
-            this.audioEl.toggleVolume();
-        },
-        soundOff:function(){
-            this.soundToggle.attr('title','Sound');
-
-            this.soundToggle.addClass('off');
-            this.soundToggle.removeClass('on');
-            this.soundOffIcon.show();
-            this.soundOnIcon.hide();
+        toggleSound:function(){
+            if(this.audioEl.isVolumeOn()){
+                this.soundToggle.attr('title','Unmute');
+                this.soundToggle.addClass('off');
+                this.soundToggle.removeClass('on');
+                this.soundOffIcon.show();
+                this.soundOnIcon.hide();
+            }
+            else{
+                this.soundToggle.attr('title','Mute');
+                this.soundToggle.addClass('on');
+                this.soundToggle.removeClass('off');
+                this.soundOnIcon.show();
+                this.soundOffIcon.hide();
+            }
 
             this.audioEl.toggleVolume();
         },
@@ -1699,18 +1693,16 @@ $(function(){
             this.playToggle.removeClass('paused');
             this.audioEl.play(url);
         },
-        resume:function(){
-            this.play();
-        },
-        pause:function(){
-            this.$(this.playToggle).attr('title','Play');
-            this.$(this.playToggle).addClass('paused');
-            this.$(this.playToggle).removeClass('playing');
-            this.audioEl.pause();
-        },
         togglePause:function(){
-            var isPaused=this.$(this.playToggle).hasClass('paused');
-            isPaused?this.play():this.pause();
+            if(this.audioEl.isPaused){
+                this.play();
+            }
+            else{
+                this.playToggle.attr('title','Play');
+                this.playToggle.addClass('paused');
+                this.playToggle.removeClass('playing');
+                this.audioEl.pause();
+            }
         },
         stop:function(){
             this.playToggle.addClass('paused');
@@ -1741,7 +1733,6 @@ $(function(){
                 dataService.scrobble(currentSong.get('title'),currentSong.get('artist'),timeInSeconds);
                 this.next();
             }
-
         }
     });
 });

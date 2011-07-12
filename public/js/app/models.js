@@ -1,4 +1,3 @@
-"use strict";
 var DataTransfer={
     create:function(type,value){
         return Object.create(this,{type:{value:type},value:{value:value}});
