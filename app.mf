@@ -6,6 +6,7 @@ css/styles.css
 css/images/no_picture.png
 /js/ext/data.service.js
 /js/ext/data.service.offline.js
+16.png
 NETWORK:
 http://player.enginimation.com
 http://userserve-ak.last.fm
