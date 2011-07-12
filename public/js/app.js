@@ -1540,8 +1540,8 @@ $(function(){
                     'turnOnHelpMode','turnOffHelpMode','changedMusicProgress','showSocialPanel','hideSocialPanel',
                     'lastFmLogin','lastFmExit','fbLogin','fbLogout','scLogin','scLogout');
             this.audioEl=AudioEl.newAudio('player_ctrl');
-            this.audioEl.bind('updated',this.updateAudioProgress);
-            this.audioEl.bind('finished',this.songFinished);
+            this.audioEl.on('updated',this.updateAudioProgress);
+            this.audioEl.on('finished',this.songFinished);
             //setting volume to audio element
             this.audioEl.volume=AppController.settings.getVolume();
             //setting volume to UI control
@@ -1656,7 +1656,7 @@ $(function(){
             this.soundOnIcon.show();
             this.soundOffIcon.hide();
 
-            this.audioEl.volume=this.volume||0.5;
+            this.audioEl.toggleVolume();
         },
         soundOff:function(){
             this.soundToggle.attr('title','Sound');
@@ -1666,8 +1666,7 @@ $(function(){
             this.soundOffIcon.show();
             this.soundOnIcon.hide();
 
-            this.volume=this.audioEl.volume;
-            this.audioEl.volume=0;
+            this.audioEl.toggleVolume();
         },
         shuffleOn:function(){
             this.shuffleToggle.attr('title','Turn shuffle off');
