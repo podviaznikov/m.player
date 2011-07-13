@@ -16,12 +16,13 @@ $(function(){
             'keyup input':'keyPressed'
         },
         initialize:function(){
+            Backbone.View.prototype.initialize.apply(this,arguments);
             this.artists=new ArtistsList();//should be first in this method!
             this.playLists=new PlayLists();//should be first in this method!
             this.albums=new AlbumList();//should be first in this method!
             this.soundCloudTracks=new SoundCloudTrackList();//should be first in this method!
             this.tabName='artists';
-            _.bindAll(this,'addArtist', 'addPlayList','addPlayLists','addAlbum','addSoundCloudTrack','addSoundCloudTracks',
+            _.bindAll(this,'addArtist','addPlayList','addPlayLists','addAlbum','addSoundCloudTrack','addSoundCloudTracks',
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
@@ -161,7 +162,7 @@ $(function(){
     ui.ArtistMenuView=Backbone.View.extend({
         className:'lib-item-data box',
         tagName:'article',
-        tpl:$('#artist_tpl').html(),
+        tplId:'artist_tpl',
         events:{
             'click':'selectArtist',
             'dblclick':'playArtistSongs',
@@ -172,23 +173,17 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this,'render','selectArtist','playArtistSongs','hide','show',
+            Backbone.View.prototype.initialize.apply(this,arguments);
+            _.bindAll(this,'render','selectArtist','playArtistSongs',
                     'deleteArtist','selectAlbum','playAlbumSongs','showArtistBio','handleDragStart');
             this.model.songs.bind('all',this.render);
             this.model.bind('change',this.render);
             this.model.view=this;
         },
         render:function(){
-            var html = _.template(this.tpl,{
-                image:this.model.get('image'),
-                name:this.model.get('name'),
-                albums:this.model.get('albums'),
-                genres:this.model.get('genres'),
-                songsCount:this.model.get('songsCount')
-            });
+            this.renderTpl();
             this.el.draggable=true;
             this.el.dataset.artist=this.model.get('name');
-            $(this.el).html(html);
             return this;
         },
         //handle drag start event
@@ -228,45 +223,34 @@ $(function(){
         },
         showArtistBio:function(){
             AppController.detailsView.showBio(this.model);
-        },
-        hide:function(){
-            this.$(this.el).hide();
-        },
-        show:function(){
-            this.$(this.el).show();
         }
     });
 
     ui.AlbumMenuView=Backbone.View.extend({
         className:'lib-item-data box',
         tagName:'article',
-        tpl:$('#album_lib_tpl').html(),
+        tplId:'album_lib_tpl',
         events:{
             'click':'selectAlbum',
             'dblclick':'playAlbumSongs',
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this,'render','renderAlbumInfo','selectAlbum','playAlbumSongs','handleDragStart','hide','show');
+            Backbone.View.prototype.initialize.apply(this,arguments);
+            _.bindAll(this,'selectAlbum','playAlbumSongs','handleDragStart');
             this.model.bind('change',this.render);
             this.model.bind('add',this.render);
             this.model.view=this;
 
         },
         render:function(){
-            this.model.findImage(this.renderAlbumInfo);
+            var self=this;
+            this.model.findImage(function(){
+                self.renderTpl();
+            });
             this.el.draggable=true;
             this.el.dataset.album=this.model.get('name');
             return this;
-        },
-        renderAlbumInfo:function(image){
-            var html=_.template(this.tpl,{
-                image:image,
-                name:this.model.get('name'),
-                artist:this.model.get('artist'),
-                songsCount:this.model.get('songs').length
-            });
-            $(this.el).html(html);
         },
         //handle drag start event
         handleDragStart:function(e){
@@ -286,19 +270,13 @@ $(function(){
             $(this.el).addClass('selected-lib-item');
             var albumSongs=this.model.get('songs');
             AppController.detailsView.showAlbum(this.model);
-        },
-        hide:function(){
-            this.$(this.el).hide();
-        },
-        show:function(){
-            this.$(this.el).show();
         }
     });
 
     ui.PlayListMenuView=Backbone.View.extend({
         className:'lib-item-data box',
         tagName:'article',
-        tpl:$('#saved_playlist_tpl').html(),
+        tplId:'saved_playlist_tpl',
         events:{
             'click':'selectPlayList',
             'dblclick':'playPlayList',
@@ -306,8 +284,8 @@ $(function(){
             'dragstart':'handleDragStart'
         },
         initialize:function(){
-            _.bindAll(this,'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist','handleDragStart',
-                'hide','show');
+            Backbone.View.prototype.initialize.apply(this,arguments);
+            _.bindAll(this,'render','renderPlayListInfo','selectPlayList','playPlayList','deletePlaylist','handleDragStart');
             this.model.bind('change',this.render);
             this.model.view=this;
         },
@@ -318,13 +296,12 @@ $(function(){
             return this;
         },
         renderPlayListInfo:function(image){
-            var html=_.template(this.tpl,{
+            this.renderTpl({
                 image:image,
                 name:this.model.get('name'),
                 genres:this.model.findGenres(),
                 songsCount:this.model.get('songs').length
             });
-            $(this.el).html(html);
         },
         //handle drag start event
         handleDragStart:function(e){
@@ -347,41 +324,23 @@ $(function(){
         deletePlaylist:function(){
             this.model.destroy();
             this.$(this.el).remove();
-        },
-        hide:function(){
-            this.$(this.el).hide();
-        },
-        show:function(){
-            this.$(this.el).show();
         }
     });
 
     ui.SoundCloudTrackMenuView=Backbone.View.extend({
         className:'lib-item-data box',
         tagName:'article',
-        tpl:$('#sound_cloud_track_menu_tpl').html(),
+        tplId:'sound_cloud_track_menu_tpl',
         events:{
             'click':'playTrack'
         },
         initialize:function(){
-            _.bindAll(this,'render','hide','show','playTrack');
+            Backbone.View.prototype.initialize.apply(this,arguments);
+            _.bindAll(this,'playTrack');
             this.model.view=this;
-        },
-        render:function(){
-            var html=_.template(this.tpl,{
-                name:this.model.get('name'),
-            });
-            $(this.el).html(html);
-            return this;
         },
         playTrack:function(){
               AppController.playerCtrl.play(this.model.get('url'));
-        },
-        hide:function(){
-            this.$(this.el).hide();
-        },
-        show:function(){
-            this.$(this.el).show();
         }
     });
 });

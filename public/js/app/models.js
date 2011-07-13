@@ -125,7 +125,10 @@ var ArtistsList=Porridge.Collection.extend({
 //name and artist fields
 var Album=Backbone.Model.extend({
     findImage:function(callback){
-        dataService.getAlbumImage(this.get('artist'),this.get('name'),callback);
+        var self=this;
+        dataService.getAlbumImage(this.get('artist'),this.get('name'),function(image){
+            self.set({image:image});
+        });
     }
 });
 var AlbumList=Backbone.Collection.extend({

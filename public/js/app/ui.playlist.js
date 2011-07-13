@@ -203,7 +203,8 @@ $(function(){
                 if(song && song.view){
                     song.view.playSong();
                 }
-            }else if(!playSong && song && song.view){
+            }
+            else if(!playSong && song && song.view){
                 song.view.selectSong();
             }
         }
@@ -225,7 +226,7 @@ $(function(){
             this.el.dataset.songname=this.model.get('title');
             this.el.dataset.id=this.model.id;
             this.el.id=this.model.id;
-            var html = _.template(this.tpl,{
+            var html=_.template(this.tpl,{
                 track:this.model.get('track'),
                 title:this.model.get('title'),
                 album:this.model.get('album'),
