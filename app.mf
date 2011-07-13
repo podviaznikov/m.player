@@ -10,6 +10,7 @@ css/images/no_picture.png
 NETWORK:
 http://player.enginimation.com
 http://userserve-ak.last.fm
+ https://api.soundcloud.com/tracks
 FALLBACK:
 http://userserve-ak.last.fm/serve/126/*.png /css/images/no_picture.png
 http://userserve-ak.last.fm/serve/126/*.jpg /css/images/no_picture.png

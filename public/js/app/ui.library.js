@@ -32,13 +32,7 @@ $(function(){
             this.soundCloudTracks.bind('reset',this.addSoundCloudTracks);
             this.artists.fetch();
             this.playLists.fetch();
-            this.soundCloudTracks.fetch({success:function(obj1,obj2){
-                console.log(obj1,obj2)
-            },
-            error:function(obj1,obj2){
-                console.log('er',obj1,obj2)
-            }
-            });
+            this.soundCloudTracks.fetch();
         },
         showSoundCloudMenu:function(){
             this.$('#show_soundcloud').removeClass('hidden');
