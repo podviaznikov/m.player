@@ -215,7 +215,7 @@ $(function(){
             this.audioEl.play(url);
         },
         togglePause:function(){
-            if(this.audioEl.isPaused){
+            if(this.audioEl.isPaused()){
                 this.play();
             }
             else{

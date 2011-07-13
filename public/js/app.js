@@ -382,6 +382,7 @@ var Album=Backbone.Model.extend({
         var self=this;
         dataService.getAlbumImage(this.get('artist'),this.get('name'),function(image){
             self.set({image:image});
+            callback();
         });
     }
 });
@@ -1696,7 +1697,7 @@ $(function(){
             this.audioEl.play(url);
         },
         togglePause:function(){
-            if(this.audioEl.isPaused){
+            if(this.audioEl.isPaused()){
                 this.play();
             }
             else{
