@@ -22,11 +22,11 @@ $(function(){
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.saveFileURL);
             this.songs.bind('add',this.addOne);
-            this.songs.bind('refresh',this.addAll);
+            this.songs.bind('reset',this.addAll);
             this.songs.bind('all',this.render);
             var playlist=AppController.settings.getPlayList();
             if(playlist){
-                this.songs.refresh(playlist.models);
+                this.songs.reset(playlist.models);
                 var lastSong=AppController.settings.getLastSong();
                 if(lastSong){
                     this.selectSong(new Song(lastSong));
@@ -38,7 +38,7 @@ $(function(){
             return this;
         },
         setSongsAndPlay:function(songs){
-            this.songs.refresh(songs.models);
+            this.songs.reset(songs.models);
             //getting first song
             var firstSong=this.songs.first();
             if(firstSong){
@@ -73,7 +73,7 @@ $(function(){
         },
         clearPlaylist:function(){
             this.songsEl.empty();
-            this.songs.refresh([]);
+            this.songs.reset([]);
             AppController.settings.savePlayList(this.songs);
             this.render();
         },

@@ -55,11 +55,9 @@ var AppController={
                         AppController.settings.saveScUser(scUsername);
                         AppController.playerCtrl.scLogin(scUsername);
                         AppController.libraryMenu.showSoundCloudMenu();
-                        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
                         AppController.libraryMenu.soundCloudTracks.fetch();
                     }
                 });
-
             }
             else{
                 //facebook authentication
@@ -82,8 +80,6 @@ var AppController={
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
 	        AppController.libraryMenu.showSoundCloudMenu();
-	        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
-	        AppController.libraryMenu.soundCloudTracks.fetch();
 	    }
 	},
 	lastfmConnect:function(){
@@ -326,8 +322,8 @@ var Artist=Porridge.Model.extend({
         if(songsCount===0){
             this.set({isDeleted:true});
         }
-        //refresh albums models
-        this.albumsModels.refresh(this.songs.lisOfAlbumsModels().models);
+        //reset albums models
+        this.albumsModels.reset(this.songs.lisOfAlbumsModels().models);
     },
     remove:function(){
         this.set({isDeleted:true});
@@ -404,8 +400,7 @@ var PlayLists=Porridge.Collection.extend({
 });
 var SoundCloudTrack=Backbone.Model.extend({});
 var SoundCloudTrackList=Backbone.Collection.extend({
-    model:SoundCloudTrack,
-    url:'/sc/tracks'
+    model:SoundCloudTrack
 });
 $(function(){
 "use strict";
@@ -646,11 +641,20 @@ $(function(){
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
-            this.playLists.bind('refresh',this.addPlayLists);
+            this.playLists.bind('reset',this.addPlayLists);
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
-            this.soundCloudTracks.bind('refresh',this.addSoundCloudTracks);
+            this.soundCloudTracks.bind('reset',this.addSoundCloudTracks);
             this.artists.fetch();
             this.playLists.fetch();
+            this.soundCloudTracks.url='/sc/tracks?access_token='+AppController.settings.getScAccessToken();
+            console.log(this.soundCloudTracks.url);
+            this.soundCloudTracks.fetch({success:function(obj1,obj2){
+                console.log(obj1,obj2)
+            },
+            error:function(obj1,obj2){
+                console.log('er',obj1,obj2)
+            }
+            });
         },
         showSoundCloudMenu:function(){
             this.$('#show_soundcloud').removeClass('hidden');
@@ -714,16 +718,13 @@ $(function(){
                 albumFromList.trigger('add');
             }
         },
-        //not binded to this because used in addArtist
-        addAlbums:function(albums){
-            albums.each(this.addAlbum);
-        },
         addArtist:function(artist){
             //do not show view if artist has no name
             var self=this;
             if(artist.get('name') && !artist.get('isDeleted')){
-                artist.albumsModels.bind('refresh',function(){
-                    self.addAlbums(this);
+                artist.albumsModels.bind('reset',function(){
+                    var albums=this;
+                    albums.each(self.addAlbum);
                 });
                 var view=new ui.ArtistMenuView({model:artist});
                 this.artistsContent.append(view.render().el);
@@ -833,7 +834,7 @@ $(function(){
         playAlbumSongs:function(e){
             var album=e.currentTarget.dataset.album,
                 albumSongs=this.model.songs.forAlbum(album);
-            AppController.detailsView.songs.refresh(albumSongs);
+            AppController.detailsView.songs.reset(albumSongs);
             AppController.playlistView.setSongsAndPlay(albumSongs);
         },
         deleteArtist:function(){
@@ -981,8 +982,11 @@ $(function(){
         className:'lib-item-data box',
         tagName:'article',
         tpl:$('#sound_cloud_track_menu_tpl').html(),
+        events:{
+            'click':'playTrack'
+        },
         initialize:function(){
-            _.bindAll(this,'render','hide','show');
+            _.bindAll(this,'render','hide','show','playTrack');
             this.model.view=this;
         },
         render:function(){
@@ -991,6 +995,9 @@ $(function(){
             });
             $(this.el).html(html);
             return this;
+        },
+        playTrack:function(){
+              AppController.playerCtrl.play(this.model.get('url'));
         },
         hide:function(){
             this.$(this.el).hide();
@@ -1024,11 +1031,11 @@ $(function(){
             this.bind('song:select',this.selectSong);
             this.bind('url:create',this.saveFileURL);
             this.songs.bind('add',this.addOne);
-            this.songs.bind('refresh',this.addAll);
+            this.songs.bind('reset',this.addAll);
             this.songs.bind('all',this.render);
             var playlist=AppController.settings.getPlayList();
             if(playlist){
-                this.songs.refresh(playlist.models);
+                this.songs.reset(playlist.models);
                 var lastSong=AppController.settings.getLastSong();
                 if(lastSong){
                     this.selectSong(new Song(lastSong));
@@ -1040,7 +1047,7 @@ $(function(){
             return this;
         },
         setSongsAndPlay:function(songs){
-            this.songs.refresh(songs.models);
+            this.songs.reset(songs.models);
             //getting first song
             var firstSong=this.songs.first();
             if(firstSong){
@@ -1075,7 +1082,7 @@ $(function(){
         },
         clearPlaylist:function(){
             this.songsEl.empty();
-            this.songs.refresh([]);
+            this.songs.reset([]);
             AppController.settings.savePlayList(this.songs);
             this.render();
         },
@@ -1496,7 +1503,7 @@ $(function(){
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounterEl:$('#time_counter'),
-        //Last.fm integration
+        //Last.fm integration                 \
         lastFmLoginBtn:$('#lastfm_login_btn'),
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),

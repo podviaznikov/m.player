@@ -27,11 +27,18 @@ $(function(){
             this.artists.bind('add',this.addArtist);
             this.artists.bind('retrieved',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
-            this.playLists.bind('refresh',this.addPlayLists);
+            this.playLists.bind('reset',this.addPlayLists);
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
-            this.soundCloudTracks.bind('refresh',this.addSoundCloudTracks);
+            this.soundCloudTracks.bind('reset',this.addSoundCloudTracks);
             this.artists.fetch();
             this.playLists.fetch();
+            this.soundCloudTracks.fetch({success:function(obj1,obj2){
+                console.log(obj1,obj2)
+            },
+            error:function(obj1,obj2){
+                console.log('er',obj1,obj2)
+            }
+            });
         },
         showSoundCloudMenu:function(){
             this.$('#show_soundcloud').removeClass('hidden');
@@ -95,16 +102,13 @@ $(function(){
                 albumFromList.trigger('add');
             }
         },
-        //not binded to this because used in addArtist
-        addAlbums:function(albums){
-            albums.each(this.addAlbum);
-        },
         addArtist:function(artist){
             //do not show view if artist has no name
             var self=this;
             if(artist.get('name') && !artist.get('isDeleted')){
-                artist.albumsModels.bind('refresh',function(){
-                    self.addAlbums(this);
+                artist.albumsModels.bind('reset',function(){
+                    var albums=this;
+                    albums.each(self.addAlbum);
                 });
                 var view=new ui.ArtistMenuView({model:artist});
                 this.artistsContent.append(view.render().el);
@@ -214,7 +218,7 @@ $(function(){
         playAlbumSongs:function(e){
             var album=e.currentTarget.dataset.album,
                 albumSongs=this.model.songs.forAlbum(album);
-            AppController.detailsView.songs.refresh(albumSongs);
+            AppController.detailsView.songs.reset(albumSongs);
             AppController.playlistView.setSongsAndPlay(albumSongs);
         },
         deleteArtist:function(){
@@ -362,8 +366,11 @@ $(function(){
         className:'lib-item-data box',
         tagName:'article',
         tpl:$('#sound_cloud_track_menu_tpl').html(),
+        events:{
+            'click':'playTrack'
+        },
         initialize:function(){
-            _.bindAll(this,'render','hide','show');
+            _.bindAll(this,'render','hide','show','playTrack');
             this.model.view=this;
         },
         render:function(){
@@ -372,6 +379,9 @@ $(function(){
             });
             $(this.el).html(html);
             return this;
+        },
+        playTrack:function(){
+              AppController.playerCtrl.play(this.model.get('url'));
         },
         hide:function(){
             this.$(this.el).hide();

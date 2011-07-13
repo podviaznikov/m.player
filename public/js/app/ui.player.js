@@ -17,7 +17,7 @@ $(function(){
         soundOffIcon:$('#sound_off_icon'),
         soundOnIcon:$('#sound_on_icon'),
         timeCounterEl:$('#time_counter'),
-        //Last.fm integration
+        //Last.fm integration                 \
         lastFmLoginBtn:$('#lastfm_login_btn'),
         lastFmUsername:$('#lastfm_username'),
         lastFmControlPanel:$('#lastfm_control_panel'),

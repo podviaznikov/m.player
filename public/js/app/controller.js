@@ -54,11 +54,9 @@ var AppController={
                         AppController.settings.saveScUser(scUsername);
                         AppController.playerCtrl.scLogin(scUsername);
                         AppController.libraryMenu.showSoundCloudMenu();
-                        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+accessToken;
                         AppController.libraryMenu.soundCloudTracks.fetch();
                     }
                 });
-
             }
             else{
                 //facebook authentication
@@ -81,8 +79,6 @@ var AppController={
 	    if(AppController.settings.isScLogined()){
 	        AppController.playerCtrl.scLogin(AppController.settings.getScUser());
 	        AppController.libraryMenu.showSoundCloudMenu();
-	        AppController.libraryMenu.soundCloudTracks.url=AppController.libraryMenu.soundCloudTracks.url+'?access_token='+AppController.settings.getScAccessToken();
-	        AppController.libraryMenu.soundCloudTracks.fetch();
 	    }
 	},
 	lastfmConnect:function(){

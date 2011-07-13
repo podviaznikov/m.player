@@ -51,8 +51,7 @@ app.get('/sc/user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('SC access token ready:',accessToken);
     res.contentType('application/json');
-    soundcloud.saveOauthToken(accessToken);
-    soundcloud.me(function(data){
+    soundcloud.me(accessToken,function(data){
         util.log('SC profile received');
         if(data){
             util.log(util.inspect(data));
@@ -64,8 +63,7 @@ app.get('/sc/tracks',function(req,res){
     var accessToken=req.query.access_token;
     util.log('SC access token ready:',accessToken);
     res.contentType('application/json');
-    soundcloud.saveOauthToken(accessToken);
-    soundcloud.myPrivateStreamableTracks(function(data){
+    soundcloud.myPrivateStreamableTracks(accessToken,function(data){
         util.log('SC resp:'+util.inspect(data));
         res.send(data);
     });

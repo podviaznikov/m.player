@@ -101,8 +101,8 @@ var Artist=Porridge.Model.extend({
         if(songsCount===0){
             this.set({isDeleted:true});
         }
-        //refresh albums models
-        this.albumsModels.refresh(this.songs.lisOfAlbumsModels().models);
+        //reset albums models
+        this.albumsModels.reset(this.songs.lisOfAlbumsModels().models);
     },
     remove:function(){
         this.set({isDeleted:true});
@@ -180,5 +180,7 @@ var PlayLists=Porridge.Collection.extend({
 var SoundCloudTrack=Backbone.Model.extend({});
 var SoundCloudTrackList=Backbone.Collection.extend({
     model:SoundCloudTrack,
-    url:'/sc/tracks'
+    url:function(){
+        return '/sc/tracks?access_token='+AppController.settings.getScAccessToken();
+    }
 });
