@@ -115,6 +115,14 @@ var Artist=Porridge.Model.extend({
         this.set({isDeleted:true});
         this.songs.remove();
         this.model.save();
+    },
+    findImage:function(callback){
+        var self=this;
+        dataService.getArtistImage(this.get('name'),function(image){
+            self.set({image:image});
+            self.save();
+            callback();
+        });
     }
 },{
     definition:{

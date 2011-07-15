@@ -369,6 +369,14 @@ var Artist=Porridge.Model.extend({
         this.set({isDeleted:true});
         this.songs.remove();
         this.model.save();
+    },
+    findImage:function(callback){
+        var self=this;
+        dataService.getArtistImage(this.get('name'),function(image){
+            self.set({image:image});
+            self.save();
+            callback();
+        });
     }
 },{
     definition:{
@@ -541,9 +549,7 @@ $(function(){
                                 artist=AppController.libraryMenu.artists.forName(artistName);
                             if(!artist){
                                 artist=new Artist({name:artistName});
-                                dataService.getArtistImage(artist.get('name'),function(image){
-                                    artist.set({image:image});
-                                    artist.save();
+                                artist.findImage(function(){
                                     AppController.libraryMenu.artists.add(artist);
                                     callback(null);
                                 });
@@ -553,7 +559,7 @@ $(function(){
                                 artist.set({isDeleted:false});
                                 var songsCount=artist.get('songsCount')||0;
                                 artist.set({songsCount:songsCount+1});
-                                artist.songs.add(song,{silent: true});
+                                artist.songs.add(song,{silent:true});
                                 artist.save();
                                 artist.change();
                                 callback(null);
@@ -1464,7 +1470,7 @@ $(function(){
 });
 $(function(){
 "use strict";
-    ui.PlayerCtrl = Backbone.View.extend({
+    ui.PlayerCtrl=Backbone.View.extend({
         el:$('#player'),
         mainControls:$('#main_controls_panel'),
         socialControls:$('#social_controls_panel'),

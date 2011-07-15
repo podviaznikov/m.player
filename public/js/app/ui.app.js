@@ -90,9 +90,7 @@ $(function(){
                                 artist=AppController.libraryMenu.artists.forName(artistName);
                             if(!artist){
                                 artist=new Artist({name:artistName});
-                                dataService.getArtistImage(artist.get('name'),function(image){
-                                    artist.set({image:image});
-                                    artist.save();
+                                artist.findImage(function(){
                                     AppController.libraryMenu.artists.add(artist);
                                     callback(null);
                                 });
@@ -102,7 +100,7 @@ $(function(){
                                 artist.set({isDeleted:false});
                                 var songsCount=artist.get('songsCount')||0;
                                 artist.set({songsCount:songsCount+1});
-                                artist.songs.add(song,{silent: true});
+                                artist.songs.add(song,{silent:true});
                                 artist.save();
                                 artist.change();
                                 callback(null);

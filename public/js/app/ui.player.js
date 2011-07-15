@@ -1,6 +1,6 @@
 $(function(){
 "use strict";
-    ui.PlayerCtrl = Backbone.View.extend({
+    ui.PlayerCtrl=Backbone.View.extend({
         el:$('#player'),
         mainControls:$('#main_controls_panel'),
         socialControls:$('#social_controls_panel'),
