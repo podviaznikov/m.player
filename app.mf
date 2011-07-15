@@ -1,9 +1,9 @@
 CACHE MANIFEST
 index.html
-16.png
 js/app.js
 js/lib/libs.bundle.js
 css/styles.css
+16.png
 css/images/no_picture.png
 /js/ext/data.service.js
 /js/ext/data.service.offline.js

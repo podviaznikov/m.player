@@ -25,6 +25,13 @@ var Song=Porridge.Model.extend({
         this.destroy();
         //remove file from filesystem
         fs.util.remove(this.get('fileName'));
+    },
+    findImage:function(callback){
+        var self=this;
+        dataService.getAlbumImage(this.get('artist'),this.get('album'),function(image){
+            self.set({image:image});
+            callback();
+        });
     }
 },{
     definition:{

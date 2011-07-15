@@ -180,7 +180,6 @@ $(function(){
                 this.soundOnIcon.show();
                 this.soundOffIcon.hide();
             }
-
             this.audioEl.toggleVolume();
         },
         shuffleOn:function(){

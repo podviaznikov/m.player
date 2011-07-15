@@ -179,15 +179,9 @@ $(function(){
         }
     });
 
-    ui.VisualizationView = Backbone.View.extend({
-        el: $('#playing_visualization'),
-        tpl: $('#visualization_tpl').html(),
-        initialize:function(){
-            _.bindAll(this,'selectSong','render','show','hide','renderAlbumPoster');
-        },
-        selectSong:function(song){
-            this.model = song;
-        },
+    ui.VisualizationView=Backbone.View.extend({
+        el:$('#playing_visualization'),
+        tplId:'visualization_tpl',
         show:function(){
             this.el.show();
             this.render();
@@ -195,13 +189,13 @@ $(function(){
         hide:function(){
             this.el.hide();
         },
-        renderAlbumPoster:function(image){
-            var html = _.template(this.tpl,{image:image });
-            $(this.el).html(html);
-        },
         render:function(){
-            if(this.model){
-                dataService.getAlbumPoster(this.model.get('artist'),this.model.get('album'),this.renderAlbumPoster);
+            var self=this,
+                song=AppController.playlistView.currentSong();
+            if(song){
+                dataService.getAlbumPoster(song.get('artist'),song.get('album'),function(image){
+                    self.renderTpl({image:image});
+                });
             }
             return this;
         }
