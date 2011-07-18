@@ -358,7 +358,7 @@ var Artist=Porridge.Model.extend({
         isDeleted:false
     },
     initialize:function(){
-        _.bindAll(this,'setParameterFromSongs','refresh','remove');
+        _.bindAll(this,'setParameterFromSongs','remove');
         if(!this.get('id')){
             this.id=UUID.generate();
             this.set({id:this.id});
@@ -366,9 +366,6 @@ var Artist=Porridge.Model.extend({
         this.songs=new SongsList();
         this.albumsModels=new AlbumList();
         this.songs.bind('retrieved',this.setParameterFromSongs);
-        this.refresh();
-    },
-    refresh:function(){
         this.songs.fetchByKey('artists',this.get('name'));
     },
     setParameterFromSongs:function(){
