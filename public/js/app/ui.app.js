@@ -67,17 +67,6 @@ $(function(){
                 AppController.metadataParser.parse(initialFile.name,data,function(tags){
                     console.log('Tags',tags);
                     var song=new Song();
-                    //fix track number
-                    if(tags.track && _.isString(tags.track)){
-                        var slashIndex=tags.track.indexOf('/');
-                        if(slashIndex>0){
-                            tags.track=tags.track.substring(0,slashIndex);
-                        }
-                        //don't save that 0 in the track number
-                        if('0'===tags.track.charAt(0)){
-                            tags.track=tags.track.substring(1);
-                        }
-                    }
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);

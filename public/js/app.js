@@ -197,13 +197,30 @@ var AppController={
     metadataParser:{
         parse:function(name,binaryData,callback){
             var startDate=new Date().getTime();
-            ID3.loadTags(name, function(){
-                var endDate = new Date().getTime();
-                console.log('Time: ' + ((endDate-startDate)/1000)+'s');
-                var tags = ID3.getAllTags(name);
+            ID3.loadTags(name,function(){
+                console.log('Time: ' + ((new Date().getTime()-startDate)/1000)+'s');
+                var parsedTags=ID3.getAllTags(name),
+                    tags={},
+                    originalTrack=parsedTags.track;
+                //fix track number
+                if(originalTrack && _.isString(originalTrack)){
+                    var slashIndex=originalTrack.indexOf('/');
+                    if(slashIndex>0){
+                        tags.track=originalTrack.substring(0,slashIndex);
+                    }
+                    //don't save that 0 in the track number
+                    if('0'===originalTrack.charAt(0)){
+                        tags.track=originalTrack.substring(1);
+                    }
+                }
+                tags.artist=parsedTags.artist.trim();
+                tags.title=parsedTags.title.trim();
+                tags.album=parsedTags.album.trim();
+                tags.year=parsedTags.year.trim();
+                tags.genre=parsedTags.genre.trim();
                 callback(tags);
-            },{tags: ["artist", "title", "album", "year", "comment", "track", "genre", "lyrics"],
-            dataReader: new FileAPIReader(binaryData)});
+            },{tags:['artist','title','album','year','track','genre'],
+            dataReader:new FileAPIReader(binaryData)});
         }
     }
 };
@@ -526,17 +543,6 @@ $(function(){
                 AppController.metadataParser.parse(initialFile.name,data,function(tags){
                     console.log('Tags',tags);
                     var song=new Song();
-                    //fix track number
-                    if(tags.track && _.isString(tags.track)){
-                        var slashIndex=tags.track.indexOf('/');
-                        if(slashIndex>0){
-                            tags.track=tags.track.substring(0,slashIndex);
-                        }
-                        //don't save that 0 in the track number
-                        if('0'===tags.track.charAt(0)){
-                            tags.track=tags.track.substring(1);
-                        }
-                    }
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);

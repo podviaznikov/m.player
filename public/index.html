@@ -139,16 +139,16 @@
     <span id="social" class="control off" title="Social"></span>
     <audio id="player_ctrl"></audio>
 </footer>
-<script type="html/template" id="song_tpl">
+<script type="text/html" id="song_tpl">
     <div class="song cell track_number"><%= track %></div>
     <div class="song cell"><%= title %></div>
     <div class="song cell delete_album_song">Delete</div>
 </script>
-<script type="html/template" id="song_mini_tpl">
+<script type="text/html" id="song_mini_tpl">
     <div class="song cell"><%= title %></div>
 </script>
-<script type="html/template" id="playlist_stat_tpl"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></script>
-<script type="html/template" id="artist_tpl">
+<script type="text/html" id="playlist_stat_tpl"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></script>
+<script type="text/html" id="artist_tpl">
     <span class="info_image"><img src="<%= image %>"></span>
     <section class="lib-item-info">
         <h1><%= name %></h1>
@@ -161,7 +161,7 @@
         </footer>
     </section>
 </script>
-<script type="html/template" id="saved_playlist_tpl">
+<script type="text/html" id="saved_playlist_tpl">
     <span class="info_image"><img src="<%= image %>"></span>
     <section class="lib-item-info">
         <h1><%= name %></h1>
@@ -172,7 +172,7 @@
         </footer>
     </section>
 </script>
-<script type="html/template" id="album_lib_tpl">
+<script type="text/html" id="album_lib_tpl">
     <span class="info_image"><img src="<%= image %>"></span>
     <section class="lib-item-info">
         <h1><%= name %></h1>
@@ -180,15 +180,15 @@
          <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songs.length %></span></div>
     </section>
 </script>
-<script type="html/template" id="visualization_tpl"><img src="<%= image %>"></script>
-<script type="html/template" id="detailed_album_info_tpl">
+<script type="text/html" id="visualization_tpl"><img src="<%= image %>"></script>
+<script type="text/html" id="detailed_album_info_tpl">
     <span class="info_image"><img src="<%= image %>"></span>
     <section class="detailed_album_info">
         <h1><%= name %></h1>
         <span class="release_date"><%= releaseDate %></span>
     </section>
 </script>
-<script type="html/template" id="detailed_playlist_info_tpl">
+<script type="text/html" id="detailed_playlist_info_tpl">
     <section class="detailed_album_info_panel box">
         <span class="info_image"><img src="<%= image %>"></span>
         <section class="detailed_album_info">
@@ -196,7 +196,7 @@
         </section>
     </section>
 </script>
-<script type="html/template" id="song_info_tpl">
+<script type="text/html" id="song_info_tpl">
     <span id="song_image" class="info_image"><img src="<%= image %>"></span>
     <section id="song_info">
         <h1><%= title %></h1>
@@ -205,14 +205,14 @@
         <span class="data_info_row"><%= year %></span>
     </section>
 </script>
-<script type="html/template" id="sound_cloud_track_menu_tpl">
+<script type="text/html" id="sound_cloud_track_menu_tpl">
     <h1><%= name %></h1>
 </script>
-<script type="html/template" id="artist_bio_tpl">
+<script type="text/html" id="artist_bio_tpl">
     <section><%= bio %></section>
     <section>
         <h2>Social profiles:</h2>
-        <% _.each(profiles, function(profile) { %> <a rel="network" target="_blank" class="profile_link" href="<%= profile.url %>"><%= profile.name %></a> <% }); %>
+        <% _.each(profiles, function(profile) { %><a rel="network" target="_blank" class="profile_link" href="<%= profile.url %>"><%= profile.name %></a> <% }); %>
     </section>
 </script>
 </body>
