@@ -63,7 +63,7 @@ var SongsList=Porridge.Collection.extend({
     listOfGenres:function(){
         return _.uniq(this.pluck('genre'))||[];
     },
-    lisOfAlbumsModels:function(){
+    listOfAlbumsModels:function(){
         var albums=new AlbumList();
         if(this.length>0){
             var artist=this.first().get('artist'),
@@ -106,7 +106,7 @@ var Artist=Porridge.Model.extend({
             this.set({isDeleted:true});
         }
         //reset albums models
-        this.albumsModels.reset(this.songs.lisOfAlbumsModels().models);
+        this.albumsModels.reset(this.songs.listOfAlbumsModels().models);
     },
     remove:function(){
         this.set({isDeleted:true});

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html manifest="app.mf" lang="en">
 <head>
-    <title>m.player</title>
+    <title>m.player - your favourite music player</title>
     <meta charset="utf-8"/>
-    <meta name="author" content="Enginimation Studio(enginimation.com)"/>
+    <meta name="author" content="Enginimation Studio (enginimation.com)"/>
     <meta name="description" content="Offline/online music player with Last.fm and Facebook integration"/>
     <meta name="keywords" content="player,music player,html5,offline player,lastfm,mp3,media player,facebook,fb,next big sound,nbs"/>
     <link rel="stylesheet" href="css/styles.css"/>
@@ -16,7 +16,7 @@
 <aside id="file_upload_status_dialog" class="modal_dialog">
     <section id="uploading_files_progress" class="dialog_content">
         <header>Importing: <span></span></header>
-        <progress value="0" min="0" max="100"></progress><span id="file_index"></span>/<span id="total_files_amount"></span>
+        <progress value="0" max="100"></progress><span id="file_index"></span>/<span id="total_files_amount"></span>
     </section>
 </aside>
 <section id="help_screen" class="screen_panel hidden">
@@ -112,7 +112,7 @@
         <span id="next_song" class="control" title="Next"></span>
         <span id="sound_toggle" class="control on" title="Mute"></span>
         <meter id ="volume_slider" value="0.5" min="0" max="1"></meter>
-        <progress id="music_slider" min="0" value="0"></progress>
+        <progress id="music_slider" value="0" value="0"></progress>
         <label id="time_counter">0:00</label>
         <span id="help" class="control off" title="Help"></span>
         <span id="expand" class="control on" title="Full screen mode"></span>
