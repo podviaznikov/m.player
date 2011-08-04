@@ -1026,7 +1026,7 @@ $(function(){
         },
         initialize: function(){
             this.songs=new SongsList();//should be first in this method!
-            _.bindAll(this,'addOne', 'addAll','destroyFileURL','currentSong','currentSongIndex',
+            _.bindAll(this,'addOne', 'addAll','currentSong','currentSongIndex',
              'randomSong','render','clearPlaylist','selectSong',
               'playSongModel','savePlayList','setPlayListModel','removePlayListModel','setSongsAndPlay');
             this.songs.bind('selected',this.selectSong);
@@ -1101,7 +1101,7 @@ $(function(){
             e.stopPropagation();
             e.preventDefault();
             var dataTransfer=e.originalEvent.dataTransfer;
-            if(dataTransfer&&dataTransfer.getData('text/plain')){
+            if(dataTransfer && dataTransfer.getData('text/plain')){
                 var transfer=DataTransfer.fromString(dataTransfer.getData('text/plain'));
                 if(transfer){
                     if('artist'===transfer.type){
@@ -1140,7 +1140,8 @@ $(function(){
                         this.songs.add(song);
                     }
                 }
-            }else{
+            }
+            else{
                 AppController.appView.dropFiles(e);
             }
         },
@@ -1150,12 +1151,6 @@ $(function(){
             song.findImage(function(){
                 self.infoEl.html(_.template(self.songInfoTpl,song.toJSON()));
             });
-        },
-        destroyFileURL:function(){
-            var audioURL=AppController.playerCtrl.url;
-            if(audioURL){
-                fs.util.destroyFileURL(audioURL);
-            }
         },
         randomSong:function(){
             var randomSong=Math.floor(Math.random()*this.songs.length);
@@ -1197,11 +1192,8 @@ $(function(){
             this.playSongModel(previousSong,playSong);
         },
         playSongModel:function(song,playSong){
-            if(playSong){
-                this.destroyFileURL();
-                if(song && song.view){
-                    song.view.playSong();
-                }
+            if(playSong && song && song.view){
+                song.view.playSong();
             }
             else if(!playSong && song && song.view){
                 song.view.selectSong();
@@ -1237,7 +1229,7 @@ $(function(){
             AppController.settings.saveLastArtist(this.model.get('artist'));
 
             this.selectSong();
-            fs.util.createFileURL(this.model.get('fileName'),function(er,url){
+            fs.util.getFileURL(this.model.get('fileName'),function(er,url){
                 if(!er){
                     AppController.playerCtrl.play(url);
                 }
@@ -1245,7 +1237,6 @@ $(function(){
         }
     });
 });
-
 $(function(){
     "use strict";
     //2nd column view
