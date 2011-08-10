@@ -143,7 +143,6 @@ $(function(){
             }
             else if(keyCode===13){
                 //enter
-                AppController.playlistView.destroyFileURL();
                 if(currentSong){
                     currentSong.view.playSong();
                 }

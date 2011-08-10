@@ -213,10 +213,15 @@ var AppController={
                         tags.track=originalTrack.substring(1);
                     }
                 }
+                parsedTags.artist=parsedTags.artist||'';
                 tags.artist=parsedTags.artist.trim();
+                parsedTags.title=parsedTags.title||'';
                 tags.title=parsedTags.title.trim();
+                parsedTags.album=parsedTags.album||'';
                 tags.album=parsedTags.album.trim();
+                parsedTags.year=parsedTags.year||'';
                 tags.year=parsedTags.year.trim();
+                parsedTags.genre=parsedTags.genre||'';
                 tags.genre=parsedTags.genre.trim();
                 callback(tags);
             },{tags:['artist','title','album','year','track','genre'],
@@ -616,7 +621,6 @@ $(function(){
             }
             else if(keyCode===13){
                 //enter
-                AppController.playlistView.destroyFileURL();
                 if(currentSong){
                     currentSong.view.playSong();
                 }
