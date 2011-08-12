@@ -1,0 +1,168 @@
+!!! 5
+html(manifest="app.mf",lang="en")
+  head
+    title m.player - your favourite music player
+    meta(charset="utf-8")
+    meta(name="author",content="Enginimation Studio (enginimation.com)")
+    meta(name="description", content="Offline/online music player with Last.fm and Facebook integration")
+    meta(name="keywords",content="player,music player,html5,offline player,lastfm,mp3,media player,facebook,fb,next big sound,nbs")
+    link(rel="stylesheet",href="css/styles.css")
+    script(src="js/lib/libs.bundle.js")
+    script(src="js/ext/data.service.js")
+    script(src="js/app.js")
+    script
+      $(function(){AppController.init();});
+body
+  include file_upload_dialog
+  section#help_screen.screen_panel.hidden
+    section#how_to_use.info_panel.help_panel
+      header
+        h1 How to use
+      section
+        p
+          | m.player - is modern offline/online audio player that works just in browser (it doesn't require Internet connection).
+          | You can drop music files from your file system (or import with special import buttons) inside the player and play them right now or come back later.</p>
+        p
+          | Player has library using which you can navigate through you music. Library populated automatically each time
+          | you add new files to play. Information in the library integrated with <a href="http://last.fm">last.fm</a> service and <a href="http://nextbigsound.com">Next Big Sound</a>.</p>
+        p
+          | All your music stored locally in the filesystem used by application. This is possible using latest HTML 5 technologies(Audio API, local storage, File System API, IndexedDB).</p>
+        p
+          | Player has integration with Last.fm and Facebook. You can login with Last.fm account and your music will be scrobbled automatically to Last.fm.
+          | Also if you login with Facebook account all information about listened songs will be available on your Facebook wall.</p>
+        p
+          | Project is open-source. You can join development <a href="https://github.com/podviaznikov/m.player">here</a>.</p>
+        p
+          | Current version is 2.9. A lot of new functionality will be implemented in the upcoming months.</p>
+        p
+          | Project is build by <a href="http://enginimation.com">Enginimation Studio</a>. Feel free to contact <a href="mailto:hello@enginimation.com">us</a> in any time with any reason.</p>
+    section#hot_keys.info_panel.help_panel
+      header
+        h1 Hot keys
+      section
+        .hot_key_row
+          .cell.key_combination Space
+          .cell Play/Pause
+        .hot_key_row
+          .cell.key_combination Enter
+          .cell Play selected track
+        .hot_key_row
+          .cell.key_combination Delete
+          .cell Delete selected track from playlist
+        .hot_key_row
+          .cell.key_combination Escape
+          .cell Return to normal mode
+        .hot_key_row
+          .cell.key_combination Key up
+          .cell Select previous track
+        .hot_key_row
+          .cell.key_combination Key down
+          .cell Select next track
+    section#contributions.info_panel.help_panel
+      header
+        h1 Thanks
+      section
+        span
+          a(href="http://documentcloud.github.com/underscore/") underscore.js
+          | - utility library for JavaScript.
+        span
+          a(href="http://documentcloud.github.com/backbone/") backbone.js
+           | - tiny MVC framework that helped to organize code.
+        span
+          a(href="http://jquery.com/") jQuery
+           |- the best cross-browser JavaScript library for dealing with DOM.</span>
+        span
+          a(href="https://github.com/podviaznikov/fs.js") fs.js
+           | - simple wrapper for HTML 5 File API.
+        span
+          a(href="https://github.com/aadsm/JavaScript-ID3-Reader") id3
+           |- ID3 reader for JavaScript.
+        span
+          a(href="http://last.fm") last.fm
+           | - great music service.
+        span
+          a(href="http://nextbigsound.com") Next Big Sound
+           | - gives you information about artists' social profiles
+        span
+          a(href="https://github.com/podviaznikov/porridge.js") porridge.js
+           | - simple wrapper for HTML 5 IndexedDB.
+        span
+          a(href="https://github.com/podviaznikov/backbone-indexdb") backbone-indexdb
+           |- backbone adapter for IndexedDB.
+        span
+          a(href="http://nodejs.org") Node.js
+           |- server side JavaScript environment.
+        span
+          a(href="http://expressjs.com/") Express.js
+           | - web framework for node.js.
+        span
+          a(href="https://github.com/jammus/lastfm-node") lastfm-node
+           |- node.js API for last.fm.
+        span
+          a(href="https://github.com/gasi/node-facebook-graph") Facebook graph
+           |- Facebook Node.js SDK
+  section#playing_visualization
+  section#main_screen.screen_panel
+    section#library_menu.info_panel.main_panel
+      header
+        h1#show_artists Artists
+        h1#show_albums Albums
+        h1#show_playlists Playlists
+        h1#show_soundcloud.hidden SoundCloud
+        input(placeholder="Search artist",type="search",maxlength="16",autocomplete="on")
+      section#artists_library_content.library_content_panel.scrollable_panel
+      section#albums_library_content.library_content_panel.scrollable_panel
+      section#playlists_library_content.library_content_panel.scrollable_panel
+      section#soundcloud_library_content.library_content_panel.scrollable_panel
+    section#filtered_lib.info_panel.main_panel
+      header
+        h1 Albums
+        h1 Bio
+      section#filtered_lib_content.scrollable_panel
+        article#artist_bio
+    section#playing_list.info_panel.main_panel
+       header.box
+         h1 Now playing
+       section#song_info_view
+       section#playlist_toolbar
+         input#new_play_list(value="Unsaved list",maxlength="18")
+         input#drop_files(type="file",accept="audio/*",multiple)
+         input#drop_folder(type="file",accept="audio/*",multiple,webkitdirectory)
+         span#clear_playlist.command_link(title="Clear playlist") Clear
+         span#import_songs_directory.command_link(title="Import music directory") Import directory
+         span#import_songs_files.command_link(title="Import music files") Import files
+       section#playing_songs.scrollable_panel
+         label Drop mp3 files here
+       footer
+  footer#player
+    section#main_controls_panel
+      span#shuffle_toggle.control.off(title="Turn shuffle on")
+      span#repeat_toggle.control.on(title="Turn repeat off")
+      span#stop_song.control(title="Stop")
+      span#previous_song.control(title="Previous")
+      span#play_toggle.control.paused(title="Play")
+      span#next_song.control(title="Next")
+      span#sound_toggle.control.on(title="Mute")
+      meter#volume_slider(value="0.5",min="0",max="1")
+      progress#music_slider(value="0")
+      label#time_counter 0:00
+      span#help.control.off(title="Help")
+      span#expand.control.on(title="Full screen mode")
+    section#social_controls_panel.hidden
+      fieldset#sc_control_panel.unlogined
+        label#sc_username.authorised
+        a#sc_logout_btn.social_logout.control.authorised(title="Logout from SoundCloud")
+        a#sc_login_btn.control(title="Login to SoundCloud",href="https://soundcloud.com/connect?scope=non-expiring&response_type=token&display=popup&client_id=1ef8d74100e28b577620e0243874233e&redirect_uri=http://player.enginimation.com") SC
+      fieldset#fb_control_panel.unlogined
+        span#fb_icon.control.authorised(title="Facebook")
+        label#fb_username.authorised
+        a#fb_logout_btn.social_logout.control.authorised(title="Logout from Facebook")
+        a#fb_login_btn.control(title="Login to Facebook",href="https://www.facebook.com/dialog/oauth?client_id=222066051151670&redirect_uri=http://player.enginimation.com&scope=email,read_stream,offline_access&response_type=token")
+      fieldset#lastfm_control_panel.unlogined
+        span#lastfm_icon.control.authorised(title="Last.fm")
+        label#lastfm_username.authorised
+        span#lastfm_logout_btn.social_logout.control.authorised(title="Logout from Last fm")
+        a#lastfm_login_btn(href="http://www.last.fm/api/auth/?api_key=e3377f4b4d8c6de47c7e2c81485a65f5.control",title="Login to Last.fm")
+    span#social.control.off(title="Social")
+    audio#player_ctrl
+  include templates
