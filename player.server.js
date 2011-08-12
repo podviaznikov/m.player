@@ -11,6 +11,7 @@ var util=require('util'),
         secret:'99523abcd47bd54b5cfa10cf9bb81f20'
     });
     app=express.createServer();
+//init NBS api
 
 nbs.init('mplayer');
 app.configure(function(){
@@ -26,6 +27,15 @@ app.configure(function(){
     app.use(app.router);
     //public folder for static files
     app.use(express.static(__dirname+'/public'));
+    //jade settings
+    //set path to the views (template) directory
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.set('view options', {layout: false});
+});
+//index page
+app.get('/', function(req,res){
+   res.render('index',{filename:__dirname+'/views/index.jade'});
 });
 app.get('/app.mf', function(req, res){
     res.header('Content-Type', 'text/cache-manifest');

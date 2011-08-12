@@ -1,0 +1,68 @@
+script#song_tpl(type="text/html")
+  <div class="song cell track_number"><%= track %></div>
+  <div class="song cell"><%= title %></div>
+  <div class="song cell delete_album_song">Delete</div>
+script#song_mini_tpl(type="text/html")
+  <div class="song cell"><%= title %></div>
+script#playlist_stat_tpl(type="text/html")
+  <label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span>
+script#artist_tpl(type="text/html")
+  |<span class="info_image"><img src="<%= image %>"></span>
+  |<section class="lib-item-info">
+  |  <h1><%= name %></h1>
+  |  <div class="artist_albums"><% _.each(albums, function(album) { %> <a class="album_link" data-album="<%= album %>"><%= album %></a> <% }); %></div>
+  |  <div class="genres_box"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag.genre_link"><%= genre %></a> <% }); %></div>
+  | <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+  |  <footer>
+  |    <span class="bio_artist command_link" title="Show artist's bio">Bio</span>
+  |    <span class="delete_artist command_link" title="Delete this artist from library">Delete</span>
+  |    </footer>
+  |  </section>
+script#saved_playlist_tpl(type="text/html")
+  |<span class="info_image"><img src="<%= image %>"></span>
+  |<section class="lib-item-info">
+  |    <h1><%= name %></h1>
+  |    <div class="genres_box"><label>Genres</label><% _.each(genres, function(genre) { %> <a rel="tag.genre_link"><%= genre %></a> <% }); %></div>
+  |    <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songsCount %></span></div>
+  |    <footer class="saved_playlist_toolbar">
+  |        <span class="delete_playlist command_link" title="Delete this playlist">Delete</span>
+  |    </footer>
+  |</section>
+script#album_lib_tpl(type="text/html")
+  |<span class="info_image"><img src="<%= image %>"></span>
+  |<section class="lib-item-info">
+  |  <h1><%= name %></h1>
+  |  <h2><%= artist %></h2>
+  |    <div class="song_count"><label for="song_count">Songs</label><span class="song_count"><%= songs.length %></span></div>
+  |</section>
+script#visualization_tpl(type="text/html")
+  <img src="<%= image %>">
+script#detailed_album_info_tpl(type="text/html")
+  |<span class="info_image"><img src="<%= image %>"></span>
+  |<section class="detailed_album_info">
+  |    <h1><%= name %></h1>
+  |    <span class="release_date"><%= releaseDate %></span>
+  |</section>
+script#detailed_playlist_info_tpl(type="text/html")
+  |<section class="detailed_album_info_panel box">
+  |    <span class="info_image"><img src="<%= image %>"></span>
+  |    <section class="detailed_album_info">
+  |        <h1><%= name %></h1>
+  |    </section>
+  |</section>
+script#song_info_tpl(type="text/html")
+  |<span id="song_image" class="info_image"><img src="<%= image %>"></span>
+  |<section id="song_info">
+  |    <h1><%= title %></h1>
+  |    <span class="data_info_row"><%= album %></span>
+  |    <span class="data_info_row"><%= artist %></span>
+  |    <span class="data_info_row"><%= year %></span>
+  |</section>
+script#sound_cloud_track_menu_tpl(type="text/html")
+  <h1><%= name %></h1>
+script#artist_bio_tpl(type="text/html")
+  |<section><%= bio %></section>
+  |<section>
+  |  <h2>Social profiles:</h2>
+  |  <% _.each(profiles, function(profile) { %><a rel="network" target="_blank.profile_link" href="<%= profile.url %>"><%= profile.name %></a> <% }); %>
+  |</section>
