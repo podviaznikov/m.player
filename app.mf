@@ -4,7 +4,6 @@ js/lib/libs.bundle.js
 css/styles.css
 /js/ext/data.service.js
 16.png
-index.html
 css/images/no_picture.png
 /js/ext/data.service.offline.js
 NETWORK:
