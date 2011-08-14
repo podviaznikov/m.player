@@ -187,7 +187,7 @@ var PlayList=Porridge.Model.extend({
     }
 });
 var PlayLists=Porridge.Collection.extend({
-    model: PlayList,
+    model:PlayList,
     forName:function(playlistName){
         return this.find(function(playlist){ return playlist.get('name') === playlistName; });
     },

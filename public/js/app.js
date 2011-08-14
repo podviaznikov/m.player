@@ -21,13 +21,19 @@ var AppController={
 		this.visualizationView=new ui.VisualizationView();
         this.visualizationView.el.height(newHeight);
         var config={
-            dbName:'mdb',
+            dbName:'mdb_2',
             dbDescription:'m.player database',
-            dbVersion:'1',
+            dbVersion:'2',
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,function(){
-            console.log('Inited views and social services/');
+            fs.io.readRootDirectory(function(err,files){
+                if(!err){
+                    console.log("Files",files);
+                    AppController.appView.handleFileSelect(files);
+                }
+            });
+            console.log('Initialized views and social services');
             //third column
             AppController.playlistView=new ui.PlayListView();
             //first column
@@ -468,7 +474,7 @@ var PlayList=Porridge.Model.extend({
     }
 });
 var PlayLists=Porridge.Collection.extend({
-    model: PlayList,
+    model:PlayList,
     forName:function(playlistName){
         return this.find(function(playlist){ return playlist.get('name') === playlistName; });
     },

@@ -15,92 +15,9 @@ html(manifest="app.mf",lang="en")
 body
   include file_upload_dialog
   section#help_screen.screen_panel.hidden
-    section#how_to_use.info_panel.help_panel
-      header
-        h1 How to use
-      section
-        p
-          | m.player - is modern offline/online audio player that works just in browser (it doesn't require Internet connection).
-          | You can drop music files from your file system (or import with special import buttons) inside the player and play them right now or come back later.</p>
-        p
-          | Player has library using which you can navigate through you music. Library populated automatically each time
-          | you add new files to play. Information in the library integrated with <a href="http://last.fm">last.fm</a> service and <a href="http://nextbigsound.com">Next Big Sound</a>.</p>
-        p
-          | All your music stored locally in the filesystem used by application. This is possible using latest HTML 5 technologies(Audio API, local storage, File System API, IndexedDB).</p>
-        p
-          | Player has integration with Last.fm and Facebook. You can login with Last.fm account and your music will be scrobbled automatically to Last.fm.
-          | Also if you login with Facebook account all information about listened songs will be available on your Facebook wall.</p>
-        p
-          | Project is open-source. You can join development <a href="https://github.com/podviaznikov/m.player">here</a>.</p>
-        p
-          | Current version is 2.9. A lot of new functionality will be implemented in the upcoming months.</p>
-        p
-          | Project is build by <a href="http://enginimation.com">Enginimation Studio</a>. Feel free to contact <a href="mailto:hello@enginimation.com">us</a> in any time with any reason.</p>
-    section#hot_keys.info_panel.help_panel
-      header
-        h1 Hot keys
-      section
-        .hot_key_row
-          .cell.key_combination Space
-          .cell Play/Pause
-        .hot_key_row
-          .cell.key_combination Enter
-          .cell Play selected track
-        .hot_key_row
-          .cell.key_combination Delete
-          .cell Delete selected track from playlist
-        .hot_key_row
-          .cell.key_combination Escape
-          .cell Return to normal mode
-        .hot_key_row
-          .cell.key_combination Key up
-          .cell Select previous track
-        .hot_key_row
-          .cell.key_combination Key down
-          .cell Select next track
-    section#contributions.info_panel.help_panel
-      header
-        h1 Thanks
-      section
-        span
-          a(href="http://documentcloud.github.com/underscore/") underscore.js
-          | - utility library for JavaScript.
-        span
-          a(href="http://documentcloud.github.com/backbone/") backbone.js
-           | - tiny MVC framework that helped to organize code.
-        span
-          a(href="http://jquery.com/") jQuery
-           |- the best cross-browser JavaScript library for dealing with DOM.</span>
-        span
-          a(href="https://github.com/podviaznikov/fs.js") fs.js
-           | - simple wrapper for HTML 5 File API.
-        span
-          a(href="https://github.com/aadsm/JavaScript-ID3-Reader") id3
-           |- ID3 reader for JavaScript.
-        span
-          a(href="http://last.fm") last.fm
-           | - great music service.
-        span
-          a(href="http://nextbigsound.com") Next Big Sound
-           | - gives you information about artists' social profiles
-        span
-          a(href="https://github.com/podviaznikov/porridge.js") porridge.js
-           | - simple wrapper for HTML 5 IndexedDB.
-        span
-          a(href="https://github.com/podviaznikov/backbone-indexdb") backbone-indexdb
-           |- backbone adapter for IndexedDB.
-        span
-          a(href="http://nodejs.org") Node.js
-           |- server side JavaScript environment.
-        span
-          a(href="http://expressjs.com/") Express.js
-           | - web framework for node.js.
-        span
-          a(href="https://github.com/jammus/lastfm-node") lastfm-node
-           |- node.js API for last.fm.
-        span
-          a(href="https://github.com/gasi/node-facebook-graph") Facebook graph
-           |- Facebook Node.js SDK
+    include how_to_use
+    include hot_keys
+    include contributions
   section#playing_visualization
   section#main_screen.screen_panel
     section#library_menu.info_panel.main_panel
