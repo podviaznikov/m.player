@@ -292,9 +292,4 @@ function scrobble(trackName,artist,trackLength,key,user){
         util.log('unsuccesfull scrobble='+error);
      });
 };
-app.listen(8083);
-//catch all errors
-process.on('uncaughtException',function(err){
-  util.log(err);
-});
-util.log('started app on 8083');
+exports.app=app;
