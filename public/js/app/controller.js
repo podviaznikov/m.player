@@ -31,7 +31,7 @@ var AppController={
                 fs.io.readFilesFromRootDirectory(function(err,files){
                     if(!err){
                         console.log("Files",files);
-                        AppController.appView.handleFileSelect(files,false);
+                        AppController.appView.handleFileSelect(files,true);
                     }
                 });
                 AppController.settings.saveDbVersion(dbVersion);

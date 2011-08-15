@@ -43,13 +43,12 @@ $(function(){
                this.handleFileSelect(files); // handle FileList object.
             }
         },
-        handleFileSelect:function(files,write){
+        handleFileSelect:function(files,skipWrite){
             var self=this,
-                write=write||true,
                 fileProcessingFunctions=[];
             this.fileUploadStatusDialog.addClass('active');
             _.each(files,function(file,index){
-                var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length,write);
+                var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length,skipWrite);
                 fileProcessingFunctions.push(bindedFunct);
             });
             async.series(fileProcessingFunctions,function(err,results){
@@ -57,7 +56,7 @@ $(function(){
             });
         },
         //todo(anton) some refactoring should be done. get dom elements from here
-        processOneAudioFile:function(file,index,filesAmount,write,callback){
+        processOneAudioFile:function(file,index,filesAmount,skipWrite,callback){
             var percent=Math.floor(((index+1)/filesAmount)*100),
                 progressElement=this.$(this.progress);
             this.$('#file_index').html(index);
@@ -72,16 +71,16 @@ $(function(){
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
                     progressElement.val(percent);
-                    if(write){
+                    if(skipWrite){
+                        AppController.appView.saveSong(song,callback);
+                    }
+                    else{
                         fs.write.file(initialFile,function(writeError){
                             if(!writeError){
                                 AppController.appView.saveSong(song,callback);
                                 AppController.playlistView.songs.add(song);
                             }
                         },song.get('fileName'));
-                    }
-                    else{
-                        AppController.appView.saveSong(song,callback);
                     }
                });
             });

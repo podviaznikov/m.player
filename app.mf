@@ -3,9 +3,9 @@ CACHE MANIFEST
 js/app.js
 16.png
 css/images/no_picture.png
-css/styles.css
 /js/ext/data.service.js
 js/lib/libs.bundle.js
+css/styles.css
 NETWORK:
 http://userserve-ak.last.fm
 http://player.enginimation.com
