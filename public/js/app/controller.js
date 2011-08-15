@@ -19,22 +19,22 @@ var AppController={
 		this.playerCtrl=new ui.PlayerCtrl();
 		this.visualizationView=new ui.VisualizationView();
         this.visualizationView.el.height(newHeight);
-        var dbVersion='5';
+        var dbVersion='1';
         var config={
-            dbName:'mdb_2',
+            dbName:'mdb',
             dbDescription:'m.player database',
-            dbVersion:dbVersion,
+            dbVersion:'1',
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,function(){
-            if(dbVersion!==settings.getDbVersion()){
+            if(dbVersion!==AppController.settings.getDbVersion()){
                 fs.io.readFilesFromRootDirectory(function(err,files){
                     if(!err){
                         console.log("Files",files);
                         AppController.appView.handleFileSelect(files,false);
                     }
                 });
-                settings.saveDbVersion(dbVersion);
+                AppController.settings.saveDbVersion(dbVersion);
             }
             console.log('Initialized views and social services');
             //third column

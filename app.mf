@@ -3,8 +3,8 @@ CACHE MANIFEST
 js/app.js
 16.png
 css/images/no_picture.png
-/js/ext/data.service.js
 css/styles.css
+/js/ext/data.service.js
 js/lib/libs.bundle.js
 NETWORK:
 http://userserve-ak.last.fm
