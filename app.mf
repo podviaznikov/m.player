@@ -1,8 +1,8 @@
 CACHE MANIFEST
+/js/ext/data.service.offline.js
 js/app.js
 16.png
 css/images/no_picture.png
-/js/ext/data.service.offline.js
 /js/ext/data.service.js
 css/styles.css
 js/lib/libs.bundle.js
