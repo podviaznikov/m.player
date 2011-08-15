@@ -19,19 +19,23 @@ var AppController={
 		this.playerCtrl=new ui.PlayerCtrl();
 		this.visualizationView=new ui.VisualizationView();
         this.visualizationView.el.height(newHeight);
+        var dbVersion='5';
         var config={
-            dbName:'mdb_2',
+            dbName:'mdb',
             dbDescription:'m.player database',
-            dbVersion:'2',
+            dbVersion:dbVersion,
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,function(){
-            fs.io.readRootDirectory(function(err,files){
-                if(!err){
-                    console.log("Files",files);
-                    AppController.appView.handleFileSelect(files);
-                }
-            });
+            if(dbVersion!==settings.getDbVersion()){
+                fs.io.readFilesFromRootDirectory(function(err,files){
+                    if(!err){
+                        console.log("Files",files);
+                        AppController.appView.handleFileSelect(files,false);
+                    }
+                });
+                settings.saveDbVersion(dbVersion);
+            }
             console.log('Initialized views and social services');
             //third column
             AppController.playlistView=new ui.PlayListView();
@@ -107,6 +111,12 @@ var AppController={
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
+        saveDbVersion:function(dbVersion){
+            localStorage.setItem('dbVersion',dbVersion);
+        },
+        getDbVersion:function(){
+            return localStorage.getItem('dbVersion');
+        },
         saveShuffle:function(isShuffle){
             localStorage.setItem('isShuffle',isShuffle);
         },

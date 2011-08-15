@@ -20,19 +20,23 @@ var AppController={
 		this.playerCtrl=new ui.PlayerCtrl();
 		this.visualizationView=new ui.VisualizationView();
         this.visualizationView.el.height(newHeight);
+        var dbVersion='5';
         var config={
-            dbName:'mdb_2',
+            dbName:'mdb',
             dbDescription:'m.player database',
-            dbVersion:'2',
+            dbVersion:dbVersion,
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
         Porridge.init(config,function(){
-            fs.io.readRootDirectory(function(err,files){
-                if(!err){
-                    console.log("Files",files);
-                    AppController.appView.handleFileSelect(files);
-                }
-            });
+            if(dbVersion!==settings.getDbVersion()){
+                fs.io.readFilesFromRootDirectory(function(err,files){
+                    if(!err){
+                        console.log("Files",files);
+                        AppController.appView.handleFileSelect(files,false);
+                    }
+                });
+                settings.saveDbVersion(dbVersion);
+            }
             console.log('Initialized views and social services');
             //third column
             AppController.playlistView=new ui.PlayListView();
@@ -108,6 +112,12 @@ var AppController={
 	},
     //storing all users' settings(locally): volume, last music, pressed buttons etc.
     settings:{
+        saveDbVersion:function(dbVersion){
+            localStorage.setItem('dbVersion',dbVersion);
+        },
+        getDbVersion:function(){
+            return localStorage.getItem('dbVersion');
+        },
         saveShuffle:function(isShuffle){
             localStorage.setItem('isShuffle',isShuffle);
         },
@@ -371,7 +381,10 @@ var SongsList=Porridge.Collection.extend({
 });
 var Artist=Porridge.Model.extend({
     defaults:{
-        isDeleted:false
+        isDeleted:false,
+        songsCount:0,
+        albums:[],
+        genres:[]
     },
     initialize:function(){
         _.bindAll(this,'setParameterFromSongs','remove');
@@ -532,12 +545,13 @@ $(function(){
                this.handleFileSelect(files); // handle FileList object.
             }
         },
-        handleFileSelect:function(files){
+        handleFileSelect:function(files,write){
             var self=this,
+                write=write||true,
                 fileProcessingFunctions=[];
             this.fileUploadStatusDialog.addClass('active');
             _.each(files,function(file,index){
-                var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length);
+                var bindedFunct=async.apply(self.processOneAudioFile,file,index,files.length,write);
                 fileProcessingFunctions.push(bindedFunct);
             });
             async.series(fileProcessingFunctions,function(err,results){
@@ -545,7 +559,7 @@ $(function(){
             });
         },
         //todo(anton) some refactoring should be done. get dom elements from here
-        processOneAudioFile:function(file,index,filesAmount,callback){
+        processOneAudioFile:function(file,index,filesAmount,write,callback){
             var percent=Math.floor(((index+1)/filesAmount)*100),
                 progressElement=this.$(this.progress);
             this.$('#file_index').html(index);
@@ -559,34 +573,42 @@ $(function(){
                     tags.fileName=song.id+initialFile.extension();
                     tags.originalFileName=initialFile.name;
                     song.set(tags);
-                    fs.write.file(initialFile,function(writeError){
-                        if(!writeError){
-                            song.save();
-                            AppController.playlistView.songs.add(song);
-                            progressElement.val(percent);
-                            var artistName=song.get('artist'),
-                                artist=AppController.libraryMenu.artists.forName(artistName);
-                            if(!artist){
-                                artist=new Artist({name:artistName});
-                                artist.findImage(function(){
-                                    AppController.libraryMenu.artists.add(artist);
-                                    callback(null);
-                                });
+                    progressElement.val(percent);
+                    if(write){
+                        fs.write.file(initialFile,function(writeError){
+                            if(!writeError){
+                                AppController.appView.saveSong(song,callback);
+                                AppController.playlistView.songs.add(song);
                             }
-                            else{
-                                //if artist was deleted: mark it as undeleted
-                                artist.set({isDeleted:false});
-                                var songsCount=artist.get('songsCount')||0;
-                                artist.set({songsCount:songsCount+1});
-                                artist.songs.add(song,{silent:true});
-                                artist.save();
-                                artist.change();
-                                callback(null);
-                            }
-                        }
-                    },song.get('fileName'));
+                        },song.get('fileName'));
+                    }
+                    else{
+                        AppController.appView.saveSong(song,callback);
+                    }
                });
             });
+        },
+        saveSong:function(song,callback){
+            song.save();
+            var artistName=song.get('artist'),
+                artist=AppController.libraryMenu.artists.forName(artistName);
+            if(!artist){
+                artist=new Artist({name:artistName});
+                artist.findImage(function(){
+                    AppController.libraryMenu.artists.add(artist);
+                    callback(null);
+                });
+            }
+            else{
+                //if artist was deleted: mark it as undeleted
+                artist.set({isDeleted:false});
+                var songsCount=artist.get('songsCount')||0;
+                artist.set({songsCount:songsCount+1});
+                artist.songs.add(song,{silent:true});
+                artist.save();
+                artist.change();
+                callback(null);
+            }
         },
         showHelp:function(){
             this.isRegularMode=false;

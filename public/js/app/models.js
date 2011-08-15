@@ -84,7 +84,10 @@ var SongsList=Porridge.Collection.extend({
 });
 var Artist=Porridge.Model.extend({
     defaults:{
-        isDeleted:false
+        isDeleted:false,
+        songsCount:0,
+        albums:[],
+        genres:[]
     },
     initialize:function(){
         _.bindAll(this,'setParameterFromSongs','remove');

@@ -1,14 +1,14 @@
 CACHE MANIFEST
 js/app.js
-js/lib/libs.bundle.js
-css/styles.css
-/js/ext/data.service.js
 16.png
 css/images/no_picture.png
 /js/ext/data.service.offline.js
+/js/ext/data.service.js
+css/styles.css
+js/lib/libs.bundle.js
 NETWORK:
-http://player.enginimation.com
 http://userserve-ak.last.fm
+http://player.enginimation.com
 FALLBACK:
 http://userserve-ak.last.fm/serve/126/*.png /css/images/no_picture.png
 http://userserve-ak.last.fm/serve/126/*.jpg /css/images/no_picture.png
