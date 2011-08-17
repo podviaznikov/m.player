@@ -2,6 +2,7 @@
 var util=require('util'),
     express=require('express'),
     connect=require('connect'),
+    appCache = require('connect-app-cache'),
     soundcloud=require('soundcloud'),
     nbs=require('nbs-api'),
     facebook=require('facebook-graph'),
@@ -32,15 +33,13 @@ app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.set('view options', {layout: false});
+    app.use(appCache("app.mf",__dirname+"/app.mf",{maxAge:0}));
 });
 //index page
 app.get('/', function(req,res){
    res.render('index',{filename:__dirname+'/views/index.jade'});
 });
-app.get('/app.mf', function(req, res){
-    res.header('Content-Type', 'text/cache-manifest');
-    res.sendfile(__dirname + '/app.mf');
-});
+
 app.get('/fb/user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('FB access token ready:',accessToken);
