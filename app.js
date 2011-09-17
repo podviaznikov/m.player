@@ -31,13 +31,13 @@ app.configure(function(){
     //jade settings
     //set path to the views (template) directory
     app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
+    //app.set('view engine', 'jade');
     app.set('view options', {layout: false});
     app.use(appCache("app.mf",__dirname+"/app.mf",{maxAge:0}));
 });
 //index page
 app.get('/', function(req,res){
-   res.render('index',{filename:__dirname+'/views/index'});
+   res.render('index.jade');
 });
 
 app.get('/fb/user',function(req,res){
