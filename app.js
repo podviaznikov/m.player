@@ -291,4 +291,4 @@ function scrobble(trackName,artist,trackLength,key,user){
         util.log('unsuccesfull scrobble='+error);
      });
 };
-export.app = app;
+exports.app = app;
