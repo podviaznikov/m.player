@@ -37,7 +37,7 @@ app.configure(function(){
 });
 //index page
 app.get('/', function(req,res){
-   res.render('index',{filename:__dirname+'/views/index.jade'});
+   res.render('index',{filename:__dirname+'/views/index'});
 });
 
 app.get('/fb/user',function(req,res){
