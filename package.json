@@ -1,0 +1,26 @@
+{
+  "author": "Enginimation Studio <hello@enginimation.com> (http://enginimation.com)",
+  "name": "m.player",
+  "description": "Stylish offline browser player with last.fm integration.",
+  "version": "1.2.0",
+  "homepage": "http://player.enginimation.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/enginimation/m.player.git"
+  },
+  "main": "./app.js",
+  "engines": {
+    "node": "~v0.4.9"
+  },
+  "dependencies": {
+    "express": ">=2.4.6",
+    "connect-app-cache": ">=0.2.1",
+    "connect": ">=1.5.2",
+    "jade": ">=0.14.0",
+    "soundcloud": ">=0.2.0",
+    "nbs-api": ">=0.4.0",
+    "lastfm": ">=0.6.3",
+    "facebook-graph": ">=0.0.6"
+  },
+  "devDependencies": {}
+}
