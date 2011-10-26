@@ -13,14 +13,15 @@
     "node": "~v0.4.9"
   },
   "dependencies": {
-    "express": ">=2.4.6",
+    "express": ">=2.4.7",
     "connect-app-cache": ">=0.2.1",
     "connect": ">=1.5.2",
-    "jade": ">=0.14.0",
+    "jade": ">=0.16.2",
     "soundcloud": ">=0.2.0",
     "nbs-api": ">=0.4.0",
-    "lastfm": ">=0.6.3",
+    "lastfm": ">=0.8.0",
     "facebook-graph": ">=0.0.6"
   },
   "devDependencies": {}
 }
+

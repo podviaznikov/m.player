@@ -26,7 +26,7 @@ $(function(){
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
-            this.artists.bind('retrieved',this.allArtistsLoaded);
+            this.artists.bind('reset',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
             this.playLists.bind('reset',this.addPlayLists);
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
@@ -45,6 +45,7 @@ $(function(){
             }
         },
         allArtistsLoaded:function(){
+            this.artists.each(this.addArtist);
             var lastArtist=AppController.settings.getLastArtist();
             if(lastArtist){
                 var lastPlayedArtist=this.artists.forName(lastArtist);

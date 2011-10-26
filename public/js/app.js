@@ -285,7 +285,6 @@ Backbone.View.prototype.renderTpl=function(model){
 };
 
 
-
 var database = {
   id: "m-player-db-3",
   description: "The database for the Movies",
@@ -293,51 +292,60 @@ var database = {
     version: "1.0",
     migrate: function (db, versionRequest, next) {
       var songsStore = db.createObjectStore("songs");
+      var artistsStore = db.createObjectStore("artists");
+      var playlistsStore = db.createObjectStore("playlists");
+      next();
+    }
+ },{
+    version: "1.1",
+    migrate: function (db, versionRequest, next) {
+      var songsStore = versionRequest.transaction.objectStore("songs");
       songsStore.createIndex("idIndex", "id", {unique: true});
       songsStore.createIndex("artistIndex", "artist", {unique: false});
-      var artistsStore = db.createObjectStore("artists");
+      var artistsStore = versionRequest.transaction.objectStore("artists");
       artistsStore.createIndex("nameIndex", "name", {unique: true});
-      var playlistsStore = db.createObjectStore("playlists");
+      var playlistsStore = versionRequest.transaction.objectStore("playlists");
+      playlistsStore.createIndex("idIndex", "id", {unique: true});
       next();
     }
   }]
 };
 var DataTransfer={
-    create:function(type,value){
-        return Object.create(this,{type:{value:type},value:{value:value}});
-    },
-    toString:function(){
-        return JSON.stringify({
-            type:this.type,
-            value:this.value
-        });
-    },
-    fromString:function(source){
-        return JSON.parse(source);
-    }
+  create:function(type,value){
+    return Object.create(this,{type:{value:type},value:{value:value}});
+  },
+  toString:function(){
+    return JSON.stringify({
+      type:this.type,
+      value:this.value
+    });
+  },
+  fromString:function(source){
+    return JSON.parse(source);
+  }
 };
 var Song = Backbone.Model.extend({
   database: database,
   storeName: "songs",
   defaults:{
-      album:'No information',
-      title:'No information',
-      artist:'No information',
-      year:'',
-      genre:''
+    album:'No information',
+    title:'No information',
+    artist:'No information',
+    year:'',
+    genre:''
   },
   remove:function(){
-      //destroy model
-      this.destroy();
-      //remove file from filesystem
-      fs.util.remove(this.get('fileName'));
+    //destroy model
+    this.destroy();
+    //remove file from filesystem
+    fs.util.remove(this.get('fileName'));
   },
   findImage:function(callback){
-      var self=this;
-      dataService.getAlbumImage(this.get('artist'),this.get('album'),function(image){
-          self.set({image:image});
-          callback();
-      });
+    var self=this;
+    dataService.getAlbumImage(this.get('artist'),this.get('album'),function(image){
+        self.set({image:image});
+        callback();
+    });
   }
 });
 var SongsList=Backbone.Collection.extend({
@@ -346,18 +354,18 @@ var SongsList=Backbone.Collection.extend({
   model:Song,
   //sort by track number or name if track number is not presented
   comparator:function(song){
-      var track=song.get('track');
-      if(track && track!==''){
-          //should always pass 10. In other case '08'(as example) may be parsed incorrectly
-          return parseInt(track,10);
-      }
-      return song.get('name');
+    var track=song.get('track');
+    if(track && track!==''){
+      //should always pass 10. In other case '08'(as example) may be parsed incorrectly
+      return parseInt(track,10);
+    }
+    return song.get('name');
   },
   buildAlbumModel:function(album,artist){
-      return new Album({name:album,artist:artist,songs:this.forAlbum(album)});
+    return new Album({name:album,artist:artist,songs:this.forAlbum(album)});
   },
   forAlbum:function(album){
-      return this.filter(function(song){return song.get('album')===album;});
+    return this.filter(function(song){return song.get('album')===album;});
   },
   listOfAlbums:function(){
       return _.uniq(this.pluck('album'))||[];
@@ -366,22 +374,22 @@ var SongsList=Backbone.Collection.extend({
       return _.uniq(this.pluck('genre'))||[];
   },
   listOfAlbumsModels:function(){
-      var albums=new AlbumList();
-      if(this.length>0){
-          var artist=this.first().get('artist'),
-              albumsArray=this.listOfAlbums(),
-              self=this;
-          _.each(albumsArray,function(album){
-              var songs=self.forAlbum(album);
-              albums.add(new Album({name:album,artist:artist,songs:new SongsList(songs)}));
-          });
-      }
-      return albums;
+    var albums=new AlbumList();
+    if(this.length>0){
+      var artist=this.first().get('artist'),
+          albumsArray=this.listOfAlbums(),
+          self=this;
+      _.each(albumsArray,function(album){
+          var songs=self.forAlbum(album);
+          albums.add(new Album({name:album,artist:artist,songs:new SongsList(songs)}));
+      });
+    }
+    return albums;
   },
   remove:function(){
-      this.each(function(song){
-          song.remove();
-      });
+    this.each(function(song){
+      song.remove();
+    });
   }
 });
 var Artist=Backbone.Model.extend({
@@ -389,45 +397,45 @@ var Artist=Backbone.Model.extend({
   storeName: "artists",
 
   defaults:{
-      isDeleted:false,
-      songsCount:0,
-      albums:[],
-      genres:[]
+    isDeleted:false,
+    songsCount:0,
+    albums:[],
+    genres:[]
   },
   initialize:function(){
-      _.bindAll(this,'setParameterFromSongs','remove');
-      if(!this.get('id')){
-          this.id=UUID.generate();
-          this.set({id:this.id});
-      }
-      this.songs=new SongsList();
-      this.albumsModels=new AlbumList();
-      this.songs.bind('retrieved',this.setParameterFromSongs);
-      this.songs.fetch({conditions:{'artist':this.get('name')}});
+    _.bindAll(this,'setParameterFromSongs','remove');
+   // if(!this.get('id')){
+   //     this.id=UUID.generate();
+   //     this.set({id:this.id});
+   // }
+    this.songs=new SongsList();
+    this.albumsModels=new AlbumList();
+    this.songs.bind('reset',this.setParameterFromSongs);
+    this.songs.fetch({conditions:{'artist':this.get('name')}});
   },
   setParameterFromSongs:function(){
-      var albums=this.songs.listOfAlbums(),
-          genres=this.songs.listOfGenres(),
-          songsCount=this.songs.length;
-      this.set({albums:albums,genres:genres,songsCount:songsCount});
-      if(songsCount===0){
-          this.set({isDeleted:true});
-      }
-      //reset albums models
-      this.albumsModels.reset(this.songs.listOfAlbumsModels().models);
+    var albums=this.songs.listOfAlbums(),
+        genres=this.songs.listOfGenres(),
+        songsCount=this.songs.length;
+    this.set({albums:albums,genres:genres,songsCount:songsCount});
+    if(songsCount===0){
+      this.set({isDeleted:true});
+    }
+    //reset albums models
+    this.albumsModels.reset(this.songs.listOfAlbumsModels().models);
   },
   remove:function(){
-      this.set({isDeleted:true});
-      this.songs.remove();
-      this.model.save();
+    this.set({isDeleted:true});
+    this.songs.remove();
+    this.model.save();
   },
   findImage:function(callback){
-      var self=this;
-      dataService.getArtistImage(this.get('name'),function(image){
-          self.set({image:image});
-          self.save();
-          callback();
-      });
+    var self=this;
+    dataService.getArtistImage(this.get('name'),function(image){
+        self.set({image:image});
+        self.save();
+        callback();
+    });
   }
 });
 var ArtistsList=Backbone.Collection.extend({
@@ -443,25 +451,25 @@ var ArtistsList=Backbone.Collection.extend({
 //name and artist fields
 var Album=Backbone.Model.extend({
   findImage:function(callback){
-      var self=this;
-      dataService.getAlbumImage(this.get('artist'),this.get('name'),function(image){
-          self.set({image:image});
-          callback();
-      });
+    var self=this;
+    dataService.getAlbumImage(this.get('artist'),this.get('name'),function(image){
+        self.set({image:image});
+        callback();
+    });
   }
 });
 var AlbumList=Backbone.Collection.extend({
   model:Album,
   isExist:function(album){
-      var foundedAlbum=this.forModel(album);
-      return foundedAlbum!==undefined;
+    var foundedAlbum=this.forModel(album);
+    return foundedAlbum!==undefined;
   },
   //find album model from list that has the same name
   forModel:function(albumToFind){
-      return this.find(function(album){ return album.get('name') === albumToFind.get('name')});
+    return this.find(function(album){ return album.get('name') === albumToFind.get('name')});
   },
   forName:function(albumName){
-      return this.find(function(album){ return album.get('name') === albumName; });
+    return this.find(function(album){ return album.get('name') === albumName; });
   },
   comparator:function(album){return album.get('name');}
 });
@@ -470,24 +478,24 @@ var PlayList=Backbone.Model.extend({
   storeName: "playlists",
 
   defaults:{
-      songs:[]
+    songs:[]
   },
   findSongs:function(){
-      var songsArray=this.get('songs')||[];
-      return new SongsList(songsArray);
+    var songsArray=this.get('songs')||[];
+    return new SongsList(songsArray);
   },
   findImage:function(callback){
-      var songs=this.findSongs();
-      if(songs.length>0){
-          var firstSong=songs.first();
-          dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),callback);
-      }
-      else{
-          callback('css/images/no_picture.png');
-      }
+    var songs=this.findSongs();
+    if(songs.length>0){
+      var firstSong=songs.first();
+      dataService.getAlbumImage(firstSong.get('artist'),firstSong.get('album'),callback);
+    }
+    else{
+      callback('css/images/no_picture.png');
+    }
   },
   findGenres:function(){
-      return this.findSongs().listOfGenres();
+    return this.findSongs().listOfGenres();
   }
 });
 var PlayLists = Backbone.Collection.extend({
@@ -502,10 +510,10 @@ var PlayLists = Backbone.Collection.extend({
 });
 var SoundCloudTrack=Backbone.Model.extend({});
 var SoundCloudTrackList=Backbone.Collection.extend({
-    model:SoundCloudTrack,
-    url:function(){
-        return '/sc/tracks?access_token='+AppController.settings.getScAccessToken();
-    }
+  model:SoundCloudTrack,
+  url:function(){
+    return '/sc/tracks?access_token='+AppController.settings.getScAccessToken();
+  }
 });
 
 
@@ -735,7 +743,7 @@ $(function(){
                 'showArtists','showPlayLists','showAlbums','showSoundCloud',
                 'allArtistsLoaded','filterLibrary','keyPressed','showSoundCloudMenu');
             this.artists.bind('add',this.addArtist);
-            this.artists.bind('retrieved',this.allArtistsLoaded);
+            this.artists.bind('reset',this.allArtistsLoaded);
             this.playLists.bind('add',this.addPlayList);
             this.playLists.bind('reset',this.addPlayLists);
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
@@ -754,6 +762,7 @@ $(function(){
             }
         },
         allArtistsLoaded:function(){
+            this.artists.each(this.addArtist);
             var lastArtist=AppController.settings.getLastArtist();
             if(lastArtist){
                 var lastPlayedArtist=this.artists.forName(lastArtist);
