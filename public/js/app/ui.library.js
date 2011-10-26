@@ -32,8 +32,8 @@ $(function(){
             this.soundCloudTracks.bind('add',this.addSoundCloudTrack);
             this.soundCloudTracks.bind('reset',this.addSoundCloudTracks);
             this.artists.fetch();
-            this.playLists.fetch();
-            this.soundCloudTracks.fetch();
+            //this.playLists.fetch();
+            //this.soundCloudTracks.fetch();
         },
         showSoundCloudMenu:function(){
             this.$('#show_soundcloud').removeClass('hidden');
@@ -344,3 +344,4 @@ $(function(){
         }
     });
 });
+

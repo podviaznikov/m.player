@@ -43,46 +43,52 @@ app.get('/', function(req,res){
 app.get('/fb/user',function(req,res){
     var accessToken=req.query.access_token;
     util.log('FB access token ready:',accessToken);
-    res.contentType('application/json');
     var graph=new facebook.GraphAPI(accessToken);
     graph.getObject('me', function(error,data){
         if(error){
             util.log('Error:'+error);
-            res.send({});
+            res.json({});
         }
         else{
             util.log('Data from FB:'+util.inspect(data));
-            res.send(data);
+            res.json(data);
         }
     });
 });
 app.get('/sc/user',function(req,res){
     var accessToken=req.query.access_token;
-    util.log('SC access token ready:',accessToken);
-    res.contentType('application/json');
-    soundcloud.me(accessToken,function(data){
-        util.log('SC profile received');
-        if(data){
-            util.log(util.inspect(data));
-        }
-        res.send(data);
-    });
+    if(accessToken){
+      util.log('SC access token ready:',accessToken);
+      soundcloud.me(accessToken,function(data){
+          util.log('SC profile received');
+          if(data){
+              util.log(util.inspect(data));
+          }
+          res.json(data);
+      });
+    }
+    else{
+      res.json([]);
+    }
 });
 app.get('/sc/tracks',function(req,res){
     var accessToken=req.query.access_token;
-    util.log('SC access token ready:',accessToken);
-    res.contentType('application/json');
-    soundcloud.myPrivateStreamableTracks(accessToken,function(data){
-        util.log('SC resp:'+util.inspect(data));
-        res.send(data);
-    });
+    if(accessToken){
+      util.log('SC access token ready:',accessToken);
+      soundcloud.myPrivateStreamableTracks(accessToken,function(data){
+          util.log('SC resp:'+util.inspect(data));
+          res.json(data);
+      });
+    }
+    else{
+      res.json({});
+    }
 });
 app.get('/session_data',function(req,res){
     var session=req.session;
-    res.contentType('application/json');
 
     if(!session||!req.session.user||!req.session.key){
-        res.send({
+        res.json({
             user:'',
             key:''
         });
@@ -91,7 +97,7 @@ app.get('/session_data',function(req,res){
         var user=req.session.user||'',
             key=req.session.key||'';
         util.log(util.inspect(session));
-        res.send({
+        res.json({
             user:user,
             key:key
         });
@@ -171,14 +177,12 @@ app.get('/artist/:artistName/bio',function(req,res){
                     bio=data.artist.bio;
                 }
                 nbs.findArtistProfileByName(artistName,function(err,data){
-                    res.contentType('application/json');
                     bio.profile=data;
-                    res.send(bio);
+                    res.json(bio);
                 });
             },
             error:function(error) {
-                res.contentType('application/json');
-                res.send(bio);
+                res.json(bio);
             }
         }
     });
@@ -292,3 +296,5 @@ function scrobble(trackName,artist,trackLength,key,user){
      });
 };
 exports.app = app;
+app.listen(8090)
+

@@ -1,13 +1,15 @@
 !!! 5
-html(manifest="app.mf",lang="en")
+//html(manifest="app.mf",lang="en")
+html
   head
     title m.player - your favourite music player
     meta(charset="utf-8")
     meta(name="author",content="Enginimation Studio (enginimation.com)")
-    meta(name="description", content="Offline/online music player with Last.fm and Facebook integration")
-    meta(name="keywords",content="player,music player,html5,offline player,lastfm,mp3,media player,facebook,fb,next big sound,nbs")
+    meta(name="description",content="Offline/online music player with Last.fm and Facebook integration")
+    meta(name="keywords",content="player,music player,html5,offline player,lastfm,mp3,media player,facebook,fb,next big sound")
     link(rel="stylesheet",href="css/styles.css")
     script(src="js/lib/libs.bundle.js")
+    script(src="js/lib/backbone-indexeddb.js")
     script(src="js/ext/data.service.js")
     script(src="js/app.js")
     script
@@ -83,3 +85,4 @@ body
     span#social.control.off(title="Social")
     audio#player_ctrl
   include templates
+

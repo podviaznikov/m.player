@@ -26,30 +26,18 @@ var AppController={
             dbVersion:'1',
             stores:[Song.definition,Artist.definition,PlayList.definition]
         };
-        Porridge.init(config,function(){
-            if(dbVersion!==AppController.settings.getDbVersion()){
-                fs.io.readFilesFromRootDirectory(function(err,files){
-                    if(!err){
-                        console.log("Files",files);
-                        AppController.appView.handleFileSelect(files,true);
-                    }
-                });
-                AppController.settings.saveDbVersion(dbVersion);
-            }
-            console.log('Initialized views and social services');
-            //third column
-            AppController.playlistView=new ui.PlayListView();
-            //first column
-            AppController.libraryMenu=new ui.LibraryMenu();
-            //init soundcloud
-            AppController.soundcloudConnect();
-            //init facebook
-            AppController.facebookConnect();
-            //init last.fm
-            AppController.lastfmConnect();
-            //second column
-            AppController.detailsView=new ui.DetailsView();
-        });
+        //third column
+        AppController.playlistView=new ui.PlayListView();
+        //first column
+        AppController.libraryMenu=new ui.LibraryMenu();
+        //init soundcloud
+        //AppController.soundcloudConnect();
+        //init facebook
+        AppController.facebookConnect();
+        //init last.fm
+        AppController.lastfmConnect();
+        //second column
+        AppController.detailsView=new ui.DetailsView();
 	},
 	handleAuthentication:function(){
 	    var accessToken=_.firstHashValue();
@@ -294,3 +282,4 @@ Backbone.View.prototype.renderTpl=function(model){
     }
     return this;
 };
+

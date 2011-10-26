@@ -5,6 +5,7 @@ js/app.js
 css/images/no_picture.png
 /js/ext/data.service.js
 js/lib/libs.bundle.js
+js/lib/backbone-indexeddb.js
 css/styles.css
 NETWORK:
 http://userserve-ak.last.fm
@@ -13,3 +14,4 @@ FALLBACK:
 http://userserve-ak.last.fm/serve/126/*.png /css/images/no_picture.png
 http://userserve-ak.last.fm/serve/126/*.jpg /css/images/no_picture.png
 /js/ext/data.service.js /js/ext/data.service.offline.js
+
