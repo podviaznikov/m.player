@@ -1,7 +1,7 @@
 {
   "name": "m.player",
   "description": "Offline Music Player with Last.fm and Facebook integration",
-  "version": "2.6",
+  "version": "3.0",
   "app": {
     "urls": [
       "*://localhost/"
@@ -19,3 +19,4 @@
     "notifications"
   ]
 }
+

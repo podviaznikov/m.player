@@ -1,5 +1,15 @@
+// Generate four random hex digits.
+function S4() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+}
+
+// Generate a pseudo-GUID by concatenating random hexadecimal.
+function guid() {
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
+
 var database = {
-  id: "m-player-db-3",
+  id: "m-player-db-8",
   description: "The database for the Movies",
   migrations: [{
     version: "1.0",
@@ -46,6 +56,12 @@ var Song = Backbone.Model.extend({
     artist:'No information',
     year:'',
     genre:''
+  },
+  initialize:function(){
+    if(!this.get('id') && !this.id){
+        this.id=guid();
+        this.set({id:this.id});
+      }
   },
   remove:function(){
     //destroy model

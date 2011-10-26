@@ -169,6 +169,7 @@ $(function(){
                 nextSongId=indexOfSelectedSong+1;
             }
             var nextSong=this.songs.at(nextSongId);
+            console.log("Next song", nextSongId, nextSong);
             this.playSongModel(nextSong,playSong);
         },
         previous:function(playSongFlag){
@@ -227,3 +228,4 @@ $(function(){
         }
     });
 });
+
