@@ -103,3 +103,6 @@ var dataService={
         }
     }
 };
+
+exports.dataService = dataService;
+

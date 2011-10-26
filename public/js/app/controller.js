@@ -1,6 +1,11 @@
 /*global Porridge: true, UUID: true, fs:true,_:true,Backbone:true, async:true,dataService:true,fbService:true,ID3:true,FileAPIReader:true */
-"use strict";
-var ui={};
+var AppView = require("./ui.app").AppView;
+var VisualizationView = require("./ui.app").VisualizationView;
+var PlayerCtrl = require("./ui.player").PlayerCtrl;
+var PlayListView = require("./ui.playlist").PlayListView;
+var LibraryMenu = require("./ui.library").LibraryMenu;
+var DetailsView = require("./ui.details").DetailsView;
+
 var AppController={
 	init:function(){
         var newHeight=$(window).height()-105,
@@ -15,29 +20,22 @@ var AppController={
         //fixing height for songs panel
         playingSongPanel.height('initial');
         playingSongPanel.css('max-height',newHeight-184);
-		this.appView=new ui.AppView();
-		this.playerCtrl=new ui.PlayerCtrl();
-		this.visualizationView=new ui.VisualizationView();
-        this.visualizationView.el.height(newHeight);
-        var dbVersion='1';
-        var config={
-            dbName:'mdb',
-            dbDescription:'m.player database',
-            dbVersion:'1',
-            stores:[Song.definition,Artist.definition,PlayList.definition]
-        };
-        //third column
-        AppController.playlistView=new ui.PlayListView();
-        //first column
-        AppController.libraryMenu=new ui.LibraryMenu();
-        //init soundcloud
-        //AppController.soundcloudConnect();
-        //init facebook
-        AppController.facebookConnect();
-        //init last.fm
-        AppController.lastfmConnect();
-        //second column
-        AppController.detailsView=new ui.DetailsView();
+		this.appView=new AppView();
+		this.playerCtrl=new PlayerCtrl();
+		this.visualizationView=new VisualizationView();
+    this.visualizationView.el.height(newHeight);
+    //third column
+    AppController.playlistView=new PlayListView();
+    //first column
+    AppController.libraryMenu=new LibraryMenu();
+    //init soundcloud
+    //AppController.soundcloudConnect();
+    //init facebook
+    //AppController.facebookConnect();
+    //init last.fm
+    //AppController.lastfmConnect();
+    //second column
+    AppController.detailsView=new DetailsView();
 	},
 	handleAuthentication:function(){
 	    var accessToken=_.firstHashValue();
@@ -282,4 +280,5 @@ Backbone.View.prototype.renderTpl=function(model){
     }
     return this;
 };
+exports.AppController = AppController;
 

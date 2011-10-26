@@ -1,3 +1,5 @@
+var dataService = require("./data.service").dataService;
+
 // Generate four random hex digits.
 function S4() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -47,7 +49,7 @@ var DataTransfer={
     return JSON.parse(source);
   }
 };
-var Song = Backbone.Model.extend({
+var Song = exports.Song = Backbone.Model.extend({
   database: database,
   storeName: "songs",
   defaults:{
@@ -77,7 +79,7 @@ var Song = Backbone.Model.extend({
     });
   }
 });
-var SongsList=Backbone.Collection.extend({
+var SongsList = exports.SongsList = Backbone.Collection.extend({
   database: database,
   storeName: "songs",
   model:Song,
@@ -121,7 +123,7 @@ var SongsList=Backbone.Collection.extend({
     });
   }
 });
-var Artist=Backbone.Model.extend({
+var Artist = exports.Artist =Backbone.Model.extend({
   database: database,
   storeName: "artists",
 
@@ -167,7 +169,7 @@ var Artist=Backbone.Model.extend({
     });
   }
 });
-var ArtistsList=Backbone.Collection.extend({
+var ArtistsList = exports.ArtistsList = Backbone.Collection.extend({
   database: database,
   storeName: "artists",
 
@@ -178,7 +180,7 @@ var ArtistsList=Backbone.Collection.extend({
   comparator:function(artist){return artist.get('name');}
 });
 //name and artist fields
-var Album=Backbone.Model.extend({
+var Album = exports.Album = Backbone.Model.extend({
   findImage:function(callback){
     var self=this;
     dataService.getAlbumImage(this.get('artist'),this.get('name'),function(image){
@@ -187,7 +189,7 @@ var Album=Backbone.Model.extend({
     });
   }
 });
-var AlbumList=Backbone.Collection.extend({
+var AlbumList = exports.AlbumList = Backbone.Collection.extend({
   model:Album,
   isExist:function(album){
     var foundedAlbum=this.forModel(album);
@@ -202,7 +204,7 @@ var AlbumList=Backbone.Collection.extend({
   },
   comparator:function(album){return album.get('name');}
 });
-var PlayList=Backbone.Model.extend({
+var PlayList = exports.PlayList = Backbone.Model.extend({
   database: database,
   storeName: "playlists",
 
@@ -227,7 +229,7 @@ var PlayList=Backbone.Model.extend({
     return this.findSongs().listOfGenres();
   }
 });
-var PlayLists = Backbone.Collection.extend({
+var PlayLists = exports.PlayLists = Backbone.Collection.extend({
   database: database,
   storeName: "playlists",
 
@@ -237,8 +239,8 @@ var PlayLists = Backbone.Collection.extend({
   },
   comparator:function(playlist){return playlist.get('name');}
 });
-var SoundCloudTrack=Backbone.Model.extend({});
-var SoundCloudTrackList=Backbone.Collection.extend({
+var SoundCloudTrack = Backbone.Model.extend({});
+var SoundCloudTrackList = Backbone.Collection.extend({
   model:SoundCloudTrack,
   url:function(){
     return '/sc/tracks?access_token='+AppController.settings.getScAccessToken();

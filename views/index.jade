@@ -10,7 +10,7 @@ html
     link(rel="stylesheet",href="css/styles.css")
     script(src="application.js")
     script
-      $(function(){AppController.init();});
+      $(function(){window.AppController = require("controller").AppController;AppController.init();});
 body
   include file_upload_dialog
   section#help_screen.screen_panel.hidden
