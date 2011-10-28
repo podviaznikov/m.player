@@ -8,38 +8,37 @@ DetailsView = exports.DetailsView = class DetailsView extends Backbone.View
 
   initialize: ->
     Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "showAlbums", "showAlbum", "showPlayList", "handleDragStart", "showBio", "hideBio"
     @artistBioView = new ArtistBioView()
 
-  showBio: (artist) ->
+  showBio: (artist) =>
     @artistBioPanel.show()
     @artistBioView.setArtistModel artist
     @artistBioView.render()
     @libDetailsPanel.hide()
 
-  hideBio: ->
+  hideBio: =>
     @artistBioPanel.hide()
     @artistBioView.clear()
     @libDetailsPanel.show()
     @libDetailsPanel.empty()
 
-  showAlbums: (albumsModels, songs) ->
+  showAlbums: (albumsModels, songs) =>
     @hideBio()
     albumsModels.each @showAlbum  if albumsModels
     @songs = songs
 
-  showAlbum: (albumModel) ->
+  showAlbum: (albumModel) =>
     @hideBio()
     @songs = albumModel.get("songs")
     albumView = new AlbumView(model: albumModel)
     @libDetailsPanel.append albumView.render().el
 
-  showPlayList: (playList) ->
+  showPlayList: (playList) =>
     @hideBio()
     playListView = new PlayListFullView(model: playList)
     @libDetailsPanel.append playListView.render().el
 
-  handleDragStart: (e) ->
+  handleDragStart: (e) =>
     event = e.originalEvent
     dataTransferObj = event.dataTransfer
     songId = event.srcElement.dataset.id
@@ -54,30 +53,29 @@ class ArtistBioView extends Backbone.View
   tplId: "artist_bio_tpl"
   initialize: ->
     Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "setArtistModel", "renderArtistBio", "clear"
 
-  setArtistModel: (artist) ->
+  setArtistModel: (artist) =>
     @model = artist
 
-  render: ->
+  render: =>
     dataService.getArtistBio @model.get("name"), @renderArtistBio  if @model
-    this
+    @
 
-  renderArtistBio: (data) ->
+  renderArtistBio: (data) =>
     @renderTpl
       bio: unescape(data.summary)
       profiles: data.profile or {}
 
-  clear: ->
-    $(@el).html ""
+  clear: => $(@el).html ""
 
 class AlbumView extends Backbone.View
   className: "lib_item_full_info_panel"
   tagName: "article"
-  initialize: ->
-    Backbone.View::initialize.apply this, arguments
 
-  render: ->
+  initialize: ->
+    super
+
+  render: =>
     @albumInfoView = new AlbumInfoView(model: @model)
     $(@el).append @albumInfoView.render().el
     @model.get("songs").each @addSong  if @model.get("songs")
@@ -100,21 +98,20 @@ class PlayListFullView extends Backbone.View
     click: "playSongs"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "addSong", "renderPlayListInfo", "playSongs"
+    super
 
-  render: ->
+  render: =>
     @model.findImage @renderPlayListInfo
-    this
+    @
 
-  renderPlayListInfo: (image) ->
+  renderPlayListInfo: (image) =>
     @renderTpl
       image: image
       name: @model.get("name")
 
     _.each @model.get("songs"), @addSong
 
-  addSong: (songData, key) ->
+  addSong: (songData, key) =>
     song = new Song(songData)
     view = new SongView(
       model: song
@@ -125,8 +122,7 @@ class PlayListFullView extends Backbone.View
     song.albumView = view
     $(@el).append view.render().el
 
-  playSongs: ->
-    AppController.playlistView.setSongsAndPlay @model.get("songs")
+  playSongs: -> AppController.playlistView.setSongsAndPlay @model.get("songs")
 
 class AlbumInfoView extends Backbone.View
   className: "detailed_album_info_panel box"
@@ -136,7 +132,7 @@ class AlbumInfoView extends Backbone.View
     click: "playSongs"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
+    super
 
   renderAlbumInfo: (data) =>
     @renderTpl
@@ -160,10 +156,9 @@ class SongView extends Backbone.View
     "dblclick .song": "playSongs"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "selectSong", "deleteSong", "onDeleteSong", "playSongs", "render"
+    super
 
-  render: ->
+  render: =>
     @el.draggable = true
     @el.dataset.songname = @model.get("title")
     @el.dataset.id = @model.id
@@ -174,19 +169,19 @@ class SongView extends Backbone.View
 
     this
 
-  selectSong: ->
+  selectSong: =>
     $(".song-data").removeClass "selected_song"
     $(@el).addClass "selected_song"
 
-  deleteSong: ->
+  deleteSong: =>
     @model.bind "destroy", @onDeleteSong
     @model.remove()
 
-  onDeleteSong: ->
+  onDeleteSong: =>
     view = @model.albumView
     view.remove()  if view
 
-  playSongs: ->
+  playSongs: =>
     songs = @options.songs
     @selectSong()
     AppController.playlistView.setSongsAndPlay songs

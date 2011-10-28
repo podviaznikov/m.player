@@ -16,33 +16,32 @@ PlayListView = exports.PlayListView = class PlayListView extends Backbone.View
 
   initialize: ->
     @songs = new SongsList()
-    _.bindAll this, "addOne", "addAll", "currentSong", "currentSongIndex", "randomSong", "render", "clearPlaylist", "selectSong", "playSongModel", "savePlayList", "setPlayListModel", "removePlayListModel", "setSongsAndPlay"
     @songs.bind "selected", @selectSong
     @songs.bind "add", @addOne
     @songs.bind "reset", @addAll
     @songs.bind "all", @render
 
-  render: ->
+  render: =>
     @statEL.html _.template(@playlistStatTpl,
       songsCount: @songs.length
     )
     this
 
-  setSongsAndPlay: (songs) ->
+  setSongsAndPlay: (songs) =>
     @songs.reset songs.models
     firstSong = @songs.first()
     firstSong.view.playSong()  if firstSong
     AppController.settings.savePlayList songs
 
-  setPlayListModel: (playList) ->
+  setPlayListModel: (playList) =>
     @playList = playList
     @newPlayListName.val @playList.get("name")
 
-  removePlayListModel: ->
+  removePlayListModel: =>
     @playList = null
     @newPlayListName.val "Unsaved list"
 
-  savePlayList: ->
+  savePlayList: =>
     newPlaylistName = @newPlayListName.val()
     if newPlaylistName isnt "Unsaved list"
       @playList = new PlayList()  unless @playList
@@ -54,20 +53,20 @@ PlayListView = exports.PlayListView = class PlayListView extends Backbone.View
       @playList.save()
       AppController.libraryMenu.playLists.add @playList
 
-  clearPlaylist: ->
+  clearPlaylist: =>
     @songsEl.empty()
     @songs.reset()
     AppController.settings.savePlayList @songs
     @render()
 
-  addOne: (song) ->
+  addOne: (song) =>
     if song.get("fileName")
       @dropFileLabel.remove()
       view = new SongMiniView(model: song)
       song.view = view
       @songsEl.append view.render().el
 
-  addAll: ->
+  addAll: =>
     if @songs.length isnt 0
       @songsEl.empty()
       @songs.each @addOne
@@ -103,24 +102,20 @@ PlayListView = exports.PlayListView = class PlayListView extends Backbone.View
     else
       AppController.appView.dropFiles e
 
-  selectSong: (song) ->
+  selectSong: (song) =>
     @selectedSong = song
-    self = this
-    song.findImage ->
-      self.infoEl.html _.template(self.songInfoTpl, song.toJSON())
+    song.findImage => @infoEl.html _.template(@songInfoTpl, song.toJSON())
 
-  randomSong: ->
+  randomSong: =>
     randomSong = Math.floor(Math.random() * @songs.length)
     return @randomSong()  if randomSong is @currentSong()
     randomSong
 
-  currentSong: ->
-    @songs.at @currentSongIndex()
+  currentSong: => @songs.at @currentSongIndex()
 
-  currentSongIndex: ->
-    @songs.indexOf @selectedSong
+  currentSongIndex: => @songs.indexOf @selectedSong
 
-  next: (playSongFlag) ->
+  next: (playSongFlag) =>
     playSong = not playSongFlag
     nextSongId = -1
     if playSong and AppController.settings.isShuffle()
@@ -135,14 +130,14 @@ PlayListView = exports.PlayListView = class PlayListView extends Backbone.View
     console.log "Next song", nextSongId, nextSong
     @playSongModel nextSong, playSong
 
-  previous: (playSongFlag) ->
+  previous: (playSongFlag) =>
     playSong = not playSongFlag
     indexOfSelectedSong = @currentSongIndex()
     indexOfSelectedSong = @songs.length  if indexOfSelectedSong is 0
     previousSong = @songs.at(indexOfSelectedSong - 1)
     @playSongModel previousSong, playSong
 
-  playSongModel: (song, playSong) ->
+  playSongModel: (song, playSong) =>
     if playSong and song and song.view
       song.view.playSong()
     else song.view.selectSong()  if not playSong and song and song.view

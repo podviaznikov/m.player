@@ -1,7 +1,8 @@
 ArtistsList = require("./models").ArtistsList
 PlayLists = require("./models").PlayLists
 AlbumList = require("./models").AlbumList
-LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
+
+LibraryMenu = exports.LibraryMenu = class LibraryMenu extends Backbone.View
   el: $("#library_menu")
   searchField: $("#library_menu header input")
   artistsContent: $("#artists_library_content")
@@ -17,39 +18,32 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
     "keyup input": "keyPressed"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
+    super
     @artists = new ArtistsList()
     @playLists = new PlayLists()
     @albums = new AlbumList()
     @tabName = "artists"
-    _.bindAll this, "addArtist", "addPlayList", "addPlayLists", "addAlbum", "addSoundCloudTrack", "addSoundCloudTracks", "showArtists", "showPlayLists", "showAlbums", "showSoundCloud", "allArtistsLoaded", "filterLibrary", "keyPressed", "showSoundCloudMenu"
     @artists.bind "add", @addArtist
     @artists.bind "reset", @allArtistsLoaded
     @playLists.bind "add", @addPlayList
     @playLists.bind "reset", @addPlayLists
-    @artists.fetch
-      success: (o) ->
-        console.log "xxx"
+    @artists.fetch success: -> console.log "artists was fetched"
 
-      error: (o) ->
-        console.log "xxx1"
-
-  showSoundCloudMenu: ->
+  showSoundCloudMenu: =>
     @$("#show_soundcloud").removeClass "hidden"
 
-  keyPressed: (event) ->
+  keyPressed: (event) =>
     keyCode = event.keyCode
     @filterLibrary()  if keyCode is 13
 
-  allArtistsLoaded: ->
-    console.log "arts", @artists
+  allArtistsLoaded: =>
     @artists.each @addArtist
     lastArtist = AppController.settings.getLastArtist()
     if lastArtist
       lastPlayedArtist = @artists.forName(lastArtist)
       lastPlayedArtist.view.selectArtist()  if lastPlayedArtist and lastPlayedArtist.view
 
-  showArtists: ->
+  showArtists: =>
     @tabName = "artists"
     @$(@searchField).attr "placeholder", "Search artist"
     @artistsContent.show()
@@ -57,7 +51,7 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
     @playListsContent.hide()
     @soundCloudContent.hide()
 
-  showAlbums: ->
+  showAlbums: =>
     @tabName = "albums"
     @$(@searchField).attr "placeholder", "Search album"
     @albumsContent.show()
@@ -65,7 +59,7 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
     @playListsContent.hide()
     @soundCloudContent.hide()
 
-  showPlayLists: ->
+  showPlayLists: =>
     @tabName = "playlists"
     @$(@searchField).attr "placeholder", "Search play list"
     @playListsContent.show()
@@ -73,7 +67,7 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
     @albumsContent.hide()
     @soundCloudContent.hide()
 
-  showSoundCloud: ->
+  showSoundCloud: =>
     @tabName = "soundcloud"
     @$(@searchField).attr "placeholder", "Search tracks"
     @soundCloudContent.show()
@@ -81,7 +75,7 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
     @artistsContent.hide()
     @albumsContent.hide()
 
-  addAlbum: (album) ->
+  addAlbum: (album) =>
     unless @albums.isExist(album)
       @albums.add album
       view = new AlbumMenuView(model: album)
@@ -91,7 +85,7 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
       albumFromList.get("songs").add album.get("songs").models
       albumFromList.trigger "add"
 
-  addArtist: (artist) ->
+  addArtist: (artist) =>
     self = this
     if artist.get("name") and not artist.get("isDeleted")
       artist.albumsModels.bind "reset", ->
@@ -101,21 +95,21 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
       view = new ArtistMenuView(model: artist)
       @artistsContent.append view.render().el
 
-  addPlayList: (playList) ->
+  addPlayList: (playList) =>
     view = new PlayListMenuView(model: playList)
     @playListsContent.append view.render().el
 
-  addSoundCloudTrack: (soundCloudTrack) ->
+  addSoundCloudTrack: (soundCloudTrack) =>
     view = new SoundCloudTrackMenuView(model: soundCloudTrack)
     @soundCloudContent.append view.render().el
 
-  addSoundCloudTracks: ->
+  addSoundCloudTracks: =>
     @soundCloudTracks.each @addSoundCloudTrack
 
-  addPlayLists: ->
+  addPlayLists: =>
     @playLists.each @addPlayList
 
-  filterLibrary: ->
+  filterLibrary: =>
     filterValue = @searchField.val()
     containerItems = @artists
     if @tabName is "soundcloud"
@@ -132,8 +126,8 @@ LibraryMenu = exports.LibraryMenu = Backbone.View.extend(
           item.view.show()  if item.view
         else
           item.view.hide()  if item.view
-)
-ArtistMenuView = Backbone.View.extend(
+
+class ArtistMenuView extends Backbone.View
   className: "lib-item-data box"
   tagName: "article"
   tplId: "artist_tpl"
@@ -147,19 +141,18 @@ ArtistMenuView = Backbone.View.extend(
     dragstart: "handleDragStart"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "render", "selectArtist", "playArtistSongs", "deleteArtist", "selectAlbum", "playAlbumSongs", "showArtistBio", "handleDragStart"
+    super
     @model.songs.bind "all", @render
     @model.bind "change", @render
     @model.view = this
 
-  render: ->
+  render: =>
     @renderTpl()
     @el.draggable = true
     @el.dataset.artist = @model.get("name")
     this
 
-  handleDragStart: (e) ->
+  handleDragStart: (e) =>
     event = e.originalEvent
     dataTransferObj = event.dataTransfer
     artist = event.srcElement.dataset.artist
@@ -167,35 +160,35 @@ ArtistMenuView = Backbone.View.extend(
     dataTransferObj.effectAllowed = "move"
     dataTransferObj.setData "text/plain", dataTransfer.toString()
 
-  selectArtist: ->
+  selectArtist: =>
     $(".lib-item-data").removeClass "selected-lib-item"
     $(@el).addClass "selected-lib-item"
     AppController.detailsView.showAlbums @model.albumsModels, @model.songs
 
-  playArtistSongs: ->
+  playArtistSongs: =>
     @selectArtist()
     AppController.playlistView.setSongsAndPlay @model.songs
 
-  playAlbumSongs: (e) ->
+  playAlbumSongs: (e) =>
     album = e.currentTarget.dataset.album
     albumSongs = @model.songs.forAlbum(album)
     AppController.detailsView.songs.reset albumSongs
     AppController.playlistView.setSongsAndPlay albumSongs
 
-  deleteArtist: ->
+  deleteArtist: =>
     @model.set isDeleted: true
     @model.save()
     @$(@el).remove()
 
-  selectAlbum: (e) ->
+  selectAlbum: (e) =>
     album = e.currentTarget.dataset.album
     albumModel = @model.songs.buildAlbumModel(album, @model.get("name"))
     AppController.detailsView.showAlbum albumModel
 
-  showArtistBio: ->
+  showArtistBio: =>
     AppController.detailsView.showBio @model
-)
-AlbumMenuView = Backbone.View.extend(
+
+class AlbumMenuView extends Backbone.View
   className: "lib-item-data box"
   tagName: "article"
   tplId: "album_lib_tpl"
@@ -205,22 +198,19 @@ AlbumMenuView = Backbone.View.extend(
     dragstart: "handleDragStart"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "selectAlbum", "playAlbumSongs", "handleDragStart"
+    super
     @model.bind "change", @render
     @model.bind "add", @render
     @model.view = this
 
-  render: ->
-    self = this
-    @model.findImage ->
-      self.renderTpl()
+  render: =>
+    @model.findImage => @renderTpl()
 
     @el.draggable = true
     @el.dataset.album = @model.get("name")
-    this
+    @
 
-  handleDragStart: (e) ->
+  handleDragStart: (e) =>
     event = e.originalEvent
     dataTransferObj = event.dataTransfer
     album = event.srcElement.dataset.album
@@ -228,17 +218,17 @@ AlbumMenuView = Backbone.View.extend(
     dataTransferObj.effectAllowed = "move"
     dataTransferObj.setData "text/plain", dataTransfer.toString()
 
-  playAlbumSongs: (e) ->
+  playAlbumSongs: (e) =>
     @selectAlbum()
     AppController.playlistView.setSongsAndPlay @model.get("songs")
 
-  selectAlbum: ->
+  selectAlbum: =>
     $(".lib-item-data").removeClass "selected-lib-item"
     $(@el).addClass "selected-lib-item"
     albumSongs = @model.get("songs")
     AppController.detailsView.showAlbum @model
-)
-PlayListMenuView = Backbone.View.extend(
+
+class PlayListMenuView extends Backbone.View
   className: "lib-item-data box"
   tagName: "article"
   tplId: "saved_playlist_tpl"
@@ -249,25 +239,24 @@ PlayListMenuView = Backbone.View.extend(
     dragstart: "handleDragStart"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "render", "renderPlayListInfo", "selectPlayList", "playPlayList", "deletePlaylist", "handleDragStart"
+    super
     @model.bind "change", @render
     @model.view = this
 
-  render: ->
+  render: =>
     @model.findImage @renderPlayListInfo
     @el.draggable = true
     @el.dataset.playlist = @model.get("name")
     this
 
-  renderPlayListInfo: (image) ->
+  renderPlayListInfo: (image) =>
     @renderTpl
       image: image
       name: @model.get("name")
       genres: @model.findGenres()
       songsCount: @model.get("songs").length
 
-  handleDragStart: (e) ->
+  handleDragStart: (e) =>
     event = e.originalEvent
     dataTransferObj = event.dataTransfer
     playlist = event.srcElement.dataset.playlist
@@ -275,20 +264,20 @@ PlayListMenuView = Backbone.View.extend(
     dataTransferObj.effectAllowed = "move"
     dataTransferObj.setData "text/plain", dataTransfer.toString()
 
-  selectPlayList: ->
+  selectPlayList: =>
     $(".lib-item-data").removeClass "selected-lib-item"
     $(@el).addClass "selected-lib-item"
     AppController.detailsView.showPlayList @model
 
-  playPlayList: ->
+  playPlayList: =>
     @selectPlayList()
     AppController.playlistView.setSongsAndPlay @model.findSongs()
 
-  deletePlaylist: ->
+  deletePlaylist: =>
     @model.destroy()
     @$(@el).remove()
-)
-SoundCloudTrackMenuView = Backbone.View.extend(
+
+class SoundCloudTrackMenuView extends Backbone.View
   className: "lib-item-data box"
   tagName: "article"
   tplId: "sound_cloud_track_menu_tpl"
@@ -296,11 +285,9 @@ SoundCloudTrackMenuView = Backbone.View.extend(
     click: "playTrack"
 
   initialize: ->
-    Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "playTrack"
+    super
     @model.view = this
 
-  playTrack: ->
+  playTrack: =>
     AppController.playerCtrl.play @model.get("url")
-)
 

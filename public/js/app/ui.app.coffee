@@ -145,11 +145,11 @@ exports.VisualizationView = class VisualizationView extends Backbone.View
   el: $("#playing_visualization")
   tplId: "visualization_tpl"
 
-  show: ->
+  show: =>
     @el.show()
     @render()
 
-  hide: ->
+  hide: =>
     @el.hide()
 
   render: =>
