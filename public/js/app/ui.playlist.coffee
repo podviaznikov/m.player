@@ -1,5 +1,6 @@
 SongsList = require("./models").SongsList
-PlayListView = exports.PlayListView = Backbone.View.extend(
+
+PlayListView = exports.PlayListView = class PlayListView extends Backbone.View
   el: $("#playing_list")
   infoEl: $("#playing_list #song_info_view")
   songsEl: $("#playing_list #playing_songs")
@@ -145,8 +146,8 @@ PlayListView = exports.PlayListView = Backbone.View.extend(
     if playSong and song and song.view
       song.view.playSong()
     else song.view.selectSong()  if not playSong and song and song.view
-)
-SongMiniView = Backbone.View.extend(
+
+class SongMiniView extends Backbone.View
   className: "song-data"
   tplId: "song_mini_tpl"
   events:
@@ -155,24 +156,22 @@ SongMiniView = Backbone.View.extend(
 
   initialize: ->
     Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "selectSong", "playSong"
 
   render: ->
     @el.draggable = true
     @renderTpl()
     this
 
-  selectSong: ->
+  selectSong: =>
     $(".song-data").removeClass "selected_song"
     $(@el).addClass "selected_song"
     @model.trigger "selected", @model
 
-  playSong: ->
+  playSong: =>
     AppController.settings.saveLastSong @model.toJSON()
     AppController.settings.saveLastAlbum @model.get("album")
     AppController.settings.saveLastArtist @model.get("artist")
     @selectSong()
     fs.util.getFileURL @model.get("fileName"), (er, url) ->
       AppController.playerCtrl.play url  unless er
-)
 

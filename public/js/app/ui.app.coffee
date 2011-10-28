@@ -1,7 +1,8 @@
+dataService = require("./data.service").dataService
 Song = require("./models").Song
 Artist = require("./models").Artist
 
-AppView = exports.AppView = class AppView extends Backbone.View.extend
+AppView = exports.AppView = class AppView extends Backbone.View
   el: $("body")
   progress: $("#uploading_files_progress progress")
   helpScreen: $("#help_screen")
@@ -19,27 +20,22 @@ AppView = exports.AppView = class AppView extends Backbone.View.extend
     "click #import_songs_directory": "importMusicDirectory"
     "click #import_songs_files": "importMusicFiles"
 
-  initialize: ->
-    _.bindAll this, "dragOverFiles", "dropFiles", "handleFileSelect", "showHelp", "hideHelp", "showFullScreen", "hideFullScreen", "keyPressed", "importMusicDirectory", "importMusicFiles", "processOneAudioFile"
+  importMusicDirectory: => @dropFolderCtrl.click()
 
-  importMusicDirectory: ->
-    @dropFolderCtrl.click()
+  importMusicFiles: => @dropFilesCtrl.click()
 
-  importMusicFiles: ->
-    @dropFilesCtrl.click()
-
-  dragOverFiles: (e) ->
+  dragOverFiles: (e) =>
     e.stopPropagation()
     e.preventDefault()
 
-  dropFiles: (e) ->
+  dropFiles: (e) =>
     e.stopPropagation()
     e.preventDefault()
     target = e.originalEvent.dataTransfer or e.originalEvent.target
     files = target.files
     @handleFileSelect files  if files and files.length > 0
 
-  handleFileSelect: (files, skipWrite) ->
+  handleFileSelect: (files, skipWrite) =>
     self = this
     fileProcessingFunctions = []
     @fileUploadStatusDialog.addClass "active"
@@ -50,7 +46,7 @@ AppView = exports.AppView = class AppView extends Backbone.View.extend
     async.series fileProcessingFunctions, (err, results) ->
       self.fileUploadStatusDialog.removeClass "active"
 
-  processOneAudioFile: (file, index, filesAmount, skipWrite, callback) ->
+  processOneAudioFile: (file, index, filesAmount, skipWrite, callback) =>
     percent = Math.floor(((index + 1) / filesAmount) * 100)
     progressElement = @$(@progress)
     @$("#file_index").html index
@@ -74,7 +70,7 @@ AppView = exports.AppView = class AppView extends Backbone.View.extend
               AppController.playlistView.songs.add song
           ), song.get("fileName")
 
-  saveSong: (song, callback) ->
+  saveSong: (song, callback) =>
     song.save {},
       success: (o) ->
         console.log "saved song", o
@@ -100,25 +96,25 @@ AppView = exports.AppView = class AppView extends Backbone.View.extend
       artist.change()
       callback null
 
-  showHelp: ->
+  showHelp: =>
     @isRegularMode = false
     @el.removeClass "fullscreen"
     @helpScreen.removeClass "hidden"
     @mainScreen.addClass "hidden"
     AppController.visualizationView.hide()
 
-  hideHelp: ->
+  hideHelp: =>
     @isRegularMode = true
     @mainScreen.removeClass "hidden"
     @helpScreen.addClass "hidden"
 
-  showFullScreen: ->
+  showFullScreen: =>
     @hideHelp()
     @mainScreen.addClass "hidden"
     @el.addClass "fullscreen"
     AppController.visualizationView.show()
 
-  hideFullScreen: ->
+  hideFullScreen: =>
     @el.removeClass "fullscreen"
     if @isRegularMode
       @mainScreen.removeClass "hidden"
@@ -126,7 +122,7 @@ AppView = exports.AppView = class AppView extends Backbone.View.extend
       @helpScreen.removeClass "hidden"
     AppController.visualizationView.hide()
 
-  keyPressed: (event) ->
+  keyPressed: (event) =>
     keyCode = event.keyCode
     currentSong = undefined
     currentSong = AppController.playlistView.currentSong()  if AppController.playlistView
@@ -145,9 +141,10 @@ AppView = exports.AppView = class AppView extends Backbone.View.extend
       AppController.playerCtrl.turnOffHelpMode()
 
 
-exports.VisualizationView = class VisualizationView extends Backbone.View.extend
+exports.VisualizationView = class VisualizationView extends Backbone.View
   el: $("#playing_visualization")
   tplId: "visualization_tpl"
+
   show: ->
     @el.show()
     @render()
@@ -155,11 +152,10 @@ exports.VisualizationView = class VisualizationView extends Backbone.View.extend
   hide: ->
     @el.hide()
 
-  render: ->
-    self = this
+  render: =>
     song = AppController.playlistView.currentSong()
     if song
-      dataService.getAlbumPoster song.get("artist"), song.get("album"), (image) ->
-        self.renderTpl image: image
-    this
+      dataService.getAlbumPoster song.get("artist"), song.get("album"), (image) =>
+        @renderTpl image: image
+    @
 

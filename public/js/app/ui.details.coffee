@@ -1,5 +1,5 @@
 dataService = require("./data.service").dataService
-DetailsView = exports.DetailsView = Backbone.View.extend(
+DetailsView = exports.DetailsView = class DetailsView extends Backbone.View
   el: $("#filtered_lib")
   libDetailsPanel: $("#filtered_lib_content")
   artistBioPanel: $("#artist_bio")
@@ -48,8 +48,8 @@ DetailsView = exports.DetailsView = Backbone.View.extend(
       song = @songs.get(songId)
       dataTransfer = DataTransfer.create("song", song)
       dataTransferObj.setData "text/plain", dataTransfer.toString()
-)
-ArtistBioView = Backbone.View.extend(
+
+class ArtistBioView extends Backbone.View
   el: $("#artist_bio")
   tplId: "artist_bio_tpl"
   initialize: ->
@@ -70,13 +70,12 @@ ArtistBioView = Backbone.View.extend(
 
   clear: ->
     $(@el).html ""
-)
-AlbumView = Backbone.View.extend(
+
+class AlbumView extends Backbone.View
   className: "lib_item_full_info_panel"
   tagName: "article"
   initialize: ->
     Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "addSong"
 
   render: ->
     @albumInfoView = new AlbumInfoView(model: @model)
@@ -84,7 +83,7 @@ AlbumView = Backbone.View.extend(
     @model.get("songs").each @addSong  if @model.get("songs")
     this
 
-  addSong: (song, key) ->
+  addSong: (song, key) =>
     view = new SongView(
       model: song
       key: key
@@ -92,8 +91,8 @@ AlbumView = Backbone.View.extend(
     )
     song.albumView = view
     $(@el).append view.render().el
-)
-PlayListFullView = Backbone.View.extend(
+
+class PlayListFullView extends Backbone.View
   className: "lib_item_full_info_panel"
   tagName: "article"
   tplId: "detailed_playlist_info_tpl"
@@ -128,8 +127,8 @@ PlayListFullView = Backbone.View.extend(
 
   playSongs: ->
     AppController.playlistView.setSongsAndPlay @model.get("songs")
-)
-AlbumInfoView = Backbone.View.extend(
+
+class AlbumInfoView extends Backbone.View
   className: "detailed_album_info_panel box"
   tagName: "section"
   tplId: "detailed_album_info_tpl"
@@ -138,22 +137,21 @@ AlbumInfoView = Backbone.View.extend(
 
   initialize: ->
     Backbone.View::initialize.apply this, arguments
-    _.bindAll this, "renderAlbumInfo", "playSongs"
 
-  renderAlbumInfo: (data) ->
+  renderAlbumInfo: (data) =>
     @renderTpl
       image: data.image
       name: @model.get("name")
       releaseDate: data.releaseDate
 
-  render: ->
+  render: =>
     dataService.getAlbumInfo @model.get("artist"), @model.get("name"), @renderAlbumInfo
     this
 
-  playSongs: ->
+  playSongs: =>
     AppController.playlistView.setSongsAndPlay @model.get("songs")
-)
-SongView = Backbone.View.extend(
+
+class SongView extends Backbone.View
   className: "song-data"
   tplId: "song_tpl"
   events:
@@ -196,5 +194,4 @@ SongView = Backbone.View.extend(
       AppController.playlistView.setPlayListModel @options.playList
     else
       AppController.playlistView.removePlayListModel()
-)
 
