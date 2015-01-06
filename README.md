@@ -3,7 +3,7 @@ m.player build on top of the HTML5 technologies and wonderful javascript librari
 
 
 ## Feedback
-There are a lot of features I would like to see in this player. You can help to make project better contributing your code or just sending your feedback. If you miss some functionality you are welcome to write me on anton.podviaznikov@enginimation.com.
+There are a lot of features I would like to see in this player. You can help to make project better contributing your code or just sending your feedback. If you miss some functionality you are welcome to write me on anton@podviaznikov.com.
 
 List of issues/features can be found here (https://github.com/podviaznikov/m.player/issues). However I personally plan to implement much more useful functions.
 
@@ -13,7 +13,7 @@ List of issues/features can be found here (https://github.com/podviaznikov/m.pla
 
 (The MIT License)
 
-Copyright (c) 2011 Enginimation Studio (http://enginimation.com)
+Copyright (c) 2011-2015 Anton Podviaznikov (http://podviaznikov.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
